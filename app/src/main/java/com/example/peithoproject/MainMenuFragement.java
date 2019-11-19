@@ -1,9 +1,12 @@
 package com.example.peithoproject;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -23,7 +26,6 @@ import java.util.List;
 public class MainMenuFragement extends Fragment {
     private static final String MAIN_MENU_STATIC = "TEST";
     private static final int REQUEST_PHOTO = 2;
-
     private Button mPhotoButton;
     private File mPhotoFile;
     private ImageView mPhotoView;
@@ -49,7 +51,7 @@ public class MainMenuFragement extends Fragment {
             @Override
             public void onClick(View v) {
                 Uri uri = FileProvider.getUriForFile(getActivity(),
-                        "com.bignerdranch.android.criminalintent.fileprovider",
+                        "com.example.peithoproject.MainMenuFragement.fileprovider",
                         mPhotoFile);
                 captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 
@@ -70,7 +72,35 @@ public class MainMenuFragement extends Fragment {
         updatePhotoView();
         return v;
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        if (requestCode == REQUEST_PHOTO) {
+            Uri uri = FileProvider.getUriForFile(getActivity(),
+                    "com.example.peithoproject.MainMenuFragement.fileprovider",
+                    mPhotoFile);
 
+            getActivity().revokeUriPermission(uri,
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+            updatePhotoView();
+        }
+
+
+    }
+    //Source: https://developer.android.com/guide/topics/media/camera#java
+    /** Check if this device has a camera */
+    private boolean checkCameraHardware(Context context) {
+        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
+            // this device has a camera
+            return true;
+        } else {
+            // no camera on this device
+            return false;
+        }
+    }
 
     private void updatePhotoView() {
         if (mPhotoFile == null || !mPhotoFile.exists()) {
