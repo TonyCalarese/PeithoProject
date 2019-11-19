@@ -22,12 +22,13 @@ import androidx.fragment.app.Fragment;
 import java.io.File;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
 
+//Source of reference: https://www.youtube.com/watch?v=u5PDdg1G4Q4
 public class MainMenuFragement extends Fragment {
     private static final String MAIN_MENU_STATIC = "TEST";
-    private static final int REQUEST_PHOTO = 2;
+    private static final int REQUEST_PHOTO = 101;
     private Button mPhotoButton;
-    private File mPhotoFile;
     private ImageView mPhotoView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,51 +42,28 @@ public class MainMenuFragement extends Fragment {
         View v = inflater.inflate(R.layout.prototype_layout_1, container, false);
         PackageManager packageManager = getActivity().getPackageManager();
 
-
+        mPhotoView = (ImageView) v.findViewById(R.id.cameraPreview);
         mPhotoButton = (Button) v.findViewById(R.id.cameraButton);
-        final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        boolean canTakePhoto = mPhotoFile != null && captureImage.resolveActivity(packageManager) != null;
-        mPhotoButton.setEnabled(canTakePhoto);
-
         mPhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri uri = FileProvider.getUriForFile(getActivity(),
-                        "com.example.peithoproject.MainMenuFragement.fileprovider",
-                        mPhotoFile);
-                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-
-                List<ResolveInfo> cameraActivities = getActivity()
-                        .getPackageManager().queryIntentActivities(captureImage,
-                                PackageManager.MATCH_DEFAULT_ONLY);
-
-                for (ResolveInfo activity : cameraActivities) {
-                    getActivity().grantUriPermission(activity.activityInfo.packageName,
-                            uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                }
-
-                startActivityForResult(captureImage, REQUEST_PHOTO);
+                scanFace(v);
             }
         });
 
-        mPhotoView = (ImageView) v.findViewById(R.id.cameraPreview);
-        updatePhotoView();
+
+
         return v;
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != Activity.RESULT_OK) {
+        if (resultCode != RESULT_OK) {
             return;
         }
-        if (requestCode == REQUEST_PHOTO) {
-            Uri uri = FileProvider.getUriForFile(getActivity(),
-                    "com.example.peithoproject.MainMenuFragement.fileprovider",
-                    mPhotoFile);
-
-            getActivity().revokeUriPermission(uri,
-                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-
-            updatePhotoView();
+        if (requestCode == REQUEST_PHOTO && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap image = (Bitmap) extras.get("data");
+            mPhotoView.setImageBitmap(image);
         }
 
 
@@ -102,15 +80,19 @@ public class MainMenuFragement extends Fragment {
         }
     }
 
-    private void updatePhotoView() {
-        if (mPhotoFile == null || !mPhotoFile.exists()) {
-            mPhotoView.setImageDrawable(null);
-        } else {
-            Bitmap bitmap = PictureUtils.getScaledBitmap(
-                    mPhotoFile.getPath(), getActivity());
-            mPhotoView.setImageBitmap(bitmap);
+    public void scanFace(View view){
+        Intent scanFace = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        //boolean canTakePhoto = mPhotoFile != null && captureImage.resolveActivity(packageManager) != null;
+        //mPhotoButton.setEnabled(canTakePhoto);
+
+        if(scanFace.resolveActivity(getActivity().getPackageManager())!= null)
+        {
+            startActivityForResult(scanFace, REQUEST_PHOTO);
+
         }
+
     }
+
 
 
 }
