@@ -51,8 +51,6 @@ public class MainMenuFragement extends Fragment {
             }
         });
 
-
-
         return v;
     }
     @Override
