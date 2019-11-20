@@ -15,9 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.List;
@@ -30,6 +33,8 @@ public class MainMenuFragement extends Fragment {
     private static final int REQUEST_PHOTO = 101;
     private Button mPhotoButton;
     private ImageView mPhotoView;
+    private TextView mEmotionTextResults;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +55,7 @@ public class MainMenuFragement extends Fragment {
                 scanFace(v);
             }
         });
-
+        mEmotionTextResults = (TextView) v.findViewById(R.id.analysisView);
         return v;
     }
     @Override

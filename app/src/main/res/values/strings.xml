@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PeithoProject</string>
+    <string name="current_analysis">Current Analysis</string>
 </resources>
