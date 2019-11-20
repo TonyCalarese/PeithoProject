@@ -1,15 +1,12 @@
 package com.example.peithoproject;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.graphics.Camera;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +14,26 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
-import org.w3c.dom.Text;
+//Tensorflow Lite Imports
+import org.tensorflow.lite.DataType;
+import org.tensorflow.lite.Interpreter;
+import org.tensorflow.lite.support.common.FileUtil;
+import org.tensorflow.lite.support.common.TensorProcessor;
+import org.tensorflow.lite.support.common.ops.NormalizeOp;
+import org.tensorflow.lite.support.image.ImageProcessor;
+import org.tensorflow.lite.support.image.TensorImage;
+import org.tensorflow.lite.support.image.ops.ResizeOp;
+import org.tensorflow.lite.support.label.TensorLabel;
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
+import org.tensorflow.lite.support.model.Model;
 
-import java.io.File;
+
+import java.io.IOException;
+import java.nio.MappedByteBuffer;
 import java.util.List;
+import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -34,6 +44,19 @@ public class MainMenuFragement extends Fragment {
     private Button mPhotoButton;
     private ImageView mPhotoView;
     private TextView mEmotionTextResults;
+
+    private ImageProcessor mImageProcessor =
+            new ImageProcessor.Builder()
+                    .add(new ResizeOp(224, 224, ResizeOp.ResizeMethod.BILINEAR))
+                    .build();
+    private TensorImage tImage = new TensorImage(DataType.UINT8);
+    private TensorBuffer mProbabilityBuffer = TensorBuffer.createFixedSize(new int[]{1, 1001}, DataType.UINT8);
+    private TensorProcessor mProbabilityProcessor =
+            new TensorProcessor.Builder().add(new NormalizeOp(0, 255)).build();
+    private TensorBuffer mDeQuantBuffer = mProbabilityProcessor.process(mProbabilityBuffer);
+
+    private final String AXIS_LABELS = "label_emotions.txt";
+    private List<String> axisLabels = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,6 +69,8 @@ public class MainMenuFragement extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.prototype_layout_1, container, false);
         PackageManager packageManager = getActivity().getPackageManager();
+
+
 
         mPhotoView = (ImageView) v.findViewById(R.id.cameraPreview);
         mPhotoButton = (Button) v.findViewById(R.id.cameraButton);
@@ -67,6 +92,38 @@ public class MainMenuFragement extends Fragment {
             Bundle extras = data.getExtras();
             Bitmap image = (Bitmap) extras.get("data");
             mPhotoView.setImageBitmap(image);
+
+            tImage.load(image);
+            tImage = mImageProcessor.process(tImage);
+
+            try{
+                MappedByteBuffer tfliteModel
+                        = FileUtil.loadMappedFile(getContext(), "mobilenet_v1_1.0_224_quant.tflite");
+                Interpreter tflite = new Interpreter(tfliteModel);
+
+                if(tflite != null) {
+                    tflite.run(tImage.getBuffer(), mProbabilityBuffer.getBuffer());
+                }
+            } catch (IOException e) {
+                Log.e("TF", "Error Reading Model", e);
+            }
+
+            try {
+                axisLabels = FileUtil.loadLabels(getContext(), AXIS_LABELS);
+            } catch (IOException e) {
+                Log.e("TF", "Error Reading Labels", e);
+            }
+
+            if (axisLabels != null) {
+                TensorLabel labels = new TensorLabel(axisLabels, mDeQuantBuffer);
+
+                Map<String, Float> results = labels.getMapWithFloatValue();
+
+                for(Map.Entry<String, Float> entry : results.entrySet()) {
+                    mEmotionTextResults.setText(mEmotionTextResults.getText().toString() + entry.getKey() + ": " + entry.getValue() + "\n");
+                }
+            }
+
         }
 
 
@@ -96,6 +153,9 @@ public class MainMenuFragement extends Fragment {
 
     }
 
-
-
 }
+
+// Tensorflow Adapted from https://github.com/EliotAndres/tensorflow-2-run-on-mobile-devices-ios-android-browser
+// and https://github.com/tensorflow/examples/blob/master/lite/examples/image_classification/android/EXPLORE_THE_CODE.md
+// and https://github.com/tensorflow/tensorflow/blob/master/tensorflow/lite/experimental/support/java/README.md
+
