@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 
         if (fragment == null) {
-            fm.beginTransaction().add(R.id.fragment_container, new peitho()).commit();
+            fm.beginTransaction().add(R.id.fragment_container, new Peitho()).commit();
         }
 
     }

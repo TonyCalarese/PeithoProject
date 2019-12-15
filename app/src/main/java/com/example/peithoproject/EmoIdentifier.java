@@ -10,7 +10,14 @@ import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 
 import java.util.List;
 
-public class emo_identifier {
+
+
+// Tensorflow Adapted from https://github.com/EliotAndres/tensorflow-2-run-on-mobile-devices-ios-android-browser
+// and https://github.com/tensorflow/examples/blob/master/lite/examples/image_classification/android/EXPLORE_THE_CODE.md
+// and https://github.com/tensorflow/tensorflow/blob/master/tensorflow/lite/experimental/support/java/README.md
+
+
+public class EmoIdentifier {
     private Object mFaces;
 
     //Tensor Flow
@@ -23,8 +30,9 @@ public class emo_identifier {
     private final String AXIS_LABELS = "label_emotions.txt";
     private List<String> axisLabels = null;
 
+
     //Constructer
-    public emo_identifier(){}
+    public EmoIdentifier(){}
 
     //Setters
     public void setFaces(Object faces){mFaces = faces;}

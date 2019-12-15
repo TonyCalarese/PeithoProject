@@ -1,6 +1,5 @@
 package com.example.peithoproject;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -9,6 +8,7 @@ import android.graphics.Bitmap;
 
 import android.graphics.SurfaceTexture;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.TextureView;
 import android.view.View;
@@ -20,16 +20,8 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 //Tensorflow Lite Imports
-import org.tensorflow.lite.DataType;
-import org.tensorflow.lite.support.common.TensorProcessor;
-import org.tensorflow.lite.support.common.ops.NormalizeOp;
-import org.tensorflow.lite.support.image.ImageProcessor;
-import org.tensorflow.lite.support.image.TensorImage;
-import org.tensorflow.lite.support.image.ops.ResizeOp;
-import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 
 import java.io.IOException;
-import java.util.List;
 
 
 //Camera Imports
@@ -38,20 +30,10 @@ import android.hardware.Camera;
 import static android.app.Activity.RESULT_OK;
 
 //Source of reference: https://www.youtube.com/watch?v=u5PDdg1G4Q4
-public class peitho extends Fragment implements TextureView.SurfaceTextureListener{
+public class Peitho extends Fragment implements TextureView.SurfaceTextureListener{
     private static final String MAIN_MENU_STATIC = "TEST";
     private static final int REQUEST_PHOTO = 101;
-    private Button mPhotoButton;
-
-    //Tensor Flow
-    private ImageProcessor mImageProcessor = new ImageProcessor.Builder().add(new ResizeOp(224, 224, ResizeOp.ResizeMethod.BILINEAR)).build();
-    private TensorImage tImage = new TensorImage(DataType.UINT8);
-    private TensorBuffer mProbabilityBuffer = TensorBuffer.createFixedSize(new int[]{1, 1001}, DataType.UINT8);
-    private TensorProcessor mProbabilityProcessor = new TensorProcessor.Builder().add(new NormalizeOp(0, 255)).build();
-    private TensorBuffer mDeQuantBuffer = mProbabilityProcessor.process(mProbabilityBuffer);
-
-    private final String AXIS_LABELS = "label_emotions.txt";
-    private List<String> axisLabels = null;
+    private Button mStartButton, mSaveButton, mStopButton;
 
 
     //Camera
@@ -59,8 +41,14 @@ public class peitho extends Fragment implements TextureView.SurfaceTextureListen
     private TextView mEmotionTextResults;
     private TextureView mImageTextureView;
     private Camera mCamera;
+
+    //Handler Elements
+    private boolean mStarted = false;
+    private Handler mVideoHandler = new Handler();
+    private int mRefreshRate = 1000; //in milliseconds
+
     //Emotion detection main Class
-    public emo_identifier Emo = new emo_identifier();
+    public EmoIdentifier Emo = new EmoIdentifier();
 
 
     @Override
@@ -74,27 +62,47 @@ public class peitho extends Fragment implements TextureView.SurfaceTextureListen
         View v = inflater.inflate(R.layout.peitho_main_screen_landscape, container, false); //Default to landscape
 
         //Soruce on rotating: https://www.youtube.com/watch?v=7MMs_lBQVcc
-        
         if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
             v = inflater.inflate(R.layout.peitho_main_screen_verticle, container, false); //Use Verticle is in verticle form
         }
-
+        //End of Rotating Source
 
         PackageManager packageManager = getActivity().getPackageManager();
 
-
+        //Texture View
         mImageTextureView = (TextureView) v.findViewById((R.id.imageSurfaceView));
-        mImageTextureView.setSurfaceTextureListener(peitho.this);
+        mImageTextureView.setSurfaceTextureListener(Peitho.this);
         //mImageTextureView.setVisibility(View.INVISIBLE);
 
-        mPhotoView = (ImageView) v.findViewById(R.id.cameraPreview);
-        mPhotoButton = (Button) v.findViewById(R.id.cameraButton);
-        mPhotoButton.setOnClickListener(new View.OnClickListener() {
+        //Photo View, will go away after some tesing is done
+        mPhotoView = (ImageView) v.findViewById(R.id.imagePreview);
+
+        //Buttons
+        mStartButton = (Button) v.findViewById(R.id.startButton);
+        mStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                scanFace();
+                if(mStarted == false){
+                    mVideoHandler.post(mRefreshImageTexture);
+                    mStartButton.setText(R.string.stop);
+                    mStarted=true;
+                }
+                else{
+                    mVideoHandler.removeCallbacks(mRefreshImageTexture);
+                    mStartButton.setText(R.string.start);
+                    mStarted = false;
+                }
             }
         });
+
+        mSaveButton = (Button) v.findViewById(R.id.saveButton);
+        mSaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Insert Saving the code here
+            }
+        });
+        //TextView for Results
         mEmotionTextResults = (TextView) v.findViewById(R.id.analysisView);
         return v;
     }
@@ -143,21 +151,21 @@ public class peitho extends Fragment implements TextureView.SurfaceTextureListen
 
     }
 
-    public void scanFace(){
-        //Intent scanFace = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //Original Code
 
 
-        //boolean canTakePhoto = mPhotoFile != null && captureImage.resolveActivity(packageManager) != null;
-        //mPhotoButton.setEnabled(canTakePhoto);
-        /*
-        if(scanFace.resolveActivity(getActivity().getPackageManager())!= null)
-        {
-            startActivityForResult(scanFace, REQUEST_PHOTO);
-
-        }
-         */
 
 
+    // Define the code block to be executed
+    //Code Reference: https://stackoverflow.com/questions/37995564/what-is-the-way-to-make-an-infinite-loop-in-a-thread-android
+    private Runnable mRefreshImageTexture = new Runnable() {
+        @Override
+        public void run() {
+            scanFaces();
+            mVideoHandler.postDelayed(mRefreshImageTexture, mRefreshRate); }
+    };
+
+    //Putting the image into the Image View for now before moving onto the facial detection
+    public void scanFaces(){
         mPhotoView.setImageBitmap(mImageTextureView.getBitmap());
     } //end of scan face function
 
@@ -166,7 +174,4 @@ public class peitho extends Fragment implements TextureView.SurfaceTextureListen
 
 }
 
-// Tensorflow Adapted from https://github.com/EliotAndres/tensorflow-2-run-on-mobile-devices-ios-android-browser
-// and https://github.com/tensorflow/examples/blob/master/lite/examples/image_classification/android/EXPLORE_THE_CODE.md
-// and https://github.com/tensorflow/tensorflow/blob/master/tensorflow/lite/experimental/support/java/README.md
 
