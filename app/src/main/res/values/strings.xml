@@ -5,4 +5,15 @@
     <string name="stop"> Stop Filming</string>
     <string name ="save"> Save Current State</string>
     <string name="dummy_text">SOMETING</string>
+
+
+
+    <!-- SubMenu Strings -->
+    <string name="options">Options</string>
+    <string name="share">Share</string>
+    <string name="download">Download</string>
+    <string name="open_chart">My Charts</string>
+
+    <string name="clear_data">Clear Data</string>
+
 </resources>

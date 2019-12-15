@@ -2,39 +2,38 @@ package com.example.peithoproject;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 
 
 import android.graphics.SurfaceTexture;
+import android.media.FaceDetector;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-//Tensorflow Lite Imports
+
 
 import java.io.IOException;
 
 
 //Camera Imports
 import android.hardware.Camera;
-
 import static android.app.Activity.RESULT_OK;
 
 //Source of reference: https://www.youtube.com/watch?v=u5PDdg1G4Q4
 public class Peitho extends Fragment implements TextureView.SurfaceTextureListener{
-    private static final String MAIN_MENU_STATIC = "TEST";
+    private static final String ORIENTATION = "TEST";
     private static final int REQUEST_PHOTO = 101;
-    private Button mStartButton, mSaveButton, mStopButton;
-
 
     //Camera
     private ImageView mPhotoView;
@@ -59,13 +58,12 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.peitho_main_screen_landscape, container, false); //Default to landscape
+        View v = inflater.inflate(R.layout.peitho_main_screen, container, false);
+        //FaceDetector detector = new FaceDetector.Builder(context).setTrackingEnabled(false).setLandmarkType(FaceDetector.ALL_LANDMARKS).build();
 
-        //Soruce on rotating: https://www.youtube.com/watch?v=7MMs_lBQVcc
-        if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-            v = inflater.inflate(R.layout.peitho_main_screen_verticle, container, false); //Use Verticle is in verticle form
+        if (savedInstanceState != null) {
+
         }
-        //End of Rotating Source
 
         PackageManager packageManager = getActivity().getPackageManager();
 
@@ -74,36 +72,9 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         mImageTextureView.setSurfaceTextureListener(Peitho.this);
         //mImageTextureView.setVisibility(View.INVISIBLE);
 
-        //Photo View, will go away after some tesing is done
-        mPhotoView = (ImageView) v.findViewById(R.id.imagePreview);
 
-        //Buttons
-        mStartButton = (Button) v.findViewById(R.id.startButton);
-        mStartButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mStarted == false){
-                    mVideoHandler.post(mRefreshImageTexture);
-                    mStartButton.setText(R.string.stop);
-                    mStarted=true;
-                }
-                else{
-                    mVideoHandler.removeCallbacks(mRefreshImageTexture);
-                    mStartButton.setText(R.string.start);
-                    mStarted = false;
-                }
-            }
-        });
-
-        mSaveButton = (Button) v.findViewById(R.id.saveButton);
-        mSaveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Insert Saving the code here
-            }
-        });
-        //TextView for Results
-        mEmotionTextResults = (TextView) v.findViewById(R.id.analysisView);
+        mPhotoView = (ImageView) v.findViewById(R.id.imagePreview); //Photo View, will go away after some tesing is done
+        mEmotionTextResults = (TextView) v.findViewById(R.id.analysisView); //TextView for Results
         return v;
     }
 
@@ -120,13 +91,11 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         }
     }
 
-    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-        // Ignored, Camera does all the work for us
-    }
+    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {    }
 
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-        mCamera.stopPreview();
-        mCamera.release();
+        //mCamera.stopPreview();
+        //mCamera.release();
         return true;
     }
 
@@ -151,9 +120,10 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
     }
 
-
-
-
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 
     // Define the code block to be executed
     //Code Reference: https://stackoverflow.com/questions/37995564/what-is-the-way-to-make-an-infinite-loop-in-a-thread-android
@@ -164,6 +134,41 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
             mVideoHandler.postDelayed(mRefreshImageTexture, mRefreshRate); }
     };
 
+    //Source for rotating with all the proper data https://medium.com/hootsuite-engineering/handling-orientation-changes-on-android-41a6b62cb43f
+
+    //Menu Functions
+    //Source on menus: https://developer.android.com/guide/topics/ui/menus#java
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.recording_features_menu_bar, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.start_menu_icon:
+                if(mStarted == false){
+                    mVideoHandler.post(mRefreshImageTexture);
+                    item.setIcon(R.drawable.stop_icon);
+                }
+                else{
+                    mVideoHandler.removeCallbacks(mRefreshImageTexture);
+                    item.setIcon(R.drawable.play_icon);
+                }
+                mStarted = !mStarted;
+                return true;
+            case R.id.single_shot_menu_iconx:
+                mPhotoView.setImageBitmap(mImageTextureView.getBitmap()); //Taking a single picture
+                return true;
+
+            case R.id.download:
+                //Need to work on saving
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
     //Putting the image into the Image View for now before moving onto the facial detection
     public void scanFaces(){
         mPhotoView.setImageBitmap(mImageTextureView.getBitmap());

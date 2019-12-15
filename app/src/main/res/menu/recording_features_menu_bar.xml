@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/single_shot_menu_iconx"
+        android:icon="@drawable/camera_img"
+        android:iconTint="@color/white"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/start_menu_icon"
+        android:icon="@drawable/play_icon"
+        android:iconTint="@color/white"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/save_menu_icon"
+        android:icon="@drawable/save_icon"
+        android:iconTint="@color/white"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/settings_gear"
+        android:iconTint="@color/white"
+        app:showAsAction="always"
+        >
+        <menu>
+            <item
+                android:id="@+id/share"
+                android:title="@string/share"
+                app:showAsAction="withText"/>
+            <item
+                android:id="@+id/download"
+                android:title="@string/download"
+                app:showAsAction="withText"/>
+            <item
+                android:id="@+id/open"
+                android:title="@string/open_chart"
+                app:showAsAction="withText"/>
+        </menu>
+    </item>
+
+</menu>
