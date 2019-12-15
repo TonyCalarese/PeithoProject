@@ -33,8 +33,8 @@
             android:layout_marginTop="24dp"
             android:text="@string/current_analysis"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.145"
+            app:layout_constraintEnd_toEndOf="@+id/imagePreview"
+            app:layout_constraintHorizontal_bias="0.151"
             app:layout_constraintStart_toStartOf="@+id/imagePreview"
             app:layout_constraintTop_toBottomOf="@+id/imagePreview"
             app:layout_constraintVertical_bias="0.396" />
@@ -43,14 +43,12 @@
             android:id="@+id/imageSurfaceView"
             android:layout_width="298dp"
             android:layout_height="285dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="416dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.057"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.238" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
