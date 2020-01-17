@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 
 
 import android.graphics.SurfaceTexture;
-import android.media.FaceDetector;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -169,13 +168,13 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
                 return super.onOptionsItemSelected(item);
         }
     }
+
     //Putting the image into the Image View for now before moving onto the facial detection
     public void scanFaces(){
         mPhotoView.setImageBitmap(mImageTextureView.getBitmap());
+
+
     } //end of scan face function
-
-
-
 
 }
 
