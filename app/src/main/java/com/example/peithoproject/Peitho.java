@@ -3,9 +3,8 @@ package com.example.peithoproject;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-
-
 import android.graphics.SurfaceTexture;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -17,17 +16,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.fragment.app.Fragment;
 
-
+import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 
 import java.io.IOException;
 
+import static android.app.Activity.RESULT_OK;
 
 //Camera Imports
-import android.hardware.Camera;
-import static android.app.Activity.RESULT_OK;
 
 //Source of reference: https://www.youtube.com/watch?v=u5PDdg1G4Q4
 public class Peitho extends Fragment implements TextureView.SurfaceTextureListener{
@@ -101,6 +98,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     public void onSurfaceTextureUpdated(SurfaceTexture surface) {
         // Invoked every time there's a new Camera preview frame
         //scanFace();
+
     }
     //End of Reference: https://developer.android.com/reference/android/view/TextureView
 
@@ -171,9 +169,8 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
     //Putting the image into the Image View for now before moving onto the facial detection
     public void scanFaces(){
-        mPhotoView.setImageBitmap(mImageTextureView.getBitmap());
-
-
+        FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(mImageTextureView.getBitmap());
+        mPhotoView.setImageBitmap(image.getBitmap());
     } //end of scan face function
 
 }

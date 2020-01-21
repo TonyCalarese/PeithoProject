@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "912968564489",
+    "firebase_url": "https://peithoproject-90ff1.firebaseio.com",
+    "project_id": "peithoproject-90ff1",
+    "storage_bucket": "peithoproject-90ff1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:912968564489:android:530429660e175b27005dd8",
+        "android_client_info": {
+          "package_name": "com.example.peithoproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "912968564489-ot411pu1vpuh1rdpj2gg5hkmug339o7j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUsK_SJaHSq-E8AkVGTXll3eBTqWa0l4k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "912968564489-ot411pu1vpuh1rdpj2gg5hkmug339o7j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
