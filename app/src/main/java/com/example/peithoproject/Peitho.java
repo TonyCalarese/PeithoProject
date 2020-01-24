@@ -167,8 +167,9 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
                 }
                 mStarted = !mStarted;
                 return true;
-            case R.id.single_shot_menu_iconx:
-                mPhotoView.setImageBitmap(mImageTextureView.getBitmap()); //Taking a single picture
+            case R.id.single_shot_menu_icon:
+                Toast.makeText(getActivity(), "DETECTING FACES", Toast.LENGTH_SHORT).show();
+                scanFaces();
                 return true;
 
             case R.id.download:
@@ -181,13 +182,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
     //Putting the image into the Image View for now before moving onto the facial detection
     public void scanFaces(){
-        FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(mImageTextureView.getBitmap());
-        mPhotoView.setImageBitmap(image.getBitmap());
-
-        FirebaseVisionFaceDetectorOptions realTimeOpts =
-                new FirebaseVisionFaceDetectorOptions.Builder()
-                        .setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CONTOURS)
-                        .build();
+        FirebaseVisionFaceDetectorOptions realTimeOpts = new FirebaseVisionFaceDetectorOptions.Builder().setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CONTOURS).build();
 
         FirebaseVisionImage fireImage = FirebaseVisionImage.fromBitmap(mImageTextureView.getBitmap());
 
@@ -200,13 +195,21 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
                                 new OnSuccessListener<List<FirebaseVisionFace>>() {
                                     @Override
                                     public void onSuccess(List<FirebaseVisionFace> faces) {
-
-                                        Toast.makeText(getContext(), "FACES DETECTED", Toast.LENGTH_SHORT);
+                                        if(faces.size() <= 0) {
+                                            Toast.makeText(getActivity(), "NO FACES DETECTED", Toast.LENGTH_SHORT).show();
+                                        }
+                                        else if (faces.size() ==  1){
+                                            Toast.makeText(getActivity(), "SINGLE FACE DETECTED", Toast.LENGTH_SHORT).show();
+                                        }
+                                        else{
+                                            Toast.makeText(getActivity(), "MULTIPLE FACES DETECTED", Toast.LENGTH_SHORT).show();
+                                        }
 
                                         for (FirebaseVisionFace face : faces) {
                                             Rect bounds = face.getBoundingBox(); // Bounds of the Face that was detected
                                             float rotY = face.getHeadEulerAngleY();  // Head is rotated to the right rotY degrees
                                             float rotZ = face.getHeadEulerAngleZ();  // Head is tilted sideways rotZ degrees
+
                                         }
                                     }
 
@@ -216,10 +219,12 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
                                 new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        // Task failed with an exception
-                                        // ...
+                                        Toast.makeText(getActivity(), "Function Failure", Toast.LENGTH_SHORT).show();
                                     }
                                 });
+        mPhotoView.setImageBitmap(fireImage.getBitmap());
+        //mPhotoView.setImageDrawable(result.getResult());
+
     } //end of scan face function
 
 }
