@@ -3,6 +3,7 @@ package com.example.peithoproject;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.os.Bundle;
@@ -16,11 +17,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
+import com.google.firebase.ml.vision.face.FirebaseVisionFace;
+import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector;
+import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
 
 import java.io.IOException;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -171,6 +183,43 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     public void scanFaces(){
         FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(mImageTextureView.getBitmap());
         mPhotoView.setImageBitmap(image.getBitmap());
+
+        FirebaseVisionFaceDetectorOptions realTimeOpts =
+                new FirebaseVisionFaceDetectorOptions.Builder()
+                        .setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CONTOURS)
+                        .build();
+
+        FirebaseVisionImage fireImage = FirebaseVisionImage.fromBitmap(mImageTextureView.getBitmap());
+
+        FirebaseVisionFaceDetector detector = FirebaseVision.getInstance()
+                .getVisionFaceDetector(realTimeOpts);
+
+        Task<List<FirebaseVisionFace>> result =
+                detector.detectInImage(fireImage)
+                        .addOnSuccessListener(
+                                new OnSuccessListener<List<FirebaseVisionFace>>() {
+                                    @Override
+                                    public void onSuccess(List<FirebaseVisionFace> faces) {
+
+                                        Toast.makeText(getContext(), "FACES DETECTED", Toast.LENGTH_SHORT);
+
+                                        for (FirebaseVisionFace face : faces) {
+                                            Rect bounds = face.getBoundingBox(); // Bounds of the Face that was detected
+                                            float rotY = face.getHeadEulerAngleY();  // Head is rotated to the right rotY degrees
+                                            float rotZ = face.getHeadEulerAngleZ();  // Head is tilted sideways rotZ degrees
+                                        }
+                                    }
+
+
+                                })
+                        .addOnFailureListener(
+                                new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        // Task failed with an exception
+                                        // ...
+                                    }
+                                });
     } //end of scan face function
 
 }
