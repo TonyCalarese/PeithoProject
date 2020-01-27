@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 
 
+import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
 import android.media.FaceDetector;
 import android.os.Bundle;
@@ -19,15 +20,29 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 
 
 import java.io.IOException;
+import java.util.List;
 
 
 //Camera Imports
 import android.hardware.Camera;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.ml.custom.FirebaseCustomLocalModel;
+import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.common.FirebaseVisionImage;
+import com.google.firebase.ml.vision.face.FirebaseVisionFace;
+import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector;
+import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
+
 import static android.app.Activity.RESULT_OK;
 
 //Source of reference: https://www.youtube.com/watch?v=u5PDdg1G4Q4
@@ -47,7 +62,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     private int mRefreshRate = 1000; //in milliseconds
 
     //Emotion detection main Class
-    public EmoIdentifier Emo = new EmoIdentifier();
+
 
 
     @Override
@@ -75,6 +90,8 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
         mPhotoView = (ImageView) v.findViewById(R.id.imagePreview); //Photo View, will go away after some tesing is done
         mEmotionTextResults = (TextView) v.findViewById(R.id.analysisView); //TextView for Results
+
+
         return v;
     }
 
@@ -172,11 +189,44 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     //Putting the image into the Image View for now before moving onto the facial detection
     public void scanFaces(){
         mPhotoView.setImageBitmap(mImageTextureView.getBitmap());
+
+        FirebaseVisionFaceDetectorOptions realTimeOpts =
+                new FirebaseVisionFaceDetectorOptions.Builder()
+                        .setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CONTOURS)
+                        .build();
+
+        FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(mImageTextureView.getBitmap());
+
+        FirebaseVisionFaceDetector detector = FirebaseVision.getInstance()
+                .getVisionFaceDetector(realTimeOpts);
+
+        Task<List<FirebaseVisionFace>> result =
+                detector.detectInImage(image)
+                        .addOnSuccessListener(
+                                new OnSuccessListener<List<FirebaseVisionFace>>() {
+                                    @Override
+                                    public void onSuccess(List<FirebaseVisionFace> faces) {
+
+                                        Toast.makeText(getContext(), "FACES DETECTED", Toast.LENGTH_SHORT);
+
+                                        for (FirebaseVisionFace face : faces) {
+                                            Rect bounds = face.getBoundingBox();
+                                            float rotY = face.getHeadEulerAngleY();  // Head is rotated to the right rotY degrees
+                                            float rotZ = face.getHeadEulerAngleZ();  // Head is tilted sideways rotZ degrees
+                                        }
+                                    }
+
+
+                                })
+                        .addOnFailureListener(
+                                new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        // Task failed with an exception
+                                        // ...
+                                    }
+                                });
     } //end of scan face function
 
 
-
-
 }
-
-
