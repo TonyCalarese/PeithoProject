@@ -35,6 +35,10 @@
                 android:id="@+id/open"
                 android:title="@string/open_chart"
                 app:showAsAction="withText"/>
+            <item
+                android:id="@+id/refreshRate"
+                android:title="@string/change_refresh"
+                app:showAsAction="withText"/>
         </menu>
     </item>
 

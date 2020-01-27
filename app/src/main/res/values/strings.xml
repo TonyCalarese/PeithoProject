@@ -15,5 +15,6 @@
     <string name="open_chart">My Charts</string>
 
     <string name="clear_data">Clear Data</string>
+    <string name="change_refresh">Change RefreshRate</string>
 
 </resources>

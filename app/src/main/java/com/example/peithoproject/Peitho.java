@@ -3,11 +3,9 @@ package com.example.peithoproject;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,44 +17,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.ml.vision.FirebaseVision;
-import com.google.firebase.ml.vision.common.FirebaseVisionImage;
-import com.google.firebase.ml.vision.face.FirebaseVisionFace;
-import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector;
-import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
-
 import java.io.IOException;
-import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
 //Camera Imports
 
-//Source of reference: https://www.youtube.com/watch?v=u5PDdg1G4Q4
-public class Peitho extends Fragment implements TextureView.SurfaceTextureListener{
-    private static final String ORIENTATION = "TEST";
-    private static final int REQUEST_PHOTO = 101;
-
+//Source of reference for Camera API: https://www.youtube.com/watch?v=u5PDdg1G4Q4
+public class Peitho extends Fragment implements TextureView.SurfaceTextureListener, PeithoInterface {
     //Camera
-    private ImageView mPhotoView;
-    private TextView mEmotionTextResults;
-    private TextureView mImageTextureView;
-    private Camera mCamera;
+    public ImageView mPhotoView;
+    public TextView mEmotionTextResults;
+    public TextureView mImageTextureView;
+    public Camera mCamera;
 
     //Handler Elements
-    private boolean mStarted = false;
-    private Handler mVideoHandler = new Handler();
-    private int mRefreshRate = 1000; //in milliseconds
-
-    //Emotion detection main Class
-    public EmoIdentifier Emo = new EmoIdentifier();
-
+    boolean mStarted = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,7 +45,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.peitho_main_screen, container, false);
-        //FaceDetector detector = new FaceDetector.Builder(context).setTrackingEnabled(false).setLandmarkType(FaceDetector.ALL_LANDMARKS).build();
 
         if (savedInstanceState != null) {
 
@@ -89,7 +66,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     //Code For TextureView Reference: https://developer.android.com/reference/android/view/TextureView
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         mCamera = Camera.open();
-
         try {
             mCamera.setPreviewTexture(surface);
             mCamera.startPreview();
@@ -102,8 +78,8 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {    }
 
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-        //mCamera.stopPreview();
-        //mCamera.release();
+        mCamera.stopPreview();
+        mCamera.release();
         return true;
     }
 
@@ -139,8 +115,9 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     private Runnable mRefreshImageTexture = new Runnable() {
         @Override
         public void run() {
-            scanFaces();
-            mVideoHandler.postDelayed(mRefreshImageTexture, mRefreshRate); }
+            FD.scanFaces(mImageTextureView.getBitmap());
+            mPhotoView.setImageBitmap(FD.getImage());
+            mVideoHandler.postDelayed(mRefreshImageTexture, mStandardRefreshRate); }
     };
 
     //Source for rotating with all the proper data https://medium.com/hootsuite-engineering/handling-orientation-changes-on-android-41a6b62cb43f
@@ -169,9 +146,9 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
                 return true;
             case R.id.single_shot_menu_icon:
                 Toast.makeText(getActivity(), "DETECTING FACES", Toast.LENGTH_SHORT).show();
-                scanFaces();
+                FD.scanFaces(mImageTextureView.getBitmap());
+                mPhotoView.setImageBitmap(FD.getImage());
                 return true;
-
             case R.id.download:
                 //Need to work on saving
                 return true;
@@ -179,53 +156,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
                 return super.onOptionsItemSelected(item);
         }
     }
-
-    //Putting the image into the Image View for now before moving onto the facial detection
-    public void scanFaces(){
-        FirebaseVisionFaceDetectorOptions realTimeOpts = new FirebaseVisionFaceDetectorOptions.Builder().setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CONTOURS).build();
-
-        FirebaseVisionImage fireImage = FirebaseVisionImage.fromBitmap(mImageTextureView.getBitmap());
-
-        FirebaseVisionFaceDetector detector = FirebaseVision.getInstance()
-                .getVisionFaceDetector(realTimeOpts);
-
-        Task<List<FirebaseVisionFace>> result =
-                detector.detectInImage(fireImage)
-                        .addOnSuccessListener(
-                                new OnSuccessListener<List<FirebaseVisionFace>>() {
-                                    @Override
-                                    public void onSuccess(List<FirebaseVisionFace> faces) {
-                                        if(faces.size() <= 0) {
-                                            Toast.makeText(getActivity(), "NO FACES DETECTED", Toast.LENGTH_SHORT).show();
-                                        }
-                                        else if (faces.size() ==  1){
-                                            Toast.makeText(getActivity(), "SINGLE FACE DETECTED", Toast.LENGTH_SHORT).show();
-                                        }
-                                        else{
-                                            Toast.makeText(getActivity(), "MULTIPLE FACES DETECTED", Toast.LENGTH_SHORT).show();
-                                        }
-
-                                        for (FirebaseVisionFace face : faces) {
-                                            Rect bounds = face.getBoundingBox(); // Bounds of the Face that was detected
-                                            float rotY = face.getHeadEulerAngleY();  // Head is rotated to the right rotY degrees
-                                            float rotZ = face.getHeadEulerAngleZ();  // Head is tilted sideways rotZ degrees
-
-                                        }
-                                    }
-
-
-                                })
-                        .addOnFailureListener(
-                                new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(getActivity(), "Function Failure", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-        mPhotoView.setImageBitmap(fireImage.getBitmap());
-        //mPhotoView.setImageDrawable(result.getResult());
-
-    } //end of scan face function
 
 }
 
