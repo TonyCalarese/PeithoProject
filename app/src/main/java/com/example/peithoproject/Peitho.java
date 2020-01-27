@@ -110,15 +110,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         super.onSaveInstanceState(outState);
     }
 
-    // Define the code block to be executed
-    //Code Reference: https://stackoverflow.com/questions/37995564/what-is-the-way-to-make-an-infinite-loop-in-a-thread-android
-    private Runnable mRefreshImageTexture = new Runnable() {
-        @Override
-        public void run() {
-            FD.scanFaces(mImageTextureView.getBitmap());
-            mPhotoView.setImageBitmap(FD.getImage());
-            mVideoHandler.postDelayed(mRefreshImageTexture, mStandardRefreshRate); }
-    };
+
 
     //Source for rotating with all the proper data https://medium.com/hootsuite-engineering/handling-orientation-changes-on-android-41a6b62cb43f
 
@@ -156,6 +148,18 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
+    //Functions for Handler
+    // Define the code block to be executed
+    //Code Reference: https://stackoverflow.com/questions/37995564/what-is-the-way-to-make-an-infinite-loop-in-a-thread-android
+    private Runnable mRefreshImageTexture = new Runnable() {
+        @Override
+        public void run() {
+            FD.scanFaces(mImageTextureView.getBitmap());
+            mPhotoView.setImageBitmap(FD.getImage());
+            mVideoHandler.postDelayed(mRefreshImageTexture, mStandardRefreshRate); }
+    };
 
 }
 

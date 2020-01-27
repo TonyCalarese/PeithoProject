@@ -9,6 +9,7 @@ public interface PeithoInterface {
      String ORIENTATION = "TEST",
              SCANNER_LOG_TAG = "SCANNING_FACES",
              FIREBASE_IMAGE_RESULT_LOG_TAG = "FIREBASE_RESULTS";
+
      int REQUEST_PHOTO = 101;
 
 
