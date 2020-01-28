@@ -1,7 +1,6 @@
 package com.example.peithoproject;
 
 import android.graphics.Bitmap;
-import android.graphics.Rect;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -19,7 +18,7 @@ import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
 import java.util.List;
 
 public class FacialDetector extends Peitho {
-
+    public float happinessProbability = 1.0f;
     FirebaseVisionFaceDetectorOptions realTimeOpts = new FirebaseVisionFaceDetectorOptions.Builder().setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CONTOURS).build();
     FirebaseVisionFaceDetector detector = FirebaseVision.getInstance().getVisionFaceDetector(realTimeOpts);
     FirebaseVisionImage fireImage;
@@ -28,6 +27,15 @@ public class FacialDetector extends Peitho {
     public Bitmap getImage(){
         return fireImage.getBitmap();
     }
+    private void adjustHappinessProbability(float prob){
+        happinessProbability = (happinessProbability + prob) / 2;
+    }
+    public String getHappiness() {
+        return "Happiness: " +Float.toString(happinessProbability * 100) + " %";
+    }
+
+
+
 
     public void scanFaces(Bitmap image) {
         fireImage = FirebaseVisionImage.fromBitmap(image);
@@ -48,10 +56,10 @@ public class FacialDetector extends Peitho {
                 }
 
                 for (FirebaseVisionFace face : faces) {
-                    Rect bounds = face.getBoundingBox(); // Bounds of the Face that was detected
-                    float rotY = face.getHeadEulerAngleY();  // Head is rotated to the right rotY degrees
-                    float rotZ = face.getHeadEulerAngleZ();  // Head is tilted sideways rotZ degrees
-
+                    //Rect bounds = face.getBoundingBox(); // Bounds of the Face that was detected
+                    //float rotY = face.getHeadEulerAngleY();  // Head is rotated to the right rotY degrees
+                    //float rotZ = face.getHeadEulerAngleZ();  // Head is tilted sideways rotZ degrees
+                     adjustHappinessProbability(face.getSmilingProbability());
                 }
             }
 
