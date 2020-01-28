@@ -1,8 +1,8 @@
 package com.example.peithoproject;
 
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -19,13 +19,16 @@ import java.util.List;
 
 public class FacialDetector extends Peitho {
     public float happinessProbability = 1.0f;
-    FirebaseVisionFaceDetectorOptions realTimeOpts = new FirebaseVisionFaceDetectorOptions.Builder().setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CONTOURS).build();
+    FirebaseVisionFaceDetectorOptions realTimeOpts = new FirebaseVisionFaceDetectorOptions.Builder().setContourMode(FirebaseVisionFaceDetectorOptions.FAST).build();
     FirebaseVisionFaceDetector detector = FirebaseVision.getInstance().getVisionFaceDetector(realTimeOpts);
     FirebaseVisionImage fireImage;
 
+    Bitmap cutFace;
+
 
     public Bitmap getImage(){
-        return fireImage.getBitmap();
+        //return fireImage.getBitmap();
+        return cutFace;
     }
     private void adjustHappinessProbability(float prob){
         happinessProbability = (happinessProbability + prob) / 2;
@@ -34,11 +37,24 @@ public class FacialDetector extends Peitho {
         return "Happiness: " +Float.toString(happinessProbability * 100) + " %";
     }
 
+    public void setFireImage(Bitmap image){
+        fireImage = FirebaseVisionImage.fromBitmap(image);
+    }
+    public Bitmap getFireImage()
+    {
+        return fireImage.getBitmap();
+    }
 
+    //Source of reference: https://stackoverflow.com/questions/5432495/cut-the-portion-of-bitmap
+    //https://stackoverflow.com/questions/10998843/create-a-cropped-bitmap-from-an-original-bitmap
+    public Bitmap getCutFace(Bitmap image, int x, int y, int width, int height) {
+        Bitmap temp = Bitmap.createBitmap(image, 100, 100, 100, 100);
+        return temp;
+    }
 
 
     public void scanFaces(Bitmap image) {
-        fireImage = FirebaseVisionImage.fromBitmap(image);
+       setFireImage(image);
         Task<List<FirebaseVisionFace>> result = detector.detectInImage(fireImage).addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionFace>>() {
             @Override
             public void onSuccess(List<FirebaseVisionFace> faces) {
@@ -54,12 +70,24 @@ public class FacialDetector extends Peitho {
                     //Toast.makeText(getActivity(), "MULTIPLE FACES DETECTED", Toast.LENGTH_SHORT).show();
                     Log.d(SCANNER_LOG_TAG, "MULTIPLE FACES DETECTED");
                 }
-
+                //source for landmarks: https://medium.com/androidiots/firebase-ml-kit-101-face-detection-5057190e58c0
                 for (FirebaseVisionFace face : faces) {
-                    //Rect bounds = face.getBoundingBox(); // Bounds of the Face that was detected
+                    Rect bounds = face.getBoundingBox(); // Bounds of the Face that was detected
                     //float rotY = face.getHeadEulerAngleY();  // Head is rotated to the right rotY degrees
                     //float rotZ = face.getHeadEulerAngleZ();  // Head is tilted sideways rotZ degrees
                      adjustHappinessProbability(face.getSmilingProbability());
+                     //FirebaseVisionFaceContour faceContour = face.getContour();
+
+                    cutFace = getCutFace(getFireImage(), bounds.centerX(), bounds.centerY(), bounds.width(), bounds.height()); //For testing purposes
+                    // the last face detected will be the face
+
+                }
+
+                //Reference for checking if Bitmap is empty: https://stackoverflow.com/questions/28767466/how-to-check-if-a-bitmap-is-empty-blank-on-android
+                Bitmap emptyBitmap = Bitmap.createBitmap(cutFace.getWidth(), cutFace.getHeight(), cutFace.getConfig());
+                if (cutFace.sameAs(emptyBitmap)) {
+                    // cutFace is empty/blank
+                    cutFace = fireImage.getBitmap();
                 }
             }
 
@@ -69,11 +97,13 @@ public class FacialDetector extends Peitho {
                         new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getActivity(), "Function Failure", Toast.LENGTH_SHORT).show();
+                                Log.d(SCANNER_LOG_TAG, "FUNCTION FAILURE");
                             }
                         });
 
        Log.d(FIREBASE_IMAGE_RESULT_LOG_TAG, result.toString());
     } //end Scan Faces Function
+
+
 
 }
