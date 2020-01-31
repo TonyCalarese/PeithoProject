@@ -164,5 +164,3 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     };
 
 }
-
-

@@ -25,7 +25,6 @@ android {
 
 }
 
-
 // Added Tensorflow Lite Dependencies
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -49,4 +48,7 @@ dependencies {
     // If you want to detect face contours (landmark detection and classification
     // don't require this additional model):
     implementation 'com.google.firebase:firebase-ml-vision-face-model:19.0.0'
+
+    //Firebase Tensorflow lite Model interperter
+    implementation 'com.google.firebase:firebase-ml-model-interpreter:22.0.1'
 }
