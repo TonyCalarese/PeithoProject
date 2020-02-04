@@ -18,7 +18,8 @@ import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
 import java.util.List;
 
 public class FacialDetector extends Peitho {
-    public float happinessProbability = 1.0f;
+    public float happinessProbability = 0.0f;
+    public String mEmotion = "";
     FirebaseVisionFaceDetectorOptions realTimeOpts = new FirebaseVisionFaceDetectorOptions.Builder().setContourMode(FirebaseVisionFaceDetectorOptions.FAST).build();
     FirebaseVisionFaceDetector detector = FirebaseVision.getInstance().getVisionFaceDetector(realTimeOpts);
     FirebaseVisionImage fireImage;
@@ -31,15 +32,20 @@ public class FacialDetector extends Peitho {
         return cutFace;
     }
     private void adjustHappinessProbability(float prob){
-        happinessProbability = (happinessProbability + prob) / 2;
+        //happinessProbability = (happinessProbability + prob) / 2;
+        //happinessProbability *= -100;
+        happinessProbability = prob;
     }
     public String getHappiness() {
-        return "Happiness: " +Float.toString(happinessProbability * 100) + " %";
+        //return "Happiness: " +Float.toString(happinessProbability) + " %";
+        return mEmotion;
     }
 
     public void setFireImage(Bitmap image){
+
         fireImage = FirebaseVisionImage.fromBitmap(image);
     }
+
     public Bitmap getFireImage()
     {
         return fireImage.getBitmap();
@@ -48,7 +54,7 @@ public class FacialDetector extends Peitho {
     //Source of reference: https://stackoverflow.com/questions/5432495/cut-the-portion-of-bitmap
     //https://stackoverflow.com/questions/10998843/create-a-cropped-bitmap-from-an-original-bitmap
     public Bitmap getCutFace(Bitmap image, int x, int y, int width, int height) {
-        Bitmap temp = Bitmap.createBitmap(image, 100, 100, 100, 100);
+        Bitmap temp = Bitmap.createBitmap(image, x, y, width, height);
         return temp;
     }
 
@@ -76,19 +82,28 @@ public class FacialDetector extends Peitho {
                     //float rotY = face.getHeadEulerAngleY();  // Head is rotated to the right rotY degrees
                     //float rotZ = face.getHeadEulerAngleZ();  // Head is tilted sideways rotZ degrees
                      adjustHappinessProbability(face.getSmilingProbability());
-                     //FirebaseVisionFaceContour faceContour = face.getContour();
 
-                    cutFace = getCutFace(getFireImage(), bounds.centerX(), bounds.centerY(), bounds.width(), bounds.height()); //For testing purposes
+                    //Crashes here most likely will need to troubleshoot
+                    cutFace = getCutFace(getFireImage(), bounds.left, bounds.bottom, bounds.width(), bounds.height());
+                    mEmotion = Emo.processEmo(cutFace);
+                    //For testing purposes
                     // the last face detected will be the face
 
                 }
 
                 //Reference for checking if Bitmap is empty: https://stackoverflow.com/questions/28767466/how-to-check-if-a-bitmap-is-empty-blank-on-android
+               /*
                 Bitmap emptyBitmap = Bitmap.createBitmap(cutFace.getWidth(), cutFace.getHeight(), cutFace.getConfig());
                 if (cutFace.sameAs(emptyBitmap)) {
                     // cutFace is empty/blank
                     cutFace = fireImage.getBitmap();
                 }
+
+                */
+
+
+
+
             }
 
 
