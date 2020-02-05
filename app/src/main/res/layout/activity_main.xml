@@ -1,4 +1,6 @@
 <FrameLayout android:id="@+id/fragment_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent"
+    android:keepScreenOn="true"/>
+    <!--Source for keeping Screen on: https://stackoverflow.com/questions/2039555/how-to-get-an-android-wakelock-to-work -->
