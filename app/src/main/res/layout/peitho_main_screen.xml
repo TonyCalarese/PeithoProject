@@ -39,8 +39,8 @@
 
         <TextureView
             android:id="@+id/imageSurfaceView"
-            android:layout_width="631dp"
-            android:layout_height="867dp"
+            android:layout_width="500dp"
+            android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.006"
