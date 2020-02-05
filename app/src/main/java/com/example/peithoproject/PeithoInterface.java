@@ -15,11 +15,6 @@ public interface PeithoInterface {
 
      //Handler Elements
      Handler mVideoHandler = new Handler();
-     //Source for wakeLock:https://developer.android.com/training/scheduling/wakelock#java
-     //PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-     //PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-      //       "MyApp::MyWakelockTag");
-
 
      //Face Related Classes
      FacialDetector FD = new FacialDetector();
