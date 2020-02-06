@@ -2,13 +2,13 @@ package com.example.peithoproject;
 
 //Tensorflow Lite Imports
 
-
-
 // Tensorflow Adapted from https://github.com/EliotAndres/tensorflow-2-run-on-mobile-devices-ios-android-browser
 // and https://github.com/tensorflow/examples/blob/master/lite/examples/image_classification/android/EXPLORE_THE_CODE.md
 // and https://github.com/tensorflow/tensorflow/blob/master/tensorflow/lite/experimental/support/java/README.md
+// and https://firebase.google.com/docs/ml-kit/android/use-custom-models
 
 
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
@@ -26,25 +26,12 @@ import com.google.firebase.ml.custom.FirebaseModelInterpreter;
 import com.google.firebase.ml.custom.FirebaseModelInterpreterOptions;
 import com.google.firebase.ml.custom.FirebaseModelOutputs;
 
-public class EmoIdentifier {
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class EmoIdentifier extends Peitho {
     private Object mFaces;
-
-    //Tensor Flow
-    /*
-    private ImageProcessor mImageProcessor = new ImageProcessor.Builder().add(new ResizeOp(224, 224, ResizeOp.ResizeMethod.BILINEAR)).build();
-    private TensorImage tImage = new TensorImage(DataType.UINT8);
-    private TensorBuffer mProbabilityBuffer = TensorBuffer.createFixedSize(new int[]{1, 1001}, DataType.UINT8);
-    private TensorProcessor mProbabilityProcessor = new TensorProcessor.Builder().add(new NormalizeOp(0, 255)).build();
-    private TensorBuffer mDeQuantBuffer = mProbabilityProcessor.process(mProbabilityBuffer);
-
-    private final String AXIS_LABELS = "label_emotions.txt";
-    private List<String> axisLabels = null;
-    */
-
-    private FirebaseCustomLocalModel localModel = new FirebaseCustomLocalModel.Builder()
-            .setAssetFilePath("model.tflite")
-            .build();
-
+    private FirebaseCustomLocalModel localModel = new FirebaseCustomLocalModel.Builder().setAssetFilePath("model.tflite").build();
 
     //Constructer
     public EmoIdentifier(){}
@@ -52,6 +39,12 @@ public class EmoIdentifier {
     //Setters
     public void setFaces(Object faces){mFaces = faces;}
 
+    //To Finn:
+    // I will be sending you a Bitmap array of the faces
+    //I Am Sending you a Single Bitmap with this line of code: mEmotion = Emo.processEmo(mDetectedFace);
+    //You return a string of the emotion, you take the bitmap of ONLY the face
+    //Once working for one face we will loop an array after
+    //Comment everything in great detail, IDC if it is a ton of lines
 
     public String processEmo(Bitmap bitmap){
         FirebaseModelInterpreter interpreter;
@@ -92,11 +85,10 @@ public class EmoIdentifier {
                                     float[][] output = result.getOutput(0);
                                     float[] probabilities = output[0];
 
-                                    //AssetManager assetManager = Context.getAssets(); //Need to pass context to access assets folder
+                                    AssetManager assetManager = getContext().getAssets(); //Need to pass context to access assets folder
 
                                     try {
-                                        //BufferedReader reader = new BufferedReader(
-                                                //new InputStreamReader(assetManager.open("label_emotions.txt")));
+                                        BufferedReader reader = new BufferedReader(new InputStreamReader(assetManager.open("label_emotions.txt")));
 
                                         for (int i = 0; i < probabilities.length; i++) {
                                             String label = "";//reader.readLine();
@@ -122,40 +114,6 @@ public class EmoIdentifier {
 
 
         return "Happy";
-    }
+    } //End of processEmo
 
-     /*
-            tImage.load(image);
-            tImage = mImageProcessor.process(tImage);
-
-            try{
-                MappedByteBuffer tfliteModel
-                        = FileUtil.loadMappedFile(getContext(), "mobilenet_v1_1.0_224_quant.tflite");
-                Interpreter tflite = new Interpreter(tfliteModel);
-
-                if(tflite != null) {
-                    tflite.run(tImage.getBuffer(), mProbabilityBuffer.getBuffer());
-                }
-            } catch (IOException e) {
-                Log.e("TF", "Error Reading Model", e);
-            }
-
-            try {
-                axisLabels = FileUtil.loadLabels(getContext(), AXIS_LABELS);
-            } catch (IOException e) {
-                Log.e("TF", "Error Reading Labels", e);
-            }
-
-            if (axisLabels != null) {
-                TensorLabel labels = new TensorLabel(axisLabels, mDeQuantBuffer);
-
-                Map<String, Float> results = labels.getMapWithFloatValue();
-
-                for(Map.Entry<String, Float> entry : results.entrySet()) {
-                    mEmotionTextResults.setText(mEmotionTextResults.getText().toString() + entry.getKey() + ": " + entry.getValue() + "\n");
-                }
-            }
-            */
-
-
-}
+} //End of Class
