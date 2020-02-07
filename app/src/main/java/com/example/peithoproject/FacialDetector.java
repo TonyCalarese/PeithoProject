@@ -21,8 +21,15 @@ public class FacialDetector extends Peitho {
     public float mHappinessProbability = 0.0f;
     public String mEmotion = EMPTY_EMOPTION_STRING;
 
-    FirebaseVisionFaceDetectorOptions mRealTimeOpts = new FirebaseVisionFaceDetectorOptions.Builder().setContourMode(FirebaseVisionFaceDetectorOptions.FAST).build();
-    FirebaseVisionFaceDetector mDetector = FirebaseVision.getInstance().getVisionFaceDetector(mRealTimeOpts);
+    FirebaseVisionFaceDetectorOptions mRealTimeOpts = new FirebaseVisionFaceDetectorOptions.Builder()
+            .setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CONTOURS)
+            .setMinFaceSize(.15f)
+            .enableTracking()
+            .build();
+
+    FirebaseVisionFaceDetector mDetector = FirebaseVision.getInstance().
+            getVisionFaceDetector(mRealTimeOpts);
+
     FirebaseVisionImage mFireImage;
 
     Bitmap mDetectedFace;
@@ -86,34 +93,20 @@ public class FacialDetector extends Peitho {
                 // End of Code that can be Audited
 
                 //source for landmarks: https://medium.com/androidiots/firebase-ml-kit-101-face-detection-5057190e58c0
+                //https://firebase.google.com/docs/ml-kit/detect-faces
+                //Specific source for Boundaries: https://medium.com/google-developer-experts/exploring-firebase-mlkit-on-android-face-detection-part-two-de7e307c52e0
                 for (FirebaseVisionFace face : faces) {
                     Log.d(SCANNER_LOG_TAG, ACKNOWLEDGED_FACE_LOG);
                     Rect bounds = face.getBoundingBox(); // Bounds of the Face that was detected
-                    //float rotY = face.getHeadEulerAngleY();  // Head is rotated to the right rotY degrees
-                    //float rotZ = face.getHeadEulerAngleZ();  // Head is tilted sideways rotZ degrees
+                    Log.d("TAG", "Face bounds : " + face.getBoundingBox());
+                    float rotY = face.getHeadEulerAngleY();  // Head is rotated to the right rotY degrees
+                    float rotZ = face.getHeadEulerAngleZ();  // Head is tilted sideways rotZ degrees
                      adjustHappinessProbability(face.getSmilingProbability());
 
                     //Crashes here most likely will need to troubleshoot
                     mDetectedFace = getCutFace(getFireImage(), bounds.left, bounds.bottom, bounds.width(), bounds.height());
-                    mEmotion = Emo.processEmo(mDetectedFace);
-                    //For testing purposes
-                    // the last face detected will be the face
-
+                    //mEmotion = Emo.processEmo(mDetectedFace);
                 }
-
-                //Reference for checking if Bitmap is empty: https://stackoverflow.com/questions/28767466/how-to-check-if-a-bitmap-is-empty-blank-on-android
-               /*
-                Bitmap emptyBitmap = Bitmap.createBitmap(cutFace.getWidth(), cutFace.getHeight(), cutFace.getConfig());
-                if (cutFace.sameAs(emptyBitmap)) {
-                    // cutFace is empty/blank
-                    cutFace = fireImage.getBitmap();
-                }
-
-                */
-
-
-
-
             }
 
 
@@ -128,7 +121,4 @@ public class FacialDetector extends Peitho {
 
        Log.d(FIREBASE_IMAGE_RESULT_LOG_TAG, result.toString());
     } //end Scan Faces Function
-
-
-
 }
