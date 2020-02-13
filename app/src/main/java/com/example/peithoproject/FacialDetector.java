@@ -22,9 +22,8 @@ public class FacialDetector extends Peitho {
     public String mEmotion = EMPTY_EMOPTION_STRING;
 
     FirebaseVisionFaceDetectorOptions mRealTimeOpts = new FirebaseVisionFaceDetectorOptions.Builder()
-            .setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CONTOURS)
-            .setMinFaceSize(.15f)
-            .enableTracking()
+            .setContourMode(FirebaseVisionFaceDetectorOptions.FAST)
+            //.enableTracking()
             .build();
 
     FirebaseVisionFaceDetector mDetector = FirebaseVision.getInstance().
@@ -36,18 +35,18 @@ public class FacialDetector extends Peitho {
 
 
     public Bitmap getImage(){
-        //return fireImage.getBitmap();
-        return mDetectedFace;
+        return mFireImage.getBitmap();
+        //return mDetectedFace;
     }
     private void adjustHappinessProbability(float prob){
-        //happinessProbability = (happinessProbability + prob) / 2;
+        mHappinessProbability = (mHappinessProbability + prob) / 2;
         //happinessProbability *= -100;
-        mHappinessProbability = prob;
+        //mHappinessProbability = prob;
     }
     public String getHappiness() {
         //Happiness is a float between 0.0 and 1.0
-        //return "Happiness: " +Float.toString(happinessProbability) + " %";
-        return Float.toString(mHappinessProbability);
+        return "Happiness: " +Float.toString(mHappinessProbability) + " %";
+        //return Float.toString(mHappinessProbability);
     }
     public String getEmotion() {
 
@@ -72,7 +71,8 @@ public class FacialDetector extends Peitho {
 
 
     public void scanFaces(Bitmap image) {
-       setFireImage(image);
+       //setFireImage(image);
+        mFireImage = FirebaseVisionImage.fromBitmap(image);
         Task<List<FirebaseVisionFace>> result = mDetector.detectInImage(mFireImage).addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionFace>>() {
             @Override
             public void onSuccess(List<FirebaseVisionFace> faces) {
@@ -104,8 +104,11 @@ public class FacialDetector extends Peitho {
                      adjustHappinessProbability(face.getSmilingProbability());
 
                     //Crashes here most likely will need to troubleshoot
-                    mDetectedFace = getCutFace(getFireImage(), bounds.left, bounds.bottom, bounds.width(), bounds.height());
+                    //mDetectedFace = getCutFace(getFireImage(), bounds.left, bounds.bottom, bounds.width(), bounds.height());
                     //mEmotion = Emo.processEmo(mDetectedFace);
+                    //mEmotion = String.valueOf(face.getSmilingProbability() + " Level of Happiness");
+
+                    adjustHappinessProbability(face.getSmilingProbability());
                 }
             }
 

@@ -19,7 +19,7 @@
 
             <TextureView
                 android:id="@+id/imageSurfaceView"
-                android:layout_width="300dp"
+                android:layout_width="412dp"
                 android:layout_height="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -32,7 +32,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/linearLayout"
             tools:layout_editor_absoluteY="0dp">
