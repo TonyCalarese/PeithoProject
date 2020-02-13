@@ -29,5 +29,5 @@ public interface PeithoInterface {
      EmoIdentifier Emo = new EmoIdentifier();
 
 
-     int mStandardRefreshRate = 10000; //in milliseconds, every 10 seconds
+     int mStandardRefreshRate = 100; //in milliseconds, every 10 seconds
 }

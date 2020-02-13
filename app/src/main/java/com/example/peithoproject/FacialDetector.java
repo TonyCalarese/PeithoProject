@@ -22,7 +22,7 @@ public class FacialDetector extends Peitho {
     public String mEmotion = EMPTY_EMOPTION_STRING;
 
     FirebaseVisionFaceDetectorOptions mRealTimeOpts = new FirebaseVisionFaceDetectorOptions.Builder()
-            .setContourMode(FirebaseVisionFaceDetectorOptions.FAST)
+            .setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
             //.enableTracking()
             .build();
 
@@ -39,8 +39,8 @@ public class FacialDetector extends Peitho {
         //return mDetectedFace;
     }
     private void adjustHappinessProbability(float prob){
-        mHappinessProbability = (mHappinessProbability + prob) / 2;
-        //happinessProbability *= -100;
+        //mHappinessProbability = (mHappinessProbability + prob) / 2;
+        mHappinessProbability *= -100;
         //mHappinessProbability = prob;
     }
     public String getHappiness() {
@@ -49,7 +49,6 @@ public class FacialDetector extends Peitho {
         //return Float.toString(mHappinessProbability);
     }
     public String getEmotion() {
-
         return mEmotion;
     }
 
@@ -98,10 +97,9 @@ public class FacialDetector extends Peitho {
                 for (FirebaseVisionFace face : faces) {
                     Log.d(SCANNER_LOG_TAG, ACKNOWLEDGED_FACE_LOG);
                     Rect bounds = face.getBoundingBox(); // Bounds of the Face that was detected
-                    Log.d("TAG", "Face bounds : " + face.getBoundingBox());
                     float rotY = face.getHeadEulerAngleY();  // Head is rotated to the right rotY degrees
                     float rotZ = face.getHeadEulerAngleZ();  // Head is tilted sideways rotZ degrees
-                     adjustHappinessProbability(face.getSmilingProbability());
+
 
                     //Crashes here most likely will need to troubleshoot
                     //mDetectedFace = getCutFace(getFireImage(), bounds.left, bounds.bottom, bounds.width(), bounds.height());
