@@ -28,6 +28,7 @@ import com.google.firebase.ml.custom.FirebaseModelOutputs;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 
 public class EmoIdentifier extends Peitho {
     private Object mFaces;
@@ -48,6 +49,7 @@ public class EmoIdentifier extends Peitho {
 
     public String processEmo(Bitmap bitmap){
         FirebaseModelInterpreter interpreter;
+        final HashMap<String, Float> emotionMap = new HashMap<>();
 
         try {
             FirebaseModelInterpreterOptions options =
@@ -91,10 +93,11 @@ public class EmoIdentifier extends Peitho {
                                         BufferedReader reader = new BufferedReader(new InputStreamReader(assetManager.open("label_emotions.txt")));
 
                                         for (int i = 0; i < probabilities.length; i++) {
-                                            String label = "";//reader.readLine();
+                                            String label = reader.readLine();//reader.readLine();
                                             Log.i("MLKit", String.format("%s: %1.4f", label, probabilities[i]));//Outputs the probabilites to Log for now
+                                            emotionMap.put(label, probabilities[i]);
                                         }
-                                        //ADD RETURN STATEMENT HERE
+
                                     } catch (Exception e) {
                                         Log.d("Label Error", "Unable to read labels");
                                     }
@@ -108,12 +111,24 @@ public class EmoIdentifier extends Peitho {
                                 }
                             });
 
+
+            float bestGuess = 0;
+            String bestGuessEmotion = "";
+            for (HashMap.Entry<String, Float> emotion : emotionMap.entrySet()) {
+                if (emotion.getValue() > bestGuess) {
+                    bestGuess = emotion.getValue();
+                    bestGuessEmotion = emotion.getKey();
+                }
+            }
+
+            return bestGuessEmotion;
+
         } catch (FirebaseMLException e) {
             Log.d("MODEL ERROR", "Model failed");
         }
 
 
-        return "Happy";
+        return "ERROR GETTING EMOTION";
     } //End of processEmo
 
 } //End of Class
