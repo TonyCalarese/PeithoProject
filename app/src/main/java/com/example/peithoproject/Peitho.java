@@ -138,9 +138,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
                 return true;
             case R.id.single_shot_menu_icon:
                 Toast.makeText(getActivity(), "DETECTING FACES", Toast.LENGTH_SHORT).show();
-                FD.scanFaces(mImageTextureView.getBitmap());
-                mPhotoView.setImageBitmap(FD.getImage());
-                mEmotionTextResults.setText(FD.getHappiness());
+                setScreenProperties();
                 return true;
             case R.id.download:
                 //Need to work on saving
@@ -150,17 +148,26 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         }
     }
 
-
     //Functions for Handler
     // Define the code block to be executed
     //Code Reference: https://stackoverflow.com/questions/37995564/what-is-the-way-to-make-an-infinite-loop-in-a-thread-android
     private Runnable mRefreshImageTexture = new Runnable() {
         @Override
         public void run() {
-            FD.scanFaces(mImageTextureView.getBitmap());
-            mPhotoView.setImageBitmap(FD.getImage());
-            mEmotionTextResults.setText(FD.getHappiness());
-            mVideoHandler.postDelayed(mRefreshImageTexture, mStandardRefreshRate); }
+            setScreenProperties();
+            mVideoHandler.postDelayed(mRefreshImageTexture, mStandardRefreshRate);
+        };
     };
 
+    //Function for Setting the Screen properties
+    private void setScreenProperties() {
+        FD.scanFaces(mImageTextureView.getBitmap()); //Gives a Bitmap
+        mPhotoView.setImageBitmap(FD.getImage()); //Needs a Bitmap
+        mEmotionTextResults.setText(FD.getHappiness()); //Needs a String
+    }
 }
+
+
+
+
+
