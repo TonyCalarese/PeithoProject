@@ -9,29 +9,20 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
-import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector;
-import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
 
 import java.util.List;
 
 public class FacialDetector extends Peitho {
-    public float mHappinessProbability = 0.0f;
+    public double mHappinessProbability = 100.0;
     public String mEmotion = EMPTY_EMOPTION_STRING;
 
-    FirebaseVisionFaceDetectorOptions mRealTimeOpts = new FirebaseVisionFaceDetectorOptions.Builder()
-            .setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
-            //.enableTracking()
-            .build();
+    //Moved Options and Declaration the the Interface
 
-    FirebaseVisionFaceDetector mDetector = FirebaseVision.getInstance().
-            getVisionFaceDetector(mRealTimeOpts);
+    FirebaseVisionImage mFireImage; //Set a blank Image
 
-    FirebaseVisionImage mFireImage;
-
-    Bitmap mDetectedFace;
+    Bitmap mDetectedFace; //Single Detected Image Variable
 
 
     public Bitmap getImage(){
@@ -39,14 +30,13 @@ public class FacialDetector extends Peitho {
         //return mDetectedFace;
     }
     private void adjustHappinessProbability(float prob){
-        //mHappinessProbability = (mHappinessProbability + prob) / 2;
-        mHappinessProbability *= -100;
+        mHappinessProbability += Math.abs(prob);
+        mHappinessProbability /= 2;
         //mHappinessProbability = prob;
     }
     public String getHappiness() {
-        //Happiness is a float between 0.0 and 1.0
-        return "Happiness: " +Float.toString(mHappinessProbability) + " %";
-        //return Float.toString(mHappinessProbability);
+        //Happiness is a float between 0.0 and 1.0, converted to a double
+        return "Happiness: " +Double.toString(mHappinessProbability) + " %";
     }
     public String getEmotion() {
         return mEmotion;
@@ -84,6 +74,7 @@ public class FacialDetector extends Peitho {
                 else if (faces.size() ==  1){
                     //Toast.makeText(getActivity(), "SINGLE FACE DETECTED", Toast.LENGTH_SHORT).show();
                     Log.d(SCANNER_LOG_TAG, ONE_FACE_LOG);
+
                 }
                 else{
                     //Toast.makeText(getActivity(), "MULTIPLE FACES DETECTED", Toast.LENGTH_SHORT).show();
