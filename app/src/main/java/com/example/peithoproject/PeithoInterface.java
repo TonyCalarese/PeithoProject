@@ -15,7 +15,8 @@ public interface PeithoInterface {
      String NO_FACE_LOG = "NO FACES DETECTED",
           ONE_FACE_LOG = "SINGLE FACE DETECTED",
           MULTI_FACE_LOG = "MULTIPLE FACES DETECTED",
-          ACKNOWLEDGED_FACE_LOG = "FACE DETECTED AND REGISTERED";
+          ACKNOWLEDGED_FACE_LOG = "FACE DETECTED AND REGISTERED",
+          NO_EMOTION_LOGGED = "No Emotion Registered, Defaulting to happiness";
 
 
      int REQUEST_PHOTO = 101;
