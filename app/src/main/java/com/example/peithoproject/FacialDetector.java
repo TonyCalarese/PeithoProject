@@ -65,6 +65,7 @@ public class FacialDetector extends Peitho {
         Task<List<FirebaseVisionFace>> result = mDetector.detectInImage(mFireImage).addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionFace>>() {
             @Override
             public void onSuccess(List<FirebaseVisionFace> faces) {
+                EmoIdentifier id = new EmoIdentifier();
 
                 //Starting here: These lines can be removed when fully functional, unless we want to log properly
                 if(faces.size() <= 0) {
@@ -96,8 +97,11 @@ public class FacialDetector extends Peitho {
                     //mDetectedFace = getCutFace(getFireImage(), bounds.left, bounds.bottom, bounds.width(), bounds.height());
                     //mEmotion = Emo.processEmo(mDetectedFace);
                     //mEmotion = String.valueOf(face.getSmilingProbability() + " Level of Happiness");
-
-                    adjustHappinessProbability(face.getSmilingProbability());
+                    try{
+                        mEmotion = id.processEmo(getCutFace(getFireImage(), bounds.left, bounds.bottom, bounds.width(), bounds.height()));
+                    } catch (Exception e) {
+                        adjustHappinessProbability(face.getSmilingProbability());
+                    }
                 }
             }
 
