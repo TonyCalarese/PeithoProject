@@ -138,9 +138,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
                 return true;
             case R.id.single_shot_menu_icon:
                 Toast.makeText(getActivity(), "DETECTING FACES", Toast.LENGTH_SHORT).show();
-                FD.scanFaces(mImageTextureView.getBitmap());
-                mPhotoView.setImageBitmap(FD.getImage());
-                mEmotionTextResults.setText(FD.getHappiness());
+                adjustScreen();
                 return true;
             case R.id.download:
                 //Need to work on saving
@@ -157,10 +155,15 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     private Runnable mRefreshImageTexture = new Runnable() {
         @Override
         public void run() {
-            FD.scanFaces(mImageTextureView.getBitmap());
-            mPhotoView.setImageBitmap(FD.getImage());
-            mEmotionTextResults.setText(FD.getHappiness());
+            adjustScreen();
             mVideoHandler.postDelayed(mRefreshImageTexture, mStandardRefreshRate); }
     };
+
+
+    private void adjustScreen() {
+        FD.scanFaces(mImageTextureView.getBitmap());
+        mPhotoView.setImageBitmap(FD.getImage());
+        mEmotionTextResults.setText(FD.getEmotion());
+    }
 
 }
