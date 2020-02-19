@@ -70,13 +70,10 @@ public class FacialDetector extends Peitho {
 
 
     public void scanFaces(Bitmap image) {
-       //setFireImage(image);
-        mFireImage = FirebaseVisionImage.fromBitmap(image);
+       setFireImage(image);
         Task<List<FirebaseVisionFace>> result = mDetector.detectInImage(mFireImage).addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionFace>>() {
             @Override
             public void onSuccess(List<FirebaseVisionFace> faces) {
-                EmoIdentifier id = new EmoIdentifier();
-
                 //Starting here: These lines can be removed when fully functional, unless we want to log properly
                 if(faces.size() <= 0) {
                     //Toast.makeText(getActivity(), "NO FACES DETECTED", Toast.LENGTH_SHORT).show();
@@ -101,13 +98,10 @@ public class FacialDetector extends Peitho {
                     float rotY = face.getHeadEulerAngleY();  // Head is rotated to the right rotY degrees
                     float rotZ = face.getHeadEulerAngleZ();  // Head is tilted sideways rotZ degrees
 
-
-                    //Crashes here most likely will need to troubleshoot
-                    //mDetectedFace = getCutFace(getFireImage(), bounds.left, bounds.bottom, bounds.width(), bounds.height());
-                    //mEmotion = Emo.processEmo(mDetectedFace);
-                    //mEmotion = String.valueOf(face.getSmilingProbability() + " Level of Happiness");
+                    mDetectedFace = getCutFace(getFireImage(), bounds.left, bounds.top, bounds.width(), bounds.height());
+                    
                     try{
-                        mEmotion = id.processEmo(getCutFace(getFireImage(), bounds.left, bounds.bottom, bounds.width(), bounds.height()));
+                        mEmotion = Emo.processEmo(getCutFace(getFireImage(), bounds.left, bounds.top, bounds.width(), bounds.height()));
                     } catch (Exception e) {
                         adjustHappinessProbability(face.getSmilingProbability());
                     }
