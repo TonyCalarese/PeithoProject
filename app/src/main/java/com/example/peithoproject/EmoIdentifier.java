@@ -17,7 +17,6 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.ml.common.FirebaseMLException;
 import com.google.firebase.ml.custom.FirebaseCustomLocalModel;
 import com.google.firebase.ml.custom.FirebaseModelDataType;
 import com.google.firebase.ml.custom.FirebaseModelInputOutputOptions;
@@ -111,7 +110,7 @@ public class EmoIdentifier extends Peitho {
                                 }
                             });
 
-
+        } finally {
             float bestGuess = 0;
             String bestGuessEmotion = "";
             for (HashMap.Entry<String, Float> emotion : emotionMap.entrySet()) {
@@ -123,12 +122,9 @@ public class EmoIdentifier extends Peitho {
 
             return bestGuessEmotion;
 
-        } catch (FirebaseMLException e) {
-            Log.d("MODEL ERROR", "Model failed");
         }
-
-
-        return "ERROR GETTING EMOTION";
     } //End of processEmo
 
 } //End of Class
+
+
