@@ -29,7 +29,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
-public class EmoIdentifier extends Peitho {
+public class EmoIdentifier {
     private Object mFaces;
     private FirebaseCustomLocalModel localModel = new FirebaseCustomLocalModel.Builder().setAssetFilePath("mobilenet_v1_1.0_224_quant.tflite").build();
 
@@ -46,7 +46,7 @@ public class EmoIdentifier extends Peitho {
     //Once working for one face we will loop an array after
     //Comment everything in great detail, IDC if it is a ton of lines
 
-    public String processEmo(Bitmap bitmap){
+    public void processEmo(Bitmap bitmap, FacialDetector FD){
         FirebaseModelInterpreter interpreter;
         final HashMap<String, Float> emotionMap = new HashMap<>();
 
@@ -61,7 +61,7 @@ public class EmoIdentifier extends Peitho {
                             .setOutputFormat(0, FirebaseModelDataType.FLOAT32, new int[]{1, 7}) // Output: an array containing float values for each emotions presence
                             .build();
 
-
+            //The image is being cut and not compressed down
             bitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true); //Scales input bitmap
             int batchNum = 0;
             float[][][][] input = new float[1][224][224][3];
@@ -86,7 +86,7 @@ public class EmoIdentifier extends Peitho {
                                     float[][] output = result.getOutput(0);
                                     float[] probabilities = output[0];
 
-                                    AssetManager assetManager = getContext().getAssets(); //Need to pass context to access assets folder
+                                    AssetManager assetManager = Peitho.FD.getContext().getAssets(); //Need to pass context to access assets folder
 
                                     try {
                                         BufferedReader reader = new BufferedReader(new InputStreamReader(assetManager.open("label_emotions.txt")));
@@ -96,7 +96,16 @@ public class EmoIdentifier extends Peitho {
                                             Log.i("MLKit", String.format("%s: %1.4f", label, probabilities[i]));//Outputs the probabilites to Log for now
                                             emotionMap.put(label, probabilities[i]);
                                         }
+                                        float bestGuess = 0;
+                                        String bestGuessEmotion = "";
+                                        for (HashMap.Entry<String, Float> emotion : emotionMap.entrySet()) {
+                                            if (emotion.getValue() > bestGuess) {
+                                                bestGuess = emotion.getValue();
+                                                bestGuessEmotion = emotion.getKey();
+                                            }
+                                        }
 
+                                        Peitho.FD.mEmotion = bestGuessEmotion;
                                     } catch (Exception e) {
                                         Log.d("Label Error", "Unable to read labels");
                                     }
@@ -114,16 +123,7 @@ public class EmoIdentifier extends Peitho {
             Log.d("MODEL FAIL", e.getMessage());
         }
 
-        float bestGuess = 0;
-        String bestGuessEmotion = "";
-        for (HashMap.Entry<String, Float> emotion : emotionMap.entrySet()) {
-            if (emotion.getValue() > bestGuess) {
-                bestGuess = emotion.getValue();
-                bestGuessEmotion = emotion.getKey();
-            }
-        }
 
-        return bestGuessEmotion;
 
     } //End of processEmo
 

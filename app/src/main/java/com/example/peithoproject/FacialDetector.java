@@ -104,10 +104,13 @@ public class FacialDetector extends Peitho {
                     }
 
                     try{
-                        mEmotion = Emo.processEmo(getCutFace(getFireImage(), bounds.left, bounds.top, bounds.width(), bounds.height()));
+                        Log.d(SCANNER_LOG_TAG, ATTEMPTING_EMOTION);
+                        Emo.processEmo(mDetectedFace, FacialDetector.this);
                         Log.d(SCANNER_LOG_TAG, ACKNOWLEDGED_FACE_LOG);
+                        mEmotionTextResults.setText(FD.getEmotion());
                     } catch (Exception e) {
                         Log.d(SCANNER_LOG_TAG, NO_EMOTION_LOGGED);
+                        Log.d(SCANNER_LOG_TAG, e.getMessage());
                         adjustHappinessProbability(face.getSmilingProbability());
                     }
                 }
