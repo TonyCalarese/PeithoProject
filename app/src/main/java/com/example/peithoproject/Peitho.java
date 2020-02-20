@@ -160,10 +160,10 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     };
 
 
-    private void adjustScreen() {
+    public void adjustScreen() {
         FD.scanFaces(mImageTextureView.getBitmap());
         mPhotoView.setImageBitmap(FD.getImage());
-
+        mEmotionTextResults.setText(FD.getEmotion());
     }
 
 }

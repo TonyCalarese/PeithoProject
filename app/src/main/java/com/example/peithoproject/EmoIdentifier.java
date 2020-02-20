@@ -106,6 +106,7 @@ public class EmoIdentifier {
                                         }
 
                                         Peitho.FD.mEmotion = bestGuessEmotion;
+                                        Peitho.FD.adjustScreen();
                                     } catch (Exception e) {
                                         Log.d("Label Error", "Unable to read labels");
                                     }

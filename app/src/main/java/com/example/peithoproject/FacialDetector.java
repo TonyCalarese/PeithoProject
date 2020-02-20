@@ -92,7 +92,6 @@ public class FacialDetector extends Peitho {
                 //https://firebase.google.com/docs/ml-kit/detect-faces
                 //Specific source for Boundaries: https://medium.com/google-developer-experts/exploring-firebase-mlkit-on-android-face-detection-part-two-de7e307c52e0
                 for (FirebaseVisionFace face : faces) {
-                    Log.d(SCANNER_LOG_TAG, ACKNOWLEDGED_FACE_LOG);
                     Rect bounds = face.getBoundingBox(); // Bounds of the Face that was detected
                     float rotY = face.getHeadEulerAngleY();  // Head is rotated to the right rotY degrees
                     float rotZ = face.getHeadEulerAngleZ();  // Head is tilted sideways rotZ degrees
@@ -107,7 +106,7 @@ public class FacialDetector extends Peitho {
                         Log.d(SCANNER_LOG_TAG, ATTEMPTING_EMOTION);
                         Emo.processEmo(mDetectedFace, FacialDetector.this);
                         Log.d(SCANNER_LOG_TAG, ACKNOWLEDGED_FACE_LOG);
-                        mEmotionTextResults.setText(FD.getEmotion());
+                        Log.d("EMOTION: ", mEmotion);
                     } catch (Exception e) {
                         Log.d(SCANNER_LOG_TAG, NO_EMOTION_LOGGED);
                         Log.d(SCANNER_LOG_TAG, e.getMessage());
