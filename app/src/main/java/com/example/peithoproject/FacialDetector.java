@@ -97,7 +97,11 @@ public class FacialDetector extends Peitho {
                     float rotY = face.getHeadEulerAngleY();  // Head is rotated to the right rotY degrees
                     float rotZ = face.getHeadEulerAngleZ();  // Head is tilted sideways rotZ degrees
 
-                    mDetectedFace = getCutFace(getFireImage(), bounds.left, bounds.top, bounds.width(), bounds.height());
+                    try {
+                        mDetectedFace = getCutFace(getFireImage(), bounds.left, bounds.top, bounds.width(), bounds.height());
+                    } catch (Exception e) {
+                        Log.d("CUT FACE ERROR", e.getMessage());
+                    }
 
                     try{
                         mEmotion = Emo.processEmo(getCutFace(getFireImage(), bounds.left, bounds.top, bounds.width(), bounds.height()));

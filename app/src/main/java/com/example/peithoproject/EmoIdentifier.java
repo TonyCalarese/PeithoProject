@@ -31,7 +31,7 @@ import java.util.HashMap;
 
 public class EmoIdentifier extends Peitho {
     private Object mFaces;
-    private FirebaseCustomLocalModel localModel = new FirebaseCustomLocalModel.Builder().setAssetFilePath("model.tflite").build();
+    private FirebaseCustomLocalModel localModel = new FirebaseCustomLocalModel.Builder().setAssetFilePath("mobilenet_v1_1.0_224_quant.tflite").build();
 
     //Constructer
     public EmoIdentifier(){}
@@ -106,24 +106,28 @@ public class EmoIdentifier extends Peitho {
                             new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Log.d("MODEL FAIL", "Model failed to run");
+                                    Log.d("MODEL FAIL", e.getMessage());
                                 }
                             });
 
-        } finally {
-            float bestGuess = 0;
-            String bestGuessEmotion = "";
-            for (HashMap.Entry<String, Float> emotion : emotionMap.entrySet()) {
-                if (emotion.getValue() > bestGuess) {
-                    bestGuess = emotion.getValue();
-                    bestGuessEmotion = emotion.getKey();
-                }
-            }
-
-            return bestGuessEmotion;
-
+        } catch (Error | Exception  e){
+            Log.d("MODEL FAIL", e.getMessage());
         }
+
+        float bestGuess = 0;
+        String bestGuessEmotion = "";
+        for (HashMap.Entry<String, Float> emotion : emotionMap.entrySet()) {
+            if (emotion.getValue() > bestGuess) {
+                bestGuess = emotion.getValue();
+                bestGuessEmotion = emotion.getKey();
+            }
+        }
+
+        return bestGuessEmotion;
+
     } //End of processEmo
+
+    
 
 } //End of Class
 
