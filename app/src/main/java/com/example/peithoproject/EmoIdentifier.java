@@ -33,9 +33,6 @@ public class EmoIdentifier {
     private Object mFaces;
     private FirebaseCustomLocalModel localModel = new FirebaseCustomLocalModel.Builder().setAssetFilePath("mobilenet_v1_1.0_224_quant.tflite").build();
 
-    //Constructer
-    public EmoIdentifier(){}
-
     //Setters
     public void setFaces(Object faces){mFaces = faces;}
 
@@ -123,12 +120,7 @@ public class EmoIdentifier {
         } catch (Error | Exception  e){
             Log.d("MODEL FAIL", e.getMessage());
         }
-
-
-
     } //End of processEmo
-
-    
 
 } //End of Class
 
