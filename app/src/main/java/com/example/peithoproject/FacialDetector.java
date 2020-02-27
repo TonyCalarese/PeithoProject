@@ -9,61 +9,65 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
-import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector;
-import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
-
+//Sources of Reference for Async tasks: https://stackoverflow.com/questions/51411110/are-the-firebase-ml-kit-functions-asynchronous-so-that-i-could-run-multiple-dete
+//https://www.upwork.com/hiring/mobile/why-you-should-use-asynctask-in-android-development/
 
 public class FacialDetector implements PeithoInterface {
     public float mHappinessProbability = 0.0f;
     public String mEmotion = EMPTY_EMOPTION_STRING;
 
-    FirebaseVisionFaceDetectorOptions mRealTimeOpts = new FirebaseVisionFaceDetectorOptions.Builder()
-            .setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
-            //.enableTracking()
-            .build();
-
-    FirebaseVisionFaceDetector mDetector = FirebaseVision.getInstance().getVisionFaceDetector(mRealTimeOpts);
-
+    //FireBase Declareations //Check interface for the full settings
     FirebaseVisionImage mFireImage;
-
     Bitmap mDetectedFace;
+    ArrayList<Bitmap> mDetectedFaces=new ArrayList<Bitmap>();
 
-
-    public Bitmap getImage(){
-        return mDetectedFace;
-    }
+    //Setters and Functions
     private void adjustHappinessProbability(float prob){
         mHappinessProbability = prob;
     }
-
-    public String getEmotion() {
-        return mEmotion;
-    }
-
     public void setFireImage(Bitmap image){
         mFireImage = FirebaseVisionImage.fromBitmap(image);
     }
+    public void appendFacetoList(Bitmap face) {
+        mDetectedFaces.add(face);
+    }
+    public void clearList() {
+        mDetectedFaces.clear();
+    }
 
+    //Getters
+    public String getHappiness() {
+        return "Happiness: " +Float.toString(mHappinessProbability) + " %";
+    }
     public Bitmap getFireImage()
     {
         return mFireImage.getBitmap();
     }
 
+    public Bitmap getImage(){
+        return mDetectedFace;
+    }
+
+    public String getEmotion() {
+        return mEmotion;
+    }
     //Source of reference: https://stackoverflow.com/questions/5432495/cut-the-portion-of-bitmap
     //https://stackoverflow.com/questions/10998843/create-a-cropped-bitmap-from-an-original-bitmap
-    public Bitmap getCutFace(Bitmap image, int x, int y, int width, int height) {
+    public Bitmap getCutoutFace(Bitmap image, int x, int y, int width, int height) {
         return Bitmap.createBitmap(image, x, y, width, height);
     }
 
 
-    public void scanFaces(Bitmap image) {
+    public void scanFaces(Bitmap image) throws ExecutionException, InterruptedException {
        setFireImage(image);
         Task<List<FirebaseVisionFace>> result = mDetector.detectInImage(mFireImage).addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionFace>>() {
             @Override
@@ -91,7 +95,8 @@ public class FacialDetector implements PeithoInterface {
                     float rotZ = face.getHeadEulerAngleZ();  // Head is tilted sideways rotZ degrees
 
                     try {
-                        mDetectedFace = getCutFace(getFireImage(), bounds.left, bounds.top, bounds.width(), bounds.height());
+                        mDetectedFace = getCutoutFace(getFireImage(), bounds.left, bounds.top, bounds.width(), bounds.height());
+                        //appendFacetoList(mDetectedFace);
                     } catch (Exception e) {
                         Log.d("CUT FACE ERROR", e.getMessage());
                     }
@@ -119,10 +124,9 @@ public class FacialDetector implements PeithoInterface {
                             }
                         });
 
+        //Dont know where this is supposed to go but this waits
+        Tasks.await(result);
        Log.d(FIREBASE_IMAGE_RESULT_LOG_TAG, result.toString());
     } //end Scan Faces Function
 
-    public String getHappiness() {
-        return "Happiness: " +Float.toString(mHappinessProbability) + " %";
-    }
 }
