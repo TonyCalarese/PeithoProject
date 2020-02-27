@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -155,13 +156,20 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     private Runnable mRefreshImageTexture = new Runnable() {
         @Override
         public void run() {
-            adjustScreen();
+           adjustScreen();
             mVideoHandler.postDelayed(mRefreshImageTexture, mStandardRefreshRate); }
     };
 
 
-    public void adjustScreen() {
-        FD.scanFaces(mImageTextureView.getBitmap());
+    public void adjustScreen()  {
+        try {
+            FD.scanFaces(mImageTextureView.getBitmap());
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         mPhotoView.setImageBitmap(FD.getImage());
         mEmotionTextResults.setText(FD.getEmotion());
     }
