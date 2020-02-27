@@ -2,10 +2,9 @@ package com.example.peithoproject;
 
         import android.os.Handler;
 
-        import com.google.firebase.ml.vision.FirebaseVision;
-        import com.google.firebase.ml.vision.common.FirebaseVisionImage;
-        import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector;
-        import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
+import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector;
+import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
 
 public interface PeithoInterface {
 
@@ -38,7 +37,6 @@ public interface PeithoInterface {
      //FireBaseCode
      FirebaseVisionFaceDetectorOptions mRealTimeOpts = new FirebaseVisionFaceDetectorOptions.Builder().setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS).build();
      FirebaseVisionFaceDetector mDetector = FirebaseVision.getInstance().getVisionFaceDetector(mRealTimeOpts);
-
 
      int mStandardRefreshRate = 10000; //in milliseconds, every 10 seconds
 }

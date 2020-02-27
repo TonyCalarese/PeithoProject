@@ -29,7 +29,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
-public class EmoIdentifier {
+public class EmoIdentifier extends Peitho{
     private Object mFaces;
     private FirebaseCustomLocalModel localModel = new FirebaseCustomLocalModel.Builder().setAssetFilePath("mobilenet_v1_1.0_224_quant.tflite").build();
 
@@ -43,7 +43,7 @@ public class EmoIdentifier {
     //Once working for one face we will loop an array after
     //Comment everything in great detail, IDC if it is a ton of lines
 
-    public void processEmo(Bitmap bitmap, FacialDetector FD){
+    public void processEmo(Bitmap bitmap){
         FirebaseModelInterpreter interpreter;
         final HashMap<String, Float> emotionMap = new HashMap<>();
 
@@ -83,7 +83,7 @@ public class EmoIdentifier {
                                     float[][] output = result.getOutput(0);
                                     float[] probabilities = output[0];
 
-                                    AssetManager assetManager = Peitho.FD.getContext().getAssets(); //Need to pass context to access assets folder
+                                    AssetManager assetManager = getActivity().getAssets(); //Need to pass context to access assets folder
 
                                     try {
                                         BufferedReader reader = new BufferedReader(new InputStreamReader(assetManager.open("label_emotions.txt")));
@@ -103,7 +103,7 @@ public class EmoIdentifier {
                                         }
 
                                         Peitho.FD.mEmotion = bestGuessEmotion;
-                                        Peitho.FD.adjustScreen();
+                                        adjustScreen();
                                     } catch (Exception e) {
                                         Log.d("Label Error", "Unable to read labels");
                                     }

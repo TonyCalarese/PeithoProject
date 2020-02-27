@@ -103,7 +103,7 @@ public class FacialDetector implements PeithoInterface {
 
                     try{
                         Log.d(SCANNER_LOG_TAG, ATTEMPTING_EMOTION);
-                        Emo.processEmo(mDetectedFace, FacialDetector.this);
+                        Emo.processEmo(mDetectedFace);
                         Log.d(SCANNER_LOG_TAG, ACKNOWLEDGED_FACE_LOG);
                         Log.d("EMOTION: ", mEmotion);
                     } catch (Exception e) {
