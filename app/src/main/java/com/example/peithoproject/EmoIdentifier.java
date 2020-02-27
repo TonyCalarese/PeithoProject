@@ -29,6 +29,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
+
+//Async sources: https://www.upwork.com/hiring/mobile/why-you-should-use-asynctask-in-android-development/
+//firebask async task: https://www.upwork.com/hiring/mobile/why-you-should-use-asynctask-in-android-development/
 public class EmoIdentifier extends Peitho{
     private Object mFaces;
     private FirebaseCustomLocalModel localModel = new FirebaseCustomLocalModel.Builder().setAssetFilePath("mobilenet_v1_1.0_224_quant.tflite").build();
@@ -37,11 +40,9 @@ public class EmoIdentifier extends Peitho{
     public void setFaces(Object faces){mFaces = faces;}
 
     //To Finn:
-    // I will be sending you a Bitmap array of the faces
-    //I Am Sending you a Single Bitmap with this line of code: mEmotion = Emo.processEmo(mDetectedFace);
-    //You return a string of the emotion, you take the bitmap of ONLY the face
-    //Once working for one face we will loop an array after
-    //Comment everything in great detail, IDC if it is a ton of lines
+  //Lines from the old adjustScreen code to be implemented
+    //     mPhotoView.setImageBitmap(FD.getImage());
+    //        mEmotionTextResults.setText(FD.getEmotion());
 
     public void processEmo(Bitmap bitmap){
         FirebaseModelInterpreter interpreter;
@@ -103,7 +104,12 @@ public class EmoIdentifier extends Peitho{
                                         }
 
                                         Peitho.FD.mEmotion = bestGuessEmotion;
-                                        adjustScreen();
+
+                                        //To Finn: Sources for UI thread
+                                        //https://stackoverflow.com/questions/12850143/android-basics-running-code-in-the-ui-thread
+
+                                        //Need to update the UI here
+                                        // adjustScreen();
                                     } catch (Exception e) {
                                         Log.d("Label Error", "Unable to read labels");
                                     }
@@ -116,7 +122,6 @@ public class EmoIdentifier extends Peitho{
                                     Log.d("MODEL FAIL", e.getMessage());
                                 }
                             });
-
         } catch (Error | Exception  e){
             Log.d("MODEL FAIL", e.getMessage());
         }

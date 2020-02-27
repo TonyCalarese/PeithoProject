@@ -139,7 +139,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
                 return true;
             case R.id.single_shot_menu_icon:
                 Toast.makeText(getActivity(), "DETECTING FACES", Toast.LENGTH_SHORT).show();
-                adjustScreen();
+                scanForFaces();
                 return true;
             case R.id.download:
                 //Need to work on saving
@@ -156,12 +156,12 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     private Runnable mRefreshImageTexture = new Runnable() {
         @Override
         public void run() {
-           adjustScreen();
-            mVideoHandler.postDelayed(mRefreshImageTexture, mStandardRefreshRate); }
+           scanForFaces();
+           mVideoHandler.postDelayed(mRefreshImageTexture, mStandardRefreshRate); }
     };
 
     //Finn Look Here: Added the error handler as requested by the compiler
-    public void adjustScreen()  {
+    public void scanForFaces()  {
         try {
             FD.scanFaces(mImageTextureView.getBitmap());
         } catch (ExecutionException e) {
@@ -170,8 +170,8 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
             e.printStackTrace();
         }
 
-        mPhotoView.setImageBitmap(FD.getImage());
-        mEmotionTextResults.setText(FD.getEmotion());
+   //     mPhotoView.setImageBitmap(FD.getImage());
+        //        mEmotionTextResults.setText(FD.getEmotion());
     }
 
 }

@@ -69,6 +69,7 @@ public class FacialDetector implements PeithoInterface {
 
     public void scanFaces(Bitmap image) throws ExecutionException, InterruptedException {
        setFireImage(image);
+       //Start of Async Task
         Task<List<FirebaseVisionFace>> result = mDetector.detectInImage(mFireImage).addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionFace>>() {
             @Override
             public void onSuccess(List<FirebaseVisionFace> faces) {

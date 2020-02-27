@@ -16,11 +16,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d4d3d073-ef15-4114-a2de-a473e696e050" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/app/app.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/peithoproject/EmoIdentifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/peithoproject/EmoIdentifier.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/peithoproject/FacialDetector.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/peithoproject/FacialDetector.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/peithoproject/Peitho.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/peithoproject/Peitho.java" afterDir="false" />
     </list>
@@ -52,14 +50,6 @@
         <option value="Class" />
       </list>
     </option>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>lans</find>
-      <find>mStarted</find>
-      <find>peith</find>
-      <find>face</find>
-    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
