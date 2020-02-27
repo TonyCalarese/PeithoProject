@@ -9,95 +9,108 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
-public class FacialDetector extends Peitho {
-    public double mHappinessProbability = 100.0;
+
+//Sources of Reference for Async tasks: https://stackoverflow.com/questions/51411110/are-the-firebase-ml-kit-functions-asynchronous-so-that-i-could-run-multiple-dete
+//https://www.upwork.com/hiring/mobile/why-you-should-use-asynctask-in-android-development/
+
+public class FacialDetector implements PeithoInterface {
+    public float mHappinessProbability = 0.0f;
     public String mEmotion = EMPTY_EMOPTION_STRING;
 
-    //Moved Options and Declaration the the Interface
+    //FireBase Declareations //Check interface for the full settings
+    FirebaseVisionImage mFireImage;
+    Bitmap mDetectedFace;
+    ArrayList<Bitmap> mDetectedFaces=new ArrayList<Bitmap>();
 
-    FirebaseVisionImage mFireImage; //Set a blank Image
-
-    Bitmap mDetectedFace; //Single Detected Image Variable
-
-
-    public Bitmap getImage(){
-        return mFireImage.getBitmap();
-        //return mDetectedFace;
-    }
+    //Setters and Functions
     private void adjustHappinessProbability(float prob){
-        mHappinessProbability += Math.abs(prob);
-        mHappinessProbability /= 2;
-        //mHappinessProbability = prob;
+        mHappinessProbability = prob;
     }
-    public String getHappiness() {
-        //Happiness is a float between 0.0 and 1.0, converted to a double
-        return "Happiness: " +Double.toString(mHappinessProbability) + " %";
-    }
-    public String getEmotion() {
-        return mEmotion;
-    }
-
     public void setFireImage(Bitmap image){
         mFireImage = FirebaseVisionImage.fromBitmap(image);
     }
+    public void appendFacetoList(Bitmap face) {
+        mDetectedFaces.add(face);
+    }
+    public void clearList() {
+        mDetectedFaces.clear();
+    }
 
+    //Getters
+    public String getHappiness() {
+        return "Happiness: " +Float.toString(mHappinessProbability) + " %";
+    }
     public Bitmap getFireImage()
     {
         return mFireImage.getBitmap();
     }
 
+    public Bitmap getImage(){
+        return mDetectedFace;
+    }
+
+    public String getEmotion() {
+        return mEmotion;
+    }
     //Source of reference: https://stackoverflow.com/questions/5432495/cut-the-portion-of-bitmap
     //https://stackoverflow.com/questions/10998843/create-a-cropped-bitmap-from-an-original-bitmap
-    public Bitmap getCutFace(Bitmap image, int x, int y, int width, int height) {
-        //Bitmap temp = Bitmap.createBitmap(image, x, y, width, height);
+    public Bitmap getCutoutFace(Bitmap image, int x, int y, int width, int height) {
         return Bitmap.createBitmap(image, x, y, width, height);
     }
 
 
-    public void scanFaces(Bitmap image) {
-       //setFireImage(image);
-        mFireImage = FirebaseVisionImage.fromBitmap(image);
+    public void scanFaces(Bitmap image) throws ExecutionException, InterruptedException {
+       setFireImage(image);
         Task<List<FirebaseVisionFace>> result = mDetector.detectInImage(mFireImage).addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionFace>>() {
             @Override
             public void onSuccess(List<FirebaseVisionFace> faces) {
-
                 //Starting here: These lines can be removed when fully functional, unless we want to log properly
-                if(faces.size() <= 0) {
-                    //Toast.makeText(getActivity(), "NO FACES DETECTED", Toast.LENGTH_SHORT).show();
-                    Log.d(SCANNER_LOG_TAG, NO_FACE_LOG);
-                }
-                else if (faces.size() ==  1){
-                    //Toast.makeText(getActivity(), "SINGLE FACE DETECTED", Toast.LENGTH_SHORT).show();
-                    Log.d(SCANNER_LOG_TAG, ONE_FACE_LOG);
+                switch(faces.size()){
+                    case 0:
+                        Log.d(SCANNER_LOG_TAG, NO_FACE_LOG);
+                        break;
+                    case 1:
+                        Log.d(SCANNER_LOG_TAG, ONE_FACE_LOG);
+                        break;
+                    default:
+                        Log.d(SCANNER_LOG_TAG, MULTI_FACE_LOG);
+                        break;
 
-                }
-                else{
-                    //Toast.makeText(getActivity(), "MULTIPLE FACES DETECTED", Toast.LENGTH_SHORT).show();
-                    Log.d(SCANNER_LOG_TAG, MULTI_FACE_LOG);
-                }
-                // End of Code that can be Audited
+                } //End of Auditable Code
 
                 //source for landmarks: https://medium.com/androidiots/firebase-ml-kit-101-face-detection-5057190e58c0
                 //https://firebase.google.com/docs/ml-kit/detect-faces
                 //Specific source for Boundaries: https://medium.com/google-developer-experts/exploring-firebase-mlkit-on-android-face-detection-part-two-de7e307c52e0
                 for (FirebaseVisionFace face : faces) {
-                    Log.d(SCANNER_LOG_TAG, ACKNOWLEDGED_FACE_LOG);
                     Rect bounds = face.getBoundingBox(); // Bounds of the Face that was detected
                     float rotY = face.getHeadEulerAngleY();  // Head is rotated to the right rotY degrees
                     float rotZ = face.getHeadEulerAngleZ();  // Head is tilted sideways rotZ degrees
 
+                    try {
+                        mDetectedFace = getCutoutFace(getFireImage(), bounds.left, bounds.top, bounds.width(), bounds.height());
+                        //appendFacetoList(mDetectedFace);
+                    } catch (Exception e) {
+                        Log.d("CUT FACE ERROR", e.getMessage());
+                    }
 
-                    //Crashes here most likely will need to troubleshoot
-                    //mDetectedFace = getCutFace(getFireImage(), bounds.left, bounds.bottom, bounds.width(), bounds.height());
-                    //mEmotion = Emo.processEmo(mDetectedFace);
-                    //mEmotion = String.valueOf(face.getSmilingProbability() + " Level of Happiness");
-
-                    adjustHappinessProbability(face.getSmilingProbability());
+                    try{
+                        Log.d(SCANNER_LOG_TAG, ATTEMPTING_EMOTION);
+                        Emo.processEmo(mDetectedFace);
+                        Log.d(SCANNER_LOG_TAG, ACKNOWLEDGED_FACE_LOG);
+                        Log.d("EMOTION: ", mEmotion);
+                    } catch (Exception e) {
+                        Log.d(SCANNER_LOG_TAG, NO_EMOTION_LOGGED);
+                        Log.d(SCANNER_LOG_TAG, e.getMessage());
+                        adjustHappinessProbability(face.getSmilingProbability());
+                    }
                 }
             }
 
@@ -111,6 +124,9 @@ public class FacialDetector extends Peitho {
                             }
                         });
 
+        //Dont know where this is supposed to go but this waits
+        Tasks.await(result);
        Log.d(FIREBASE_IMAGE_RESULT_LOG_TAG, result.toString());
     } //end Scan Faces Function
+
 }

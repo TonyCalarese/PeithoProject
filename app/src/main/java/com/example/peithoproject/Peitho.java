@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -138,7 +139,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
                 return true;
             case R.id.single_shot_menu_icon:
                 Toast.makeText(getActivity(), "DETECTING FACES", Toast.LENGTH_SHORT).show();
-                setScreenProperties();
+                adjustScreen();
                 return true;
             case R.id.download:
                 //Need to work on saving
@@ -148,26 +149,29 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         }
     }
 
+
     //Functions for Handler
     // Define the code block to be executed
     //Code Reference: https://stackoverflow.com/questions/37995564/what-is-the-way-to-make-an-infinite-loop-in-a-thread-android
     private Runnable mRefreshImageTexture = new Runnable() {
         @Override
         public void run() {
-            setScreenProperties();
-            mVideoHandler.postDelayed(mRefreshImageTexture, mStandardRefreshRate);
-        };
+           adjustScreen();
+            mVideoHandler.postDelayed(mRefreshImageTexture, mStandardRefreshRate); }
     };
 
-    //Function for Setting the Screen properties
-    private void setScreenProperties() {
-        FD.scanFaces(mImageTextureView.getBitmap()); //Gives a Bitmap
-        mPhotoView.setImageBitmap(FD.getImage()); //Needs a Bitmap
-        mEmotionTextResults.setText(FD.getHappiness()); //Needs a String
+
+    public void adjustScreen()  {
+        try {
+            FD.scanFaces(mImageTextureView.getBitmap());
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        mPhotoView.setImageBitmap(FD.getImage());
+        mEmotionTextResults.setText(FD.getEmotion());
     }
+
 }
-
-
-
-
-

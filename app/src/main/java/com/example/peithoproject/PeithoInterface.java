@@ -2,9 +2,9 @@ package com.example.peithoproject;
 
         import android.os.Handler;
 
-        import com.google.firebase.ml.vision.FirebaseVision;
-        import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector;
-        import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
+import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector;
+import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
 
 public interface PeithoInterface {
 
@@ -19,7 +19,9 @@ public interface PeithoInterface {
      String NO_FACE_LOG = "NO FACES DETECTED",
           ONE_FACE_LOG = "SINGLE FACE DETECTED",
           MULTI_FACE_LOG = "MULTIPLE FACES DETECTED",
-          ACKNOWLEDGED_FACE_LOG = "FACE DETECTED AND REGISTERED";
+          ACKNOWLEDGED_FACE_LOG = "FACE DETECTED AND REGISTERED, ATTMEPTING TO IDENTIFY",
+          NO_EMOTION_LOGGED = "NO EMOTION REGISTERED DEFAULTING TO HAPPINESS",
+             ATTEMPTING_EMOTION = "ATTEMPTING TO READ EMOTION";
 
 
      int REQUEST_PHOTO = 101;
@@ -32,16 +34,9 @@ public interface PeithoInterface {
      FacialDetector FD = new FacialDetector();
      EmoIdentifier Emo = new EmoIdentifier();
 
-     FirebaseVisionFaceDetectorOptions mFaceDetectorOptions = new FirebaseVisionFaceDetectorOptions.Builder()
-             .setPerformanceMode(FirebaseVisionFaceDetectorOptions.ACCURATE)
-             .setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
-             //.enableTracking()
-             .build();
+     //FireBaseCode
+     FirebaseVisionFaceDetectorOptions mRealTimeOpts = new FirebaseVisionFaceDetectorOptions.Builder().setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS).build();
+     FirebaseVisionFaceDetector mDetector = FirebaseVision.getInstance().getVisionFaceDetector(mRealTimeOpts);
 
-     FirebaseVisionFaceDetector mDetector = FirebaseVision.getInstance().
-             getVisionFaceDetector(mFaceDetectorOptions);
-
-
-     //Handler RefrechRate
-     int mStandardRefreshRate = 1000; //in milliseconds, every 10 seconds
+     int mStandardRefreshRate = 10000; //in milliseconds, every 10 seconds
 }
