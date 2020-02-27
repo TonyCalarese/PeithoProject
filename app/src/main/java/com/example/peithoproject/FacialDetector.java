@@ -17,7 +17,10 @@ import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
 
 import java.util.List;
 
-public class FacialDetector extends Peitho {
+
+
+
+public class FacialDetector implements PeithoInterface {
     public float mHappinessProbability = 0.0f;
     public String mEmotion = EMPTY_EMOPTION_STRING;
 
@@ -26,8 +29,7 @@ public class FacialDetector extends Peitho {
             //.enableTracking()
             .build();
 
-    FirebaseVisionFaceDetector mDetector = FirebaseVision.getInstance().
-            getVisionFaceDetector(mRealTimeOpts);
+    FirebaseVisionFaceDetector mDetector = FirebaseVision.getInstance().getVisionFaceDetector(mRealTimeOpts);
 
     FirebaseVisionImage mFireImage;
 
@@ -35,19 +37,12 @@ public class FacialDetector extends Peitho {
 
 
     public Bitmap getImage(){
-        return mFireImage.getBitmap();
-        //return mDetectedFace;
+        return mDetectedFace;
     }
     private void adjustHappinessProbability(float prob){
-        //mHappinessProbability = (mHappinessProbability + prob) / 2;
-        mHappinessProbability *= -100;
-        //mHappinessProbability = prob;
+        mHappinessProbability = prob;
     }
-    public String getHappiness() {
-        //Happiness is a float between 0.0 and 1.0
-        return "Happiness: " +Float.toString(mHappinessProbability) + " %";
-        //return Float.toString(mHappinessProbability);
-    }
+
     public String getEmotion() {
         return mEmotion;
     }
@@ -64,7 +59,6 @@ public class FacialDetector extends Peitho {
     //Source of reference: https://stackoverflow.com/questions/5432495/cut-the-portion-of-bitmap
     //https://stackoverflow.com/questions/10998843/create-a-cropped-bitmap-from-an-original-bitmap
     public Bitmap getCutFace(Bitmap image, int x, int y, int width, int height) {
-        //Bitmap temp = Bitmap.createBitmap(image, x, y, width, height);
         return Bitmap.createBitmap(image, x, y, width, height);
     }
 
@@ -127,4 +121,8 @@ public class FacialDetector extends Peitho {
 
        Log.d(FIREBASE_IMAGE_RESULT_LOG_TAG, result.toString());
     } //end Scan Faces Function
+
+    public String getHappiness() {
+        return "Happiness: " +Float.toString(mHappinessProbability) + " %";
+    }
 }

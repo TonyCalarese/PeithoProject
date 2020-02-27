@@ -18,7 +18,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d4d3d073-ef15-4114-a2de-a473e696e050" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/peithoproject/EmoIdentifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/peithoproject/EmoIdentifier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/peithoproject/FacialDetector.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/peithoproject/FacialDetector.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
