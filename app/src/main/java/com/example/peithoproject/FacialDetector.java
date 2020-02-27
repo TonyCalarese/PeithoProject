@@ -20,7 +20,7 @@ import java.util.concurrent.ExecutionException;
 
 //Sources of Reference for Async tasks: https://stackoverflow.com/questions/51411110/are-the-firebase-ml-kit-functions-asynchronous-so-that-i-could-run-multiple-dete
 //https://www.upwork.com/hiring/mobile/why-you-should-use-asynctask-in-android-development/
-
+//Finn Look here: Whole class is restructured
 public class FacialDetector implements PeithoInterface {
     public float mHappinessProbability = 0.0f;
     public String mEmotion = EMPTY_EMOPTION_STRING;
@@ -123,7 +123,7 @@ public class FacialDetector implements PeithoInterface {
                                 Log.d(SCANNER_LOG_TAG, "FUNCTION FAILURE");
                             }
                         });
-
+        //Finn Look here: also in Peitho as well in AdjustScreen
         //Dont know where this is supposed to go but this waits
         Tasks.await(result);
        Log.d(FIREBASE_IMAGE_RESULT_LOG_TAG, result.toString());

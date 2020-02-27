@@ -160,7 +160,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
             mVideoHandler.postDelayed(mRefreshImageTexture, mStandardRefreshRate); }
     };
 
-
+    //Finn Look Here: Added the error handler as requested by the compiler
     public void adjustScreen()  {
         try {
             FD.scanFaces(mImageTextureView.getBitmap());
