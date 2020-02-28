@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.ml.common.FirebaseMLException;
 import com.google.firebase.ml.custom.FirebaseCustomLocalModel;
 import com.google.firebase.ml.custom.FirebaseModelDataType;
 import com.google.firebase.ml.custom.FirebaseModelInputOutputOptions;
@@ -29,48 +30,32 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
-
-//Async sources: https://www.upwork.com/hiring/mobile/why-you-should-use-asynctask-in-android-development/
-//firebask async task: https://www.upwork.com/hiring/mobile/why-you-should-use-asynctask-in-android-development/
 public class EmoIdentifier extends Peitho{
     private Object mFaces;
-    private FirebaseCustomLocalModel localModel = new FirebaseCustomLocalModel.Builder().setAssetFilePath("mobilenet_v1_1.0_224_quant.tflite").build();
+    private FirebaseCustomLocalModel localModel = new FirebaseCustomLocalModel.Builder().setAssetFilePath("model.tflite").build();
 
     //Setters
     public void setFaces(Object faces){mFaces = faces;}
 
     //To Finn:
-  //Lines from the old adjustScreen code to be implemented
-    //     mPhotoView.setImageBitmap(FD.getImage());
-    //        mEmotionTextResults.setText(FD.getEmotion());
+    // I will be sending you a Bitmap array of the faces
+    //I Am Sending you a Single Bitmap with this line of code: mEmotion = Emo.processEmo(mDetectedFace);
+    //You return a string of the emotion, you take the bitmap of ONLY the face
+    //Once working for one face we will loop an array after
+    //Comment everything in great detail, IDC if it is a ton of lines
 
     public void processEmo(Bitmap bitmap){
         FirebaseModelInterpreter interpreter;
         final HashMap<String, Float> emotionMap = new HashMap<>();
 
         try {
-            FirebaseModelInterpreterOptions options =
-                    new FirebaseModelInterpreterOptions.Builder(localModel).build();
-            interpreter = FirebaseModelInterpreter.getInstance(options);
+            interpreter = buildInterpreter();
 
-            FirebaseModelInputOutputOptions inputOutputOptions =
-                    new FirebaseModelInputOutputOptions.Builder()
-                            .setInputFormat(0, FirebaseModelDataType.FLOAT32, new int[]{1, 224, 224, 3}) //Input bitmap dimensions Nx224x224x3 picture
-                            .setOutputFormat(0, FirebaseModelDataType.FLOAT32, new int[]{1, 7}) // Output: an array containing float values for each emotions presence
-                            .build();
+            FirebaseModelInputOutputOptions inputOutputOptions = getIntialOutputOptions();
 
             //The image is being cut and not compressed down
             bitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true); //Scales input bitmap
-            int batchNum = 0;
-            float[][][][] input = new float[1][224][224][3];
-            for (int x = 0; x < 224; x++) {  //Translates bitmap to float array
-                for (int y = 0; y < 224; y++) {
-                    int pixel = bitmap.getPixel(x, y);
-                    input[batchNum][x][y][0] = (Color.red(pixel) - 127) / 128.0f;
-                    input[batchNum][x][y][1] = (Color.green(pixel) - 127) / 128.0f;
-                    input[batchNum][x][y][2] = (Color.blue(pixel) - 127) / 128.0f;
-                }
-            }
+            float[][][][] input = bitmapToArray(bitmap);
 
             FirebaseModelInputs inputs = new FirebaseModelInputs.Builder() //Translates input array to firebase type input
                     .add(input)
@@ -104,12 +89,7 @@ public class EmoIdentifier extends Peitho{
                                         }
 
                                         Peitho.FD.mEmotion = bestGuessEmotion;
-
-                                        //To Finn: Sources for UI thread
-                                        //https://stackoverflow.com/questions/12850143/android-basics-running-code-in-the-ui-thread
-
-                                        //Need to update the UI here
-                                        // adjustScreen();
+                                        //adjustScreen();
                                     } catch (Exception e) {
                                         Log.d("Label Error", "Unable to read labels");
                                     }
@@ -122,10 +102,50 @@ public class EmoIdentifier extends Peitho{
                                     Log.d("MODEL FAIL", e.getMessage());
                                 }
                             });
+
         } catch (Error | Exception  e){
             Log.d("MODEL FAIL", e.getMessage());
         }
     } //End of processEmo
+
+    public float[][][][] bitmapToArray(Bitmap bitmap) {
+        int batchNum = 0;
+        float[][][][] input = new float[1][224][224][3];
+        for (int x = 0; x < 224; x++) {  //Translates bitmap to float array
+            for (int y = 0; y < 224; y++) {
+                int pixel = bitmap.getPixel(x, y);
+                input[batchNum][x][y][0] = (Color.red(pixel) - 127) / 128.0f;
+                input[batchNum][x][y][1] = (Color.green(pixel) - 127) / 128.0f;
+                input[batchNum][x][y][2] = (Color.blue(pixel) - 127) / 128.0f;
+            }
+        }
+        return input;
+    }
+
+    public FirebaseModelInterpreter buildInterpreter() {
+        try {
+            FirebaseModelInterpreterOptions options =
+                    new FirebaseModelInterpreterOptions.Builder(localModel).build();
+            return FirebaseModelInterpreter.getInstance(options);
+        }  catch (FirebaseMLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public FirebaseModelInputOutputOptions getIntialOutputOptions() {
+        try {
+            FirebaseModelInputOutputOptions inputOutputOptions;
+            return inputOutputOptions =
+                    new FirebaseModelInputOutputOptions.Builder()
+                            .setInputFormat(0, FirebaseModelDataType.FLOAT32, new int[]{1, 224, 224, 3}) //Input bitmap dimensions Nx224x224x3 picture
+                            .setOutputFormat(0, FirebaseModelDataType.FLOAT32, new int[]{1, 7}) // Output: an array containing float values for each emotions presence
+                            .build();
+        } catch (FirebaseMLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 } //End of Class
 

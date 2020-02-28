@@ -111,8 +111,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         super.onSaveInstanceState(outState);
     }
 
-
-
     //Source for rotating with all the proper data https://medium.com/hootsuite-engineering/handling-orientation-changes-on-android-41a6b62cb43f
 
     //Menu Functions
