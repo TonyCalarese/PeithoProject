@@ -35,7 +35,9 @@ public interface PeithoInterface {
      EmoIdentifier Emo = new EmoIdentifier();
 
      //FireBaseCode
-     FirebaseVisionFaceDetectorOptions mRealTimeOpts = new FirebaseVisionFaceDetectorOptions.Builder().setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS).build();
+     FirebaseVisionFaceDetectorOptions mRealTimeOpts = new FirebaseVisionFaceDetectorOptions.Builder()
+             .setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
+             .build();
      FirebaseVisionFaceDetector mDetector = FirebaseVision.getInstance().getVisionFaceDetector(mRealTimeOpts);
 
      int mStandardRefreshRate = 10000; //in milliseconds, every 10 seconds

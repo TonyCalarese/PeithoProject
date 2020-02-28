@@ -13,11 +13,10 @@ import android.view.MenuItem;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -28,11 +27,16 @@ import static android.app.Activity.RESULT_OK;
 
 //Source of reference for Camera API: https://www.youtube.com/watch?v=u5PDdg1G4Q4
 public class Peitho extends Fragment implements TextureView.SurfaceTextureListener, PeithoInterface {
+
+    //public ImageView mPhotoView;
+    //public TextView mEmotionTextResults;
     //Camera
-    public ImageView mPhotoView;
-    public TextView mEmotionTextResults;
     public TextureView mImageTextureView;
     public Camera mCamera;
+
+    //RecyclerView
+    public RecyclerView mDataFrame;
+    public DataFrame.DataFrameAdapter mAdapter;
 
     //Handler Elements
     boolean mStarted = false;
@@ -56,11 +60,13 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         //Texture View
         mImageTextureView = (TextureView) v.findViewById((R.id.imageSurfaceView));
         mImageTextureView.setSurfaceTextureListener(Peitho.this);
-        //mImageTextureView.setVisibility(View.INVISIBLE);
 
 
-        mPhotoView = (ImageView) v.findViewById(R.id.imagePreview); //Photo View, will go away after some tesing is done
-        mEmotionTextResults = (TextView) v.findViewById(R.id.analysisView); //TextView for Results
+        //mPhotoView = (ImageView) v.findViewById(R.id.imagePreview); //Photo View, will go away after some tesing is done
+        //mEmotionTextResults = (TextView) v.findViewById(R.id.analysisView); //TextView for Results
+
+        mDataFrame = (RecyclerView) v.findViewById(R.id.dataRecyclerView);
+        mDataFrame.setAdapter(mAdapter);
         return v;
     }
 
@@ -99,7 +105,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         if (requestCode == REQUEST_PHOTO) {
             Bundle extras = data.getExtras();
             Bitmap image = (Bitmap) extras.get("data");
-            mPhotoView.setImageBitmap(image);
 
         }
 
@@ -172,4 +177,8 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         //        mEmotionTextResults.setText(FD.getEmotion());
     }
 
-}
+
+}// end of Fragment
+
+
+
