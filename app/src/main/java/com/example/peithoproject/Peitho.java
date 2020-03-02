@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
@@ -66,7 +67,9 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         //mEmotionTextResults = (TextView) v.findViewById(R.id.analysisView); //TextView for Results
 
         mDataFrame = (RecyclerView) v.findViewById(R.id.dataRecyclerView);
+        mDataFrame.setLayoutManager(new LinearLayoutManager(getContext()));
         mDataFrame.setAdapter(mAdapter);
+
         return v;
     }
 
