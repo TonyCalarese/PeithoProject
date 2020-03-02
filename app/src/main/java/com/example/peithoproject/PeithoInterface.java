@@ -1,6 +1,6 @@
 package com.example.peithoproject;
 
-        import android.os.Handler;
+import android.os.Handler;
 
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector;

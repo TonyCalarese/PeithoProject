@@ -7,9 +7,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class DataFrame extends Peitho {
+    //-------------------------------------------------------------------------------------------------------
+
 
     //Recycler
-    public class DataHolder extends RecyclerView.ViewHolder{
+    private class DataHolder extends RecyclerView.ViewHolder{
 
         private int mPosition;
         public DataHolder(LayoutInflater inflater, ViewGroup container) {
@@ -39,6 +41,5 @@ public class DataFrame extends Peitho {
             return 10;
         }
     }
+
 }
-
-

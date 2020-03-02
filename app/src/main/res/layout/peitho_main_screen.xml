@@ -15,7 +15,8 @@
             android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:weightSum="2">
+            android:weightSum="2"
+            tools:ignore="MissingConstraints">
 
             <TextureView
                 android:id="@+id/imageSurfaceView"
@@ -36,7 +37,7 @@
             app:layout_constraintStart_toEndOf="@+id/linearLayout"
             tools:layout_editor_absoluteY="0dp">
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/dataRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
