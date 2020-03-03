@@ -2,6 +2,9 @@ package com.example.peithoproject;
 
 import android.os.Handler;
 
+import com.example.peithoproject.com.google.firebase.ml.EmoIdentifier;
+import com.example.peithoproject.com.google.firebase.ml.FacialDetector;
+import com.example.peithoproject.recyclerassets.UserEmotionData;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector;
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;

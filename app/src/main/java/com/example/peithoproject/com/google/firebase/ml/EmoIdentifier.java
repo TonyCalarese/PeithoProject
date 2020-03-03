@@ -1,4 +1,4 @@
-package com.example.peithoproject;
+package com.example.peithoproject.com.google.firebase.ml;
 
 //Tensorflow Lite Imports
 
@@ -15,6 +15,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.peithoproject.Peitho;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.ml.common.FirebaseMLException;
@@ -30,7 +31,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
-public class EmoIdentifier extends Peitho{
+public class EmoIdentifier extends Peitho {
     private Object mFaces;
     private FirebaseCustomLocalModel localModel = new FirebaseCustomLocalModel.Builder().setAssetFilePath("model.tflite").build();
 

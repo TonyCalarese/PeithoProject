@@ -1,4 +1,4 @@
-package com.example.peithoproject;
+package com.example.peithoproject.com.google.firebase.ml;
 
 import android.graphics.Bitmap;
 import android.graphics.Rect;
@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.peithoproject.PeithoInterface;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;

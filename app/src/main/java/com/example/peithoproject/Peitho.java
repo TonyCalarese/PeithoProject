@@ -20,6 +20,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.peithoproject.recyclerassets.DataHolder;
+import com.example.peithoproject.recyclerassets.UserEmotionData;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -196,9 +199,11 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     public class DataFrameAdapter extends RecyclerView.Adapter<DataHolder> {
 
         public List<String> mEmotions;
+
         public DataFrameAdapter(UserEmotionData userEmotions) {
             mEmotions = userEmotions.getAllEmotions();
         }
+
         @Override
         public DataHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(getActivity());
@@ -215,11 +220,10 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
             return mEmotions.size();
         }
 
-        public void appendEmotion(String emotion){
+        public void appendEmotion(String emotion) {
             mEmotions.add(emotion);
         }
     }
-
 
 }// end of Fragment
 
