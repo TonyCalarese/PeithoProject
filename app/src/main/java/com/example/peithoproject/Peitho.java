@@ -24,7 +24,6 @@ import com.example.peithoproject.recyclerassets.DataHolder;
 import com.example.peithoproject.recyclerassets.UserEmotionData;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static android.app.Activity.RESULT_OK;
@@ -198,10 +197,8 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     //Adapter
     public class DataFrameAdapter extends RecyclerView.Adapter<DataHolder> {
 
-        public List<String> mEmotions;
-
         public DataFrameAdapter(UserEmotionData userEmotions) {
-            mEmotions = userEmotions.getAllEmotions();
+
         }
 
         @Override
@@ -217,11 +214,11 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
         @Override
         public int getItemCount() {
-            return mEmotions.size();
+            return UserEmoData.getEmotionDataSize();
         }
 
         public void appendEmotion(String emotion) {
-            mEmotions.add(emotion);
+            UserEmoData.add(emotion);
         }
     }
 

@@ -9,10 +9,13 @@ public class UserEmotionData {
         mEmotions.add("Neutral");
     }
 
-
+    //Getters
     public List<String> getAllEmotions() {
         return mEmotions;
     }
+    public int getEmotionDataSize() { return mEmotions.size();}
 
+    //setters
+    public void add(String emotion){ mEmotions.add(emotion);}
 
 }
