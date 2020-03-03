@@ -15,11 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static android.app.Activity.RESULT_OK;
@@ -37,7 +39,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
     //RecyclerView
     public RecyclerView mDataFrame;
-    public DataFrame.DataFrameAdapter mAdapter;
+    public DataFrameAdapter mAdapter;
 
     //Handler Elements
     boolean mStarted = false;
@@ -68,11 +70,20 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
         mDataFrame = (RecyclerView) v.findViewById(R.id.dataRecyclerView);
         mDataFrame.setLayoutManager(new LinearLayoutManager(getContext()));
-        mDataFrame.setAdapter(mAdapter);
+
 
         return v;
     }
 
+    private void UpdateUI() {
+        if (mAdapter == null) {
+            mAdapter = new DataFrameAdapter(UserEmoData);
+            mDataFrame.setAdapter(mAdapter);
+        }
+        else {
+            mAdapter.notifyDataSetChanged();
+        }
+    }
     //Code For TextureView Reference: https://developer.android.com/reference/android/view/TextureView
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         mCamera = Camera.open();
@@ -181,6 +192,33 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     }
 
 
+    //Adapter
+    public class DataFrameAdapter extends RecyclerView.Adapter<DataHolder> {
+
+        public List<String> mEmotions;
+        public DataFrameAdapter(UserEmotionData userEmotions) {
+            mEmotions = userEmotions.getAllEmotions();
+        }
+        @Override
+        public DataHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater inflater = LayoutInflater.from(getActivity());
+            return new DataHolder(inflater, parent);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull DataHolder holder, int position) {
+            holder.bindPosition(position);
+        }
+
+        @Override
+        public int getItemCount() {
+            return mEmotions.size();
+        }
+
+        public void appendEmotion(String emotion){
+            mEmotions.add(emotion);
+        }
+    }
 
 
 }// end of Fragment

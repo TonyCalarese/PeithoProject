@@ -34,6 +34,11 @@ public interface PeithoInterface {
      FacialDetector FD = new FacialDetector();
      EmoIdentifier Emo = new EmoIdentifier();
 
+
+     //Data Classes
+     UserEmotionData UserEmoData = new UserEmotionData();
+
+
      //FireBaseCode
      FirebaseVisionFaceDetectorOptions mRealTimeOpts = new FirebaseVisionFaceDetectorOptions.Builder()
              .setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
