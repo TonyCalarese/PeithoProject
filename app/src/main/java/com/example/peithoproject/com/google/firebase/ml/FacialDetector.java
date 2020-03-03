@@ -10,7 +10,6 @@ import com.example.peithoproject.PeithoInterface;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
 
@@ -127,7 +126,7 @@ public class FacialDetector implements PeithoInterface {
                         });
         //Finn Look here: also in Peitho as well in AdjustScreen
         //Dont know where this is supposed to go but this waits
-        Tasks.await(result);
+        //Tasks.await(result);
        Log.d(FIREBASE_IMAGE_RESULT_LOG_TAG, result.toString());
     } //end Scan Faces Function
 
