@@ -24,6 +24,7 @@ import com.example.peithoproject.recyclerassets.DataHolder;
 import com.example.peithoproject.recyclerassets.UserEmotionData;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static android.app.Activity.RESULT_OK;
@@ -40,12 +41,18 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     public Camera mCamera;
 
     //RecyclerView
-    public RecyclerView mDataFrame;
-    public DataFrameAdapter mAdapter;
+    private RecyclerView mDataFrame;
+    private DataFrameAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
+    //UserEmo Data
+    private UserEmotionData mUserEmoData;
 
     //Handler Elements
     boolean mStarted = false;
 
+    //Data Classes
+    UserEmotionData UserEmoData = new UserEmotionData();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +69,9 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
         PackageManager packageManager = getActivity().getPackageManager();
 
+        //User Emo Data
+        mUserEmoData = new UserEmotionData();
+
         //Texture View
         mImageTextureView = (TextureView) v.findViewById((R.id.imageSurfaceView));
         mImageTextureView.setSurfaceTextureListener(Peitho.this);
@@ -71,8 +81,12 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         //mEmotionTextResults = (TextView) v.findViewById(R.id.analysisView); //TextView for Results
 
         mDataFrame = (RecyclerView) v.findViewById(R.id.dataRecyclerView);
-        mDataFrame.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mDataFrame.setLayoutManager(mLayoutManager);
+
+        mAdapter = new DataFrameAdapter(mUserEmoData);
+        mDataFrame.setAdapter(mAdapter);
 
         return v;
     }
@@ -196,9 +210,10 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
     //Adapter
     public class DataFrameAdapter extends RecyclerView.Adapter<DataHolder> {
+        private List<String> mEmotions;
 
         public DataFrameAdapter(UserEmotionData userEmotions) {
-
+            mEmotions = userEmotions.getAllEmotions();
         }
 
         @Override
@@ -214,7 +229,8 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
         @Override
         public int getItemCount() {
-            return UserEmoData.getEmotionDataSize();
+            return 10;
+                    //UserEmoData.getEmotionDataSize();
         }
 
         public void appendEmotion(String emotion) {

@@ -38,8 +38,7 @@ public interface PeithoInterface {
      EmoIdentifier Emo = new EmoIdentifier();
 
 
-     //Data Classes
-     UserEmotionData UserEmoData = new UserEmotionData();
+
 
 
      //FireBaseCode

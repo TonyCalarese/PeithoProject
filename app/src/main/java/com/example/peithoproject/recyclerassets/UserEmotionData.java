@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserEmotionData {
-    private List<String> mEmotions = new ArrayList<>();;
+    private List<String> mEmotions;;
 
     public UserEmotionData() {
+        mEmotions = new ArrayList<>();
         mEmotions.add("Neutral");
     }
 

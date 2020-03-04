@@ -24,8 +24,11 @@
       <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/javaCompile.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/peithoproject/Peitho.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/peithoproject/Peitho.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/peithoproject/PeithoInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/peithoproject/PeithoInterface.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/peithoproject/com/google/firebase/ml/FacialDetector.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/peithoproject/com/google/firebase/ml/FacialDetector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/peitho_main_screen.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/peitho_main_screen.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/peithoproject/recyclerassets/DataHolder.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/peithoproject/recyclerassets/DataHolder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/peithoproject/recyclerassets/UserEmotionData.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/peithoproject/recyclerassets/UserEmotionData.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/tile.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/tile.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />

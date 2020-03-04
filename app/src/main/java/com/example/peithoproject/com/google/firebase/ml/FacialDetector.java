@@ -126,7 +126,7 @@ public class FacialDetector implements PeithoInterface {
                         });
         //Finn Look here: also in Peitho as well in AdjustScreen
         //Dont know where this is supposed to go but this waits
-        //Tasks.await(result);
+        //Tasks.await(result); //This will crash the app
        Log.d(FIREBASE_IMAGE_RESULT_LOG_TAG, result.toString());
     } //end Scan Faces Function
 

@@ -17,6 +17,7 @@ public class DataHolder extends RecyclerView.ViewHolder{
     public DataHolder(LayoutInflater inflater, ViewGroup container) {
         super(inflater.inflate(R.layout.tile, container, false));
         mEmoView = (TextView) itemView.findViewById(R.id.DataTile);
+        mEmoView.setText(R.string.dummy_text);
 
     }
 
