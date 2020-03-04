@@ -17,12 +17,11 @@ public class DataHolder extends RecyclerView.ViewHolder{
     public DataHolder(LayoutInflater inflater, ViewGroup container) {
         super(inflater.inflate(R.layout.tile, container, false));
         mEmoView = (TextView) itemView.findViewById(R.id.DataTile);
-        mEmoView.setText(R.string.dummy_text);
-
     }
 
-    public void bindPosition(int p) {
+    public void bindPosition(String emo, int p) {
         mPosition = p;
+        mEmoView.setText(emo);
     }
 
     public void appendData() {

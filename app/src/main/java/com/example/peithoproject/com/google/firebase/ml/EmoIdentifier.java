@@ -16,6 +16,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.peithoproject.Peitho;
+import com.example.peithoproject.recyclerassets.UserEmotionData;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.ml.common.FirebaseMLException;
@@ -45,7 +46,7 @@ public class EmoIdentifier extends Peitho {
     //Once working for one face we will loop an array after
     //Comment everything in great detail, IDC if it is a ton of lines
 
-    public void processEmo(Bitmap bitmap){
+    public void processEmo(Bitmap bitmap, final UserEmotionData userEmo){
         FirebaseModelInterpreter interpreter;
         final HashMap<String, Float> emotionMap = new HashMap<>();
 
@@ -89,8 +90,7 @@ public class EmoIdentifier extends Peitho {
                                             }
                                         }
 
-                                        Peitho.FD.mEmotion = bestGuessEmotion;
-                                        //adjustScreen();
+                                        userEmo.add(bestGuessEmotion);
                                     } catch (Exception e) {
                                         Log.d("Label Error", "Unable to read labels");
                                     }

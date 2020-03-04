@@ -16,6 +16,7 @@ public class UserEmotionData {
         return mEmotions;
     }
     public synchronized int getEmotionDataSize() { return mEmotions.size();}
+    public synchronized String getIndexEmotion(int position) {return mEmotions.get(position);}
 
     //setters
     public synchronized void add(String emotion){ mEmotions.add(emotion);}

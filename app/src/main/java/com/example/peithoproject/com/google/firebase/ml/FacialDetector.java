@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.peithoproject.PeithoInterface;
+import com.example.peithoproject.recyclerassets.UserEmotionData;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -67,7 +68,7 @@ public class FacialDetector implements PeithoInterface {
     }
 
 
-    public void scanFaces(Bitmap image) throws ExecutionException, InterruptedException {
+    public void scanFaces(Bitmap image, final UserEmotionData userEmo) throws ExecutionException, InterruptedException {
        setFireImage(image);
        //Start of Async Task
         Task<List<FirebaseVisionFace>> result = mDetector.detectInImage(mFireImage).addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionFace>>() {
@@ -104,7 +105,7 @@ public class FacialDetector implements PeithoInterface {
 
                     try{
                         Log.d(SCANNER_LOG_TAG, ATTEMPTING_EMOTION);
-                        Emo.processEmo(mDetectedFace);
+                        Emo.processEmo(mDetectedFace, userEmo);
                         Log.d(SCANNER_LOG_TAG, ACKNOWLEDGED_FACE_LOG);
                         Log.d("EMOTION: ", mEmotion);
                     } catch (Exception e) {

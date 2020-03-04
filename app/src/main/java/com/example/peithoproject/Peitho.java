@@ -24,7 +24,6 @@ import com.example.peithoproject.recyclerassets.DataHolder;
 import com.example.peithoproject.recyclerassets.UserEmotionData;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static android.app.Activity.RESULT_OK;
@@ -85,7 +84,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         mLayoutManager = new LinearLayoutManager(getContext());
         mDataFrame.setLayoutManager(mLayoutManager);
 
-        mAdapter = new DataFrameAdapter(mUserEmoData);
+        mAdapter = new DataFrameAdapter();
         mDataFrame.setAdapter(mAdapter);
 
         return v;
@@ -93,7 +92,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
     private void UpdateUI() {
         if (mAdapter == null) {
-            mAdapter = new DataFrameAdapter(UserEmoData);
+            mAdapter = new DataFrameAdapter();
             mDataFrame.setAdapter(mAdapter);
         }
         else {
@@ -196,24 +195,20 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     //Finn Look Here: Added the error handler as requested by the compiler
     public void scanForFaces()  {
         try {
-            FD.scanFaces(mImageTextureView.getBitmap());
+            FD.scanFaces(mImageTextureView.getBitmap(), mUserEmoData);
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-   //     mPhotoView.setImageBitmap(FD.getImage());
-        //        mEmotionTextResults.setText(FD.getEmotion());
+        mAdapter.notifyDataSetChanged();
     }
 
 
     //Adapter
     public class DataFrameAdapter extends RecyclerView.Adapter<DataHolder> {
-        private List<String> mEmotions;
-
-        public DataFrameAdapter(UserEmotionData userEmotions) {
-            mEmotions = userEmotions.getAllEmotions();
+        public DataFrameAdapter() {
         }
 
         @Override
@@ -224,13 +219,12 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
         @Override
         public void onBindViewHolder(@NonNull DataHolder holder, int position) {
-            holder.bindPosition(position);
+            holder.bindPosition(mUserEmoData.getIndexEmotion(position), position);
         }
 
         @Override
         public int getItemCount() {
-            return 10;
-                    //UserEmoData.getEmotionDataSize();
+            return UserEmoData.getEmotionDataSize();
         }
 
         public void appendEmotion(String emotion) {
