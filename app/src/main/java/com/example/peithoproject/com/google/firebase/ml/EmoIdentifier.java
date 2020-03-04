@@ -91,6 +91,7 @@ public class EmoIdentifier extends Peitho {
                                         }
 
                                         userEmo.add(bestGuessEmotion);
+
                                     } catch (Exception e) {
                                         Log.d("Label Error", "Unable to read labels");
                                     }

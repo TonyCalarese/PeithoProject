@@ -12,9 +12,7 @@ public class UserEmotionData {
     }
 
     //Getters
-    public synchronized List<String> getAllEmotions() {
-        return mEmotions;
-    }
+    public synchronized List<String> getAllEmotions() { return mEmotions; }
     public synchronized int getEmotionDataSize() { return mEmotions.size();}
     public synchronized String getIndexEmotion(int position) {return mEmotions.get(position);}
 
