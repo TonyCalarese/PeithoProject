@@ -33,8 +33,6 @@ import static android.app.Activity.RESULT_OK;
 //Source of reference for Camera API: https://www.youtube.com/watch?v=u5PDdg1G4Q4
 public class Peitho extends Fragment implements TextureView.SurfaceTextureListener, PeithoInterface {
 
-    //public ImageView mPhotoView;
-    //public TextView mEmotionTextResults;
     //Camera
     public TextureView mImageTextureView;
     public Camera mCamera;
@@ -49,6 +47,9 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
     //Handler Elements
     boolean mStarted = false;
+
+    //TextureView
+    boolean mTextureViewVisible = true;
 
     //Data Classes
     UserEmotionData UserEmoData = new UserEmotionData();
@@ -176,6 +177,16 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
             case R.id.download:
                 //Need to work on saving
                 return true;
+            case R.id.camera_on_off_menu_icon:
+                if(mTextureViewVisible){
+                    //Need to turn textureview off
+                    item.setIcon(R.drawable.ic_camera);
+                }
+                else {
+                    item.setIcon(R.drawable.ic_camera_off);
+                }
+
+                mTextureViewVisible = !mTextureViewVisible;
             default:
                 return super.onOptionsItemSelected(item);
         }
