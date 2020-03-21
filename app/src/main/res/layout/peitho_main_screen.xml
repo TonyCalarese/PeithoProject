@@ -34,11 +34,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:background="@drawable/ic_camera_rotate"/>
             </LinearLayout>
 
             <LinearLayout
@@ -67,6 +62,7 @@
 
             </LinearLayout>
            <!-- source for barchart: https://javapapers.com/android/android-chart-example-app-using-mpandroidchart/ -->
+            <!-- Add Charts here -->
         </LinearLayout>
 
 

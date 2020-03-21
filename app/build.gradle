@@ -51,4 +51,6 @@ dependencies {
 
     //Firebase Tensorflow lite Model interperter
     implementation 'com.google.firebase:firebase-ml-model-interpreter:22.0.1'
+
+
 }

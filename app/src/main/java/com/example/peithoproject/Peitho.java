@@ -28,11 +28,9 @@ import java.util.concurrent.ExecutionException;
 
 import static android.app.Activity.RESULT_OK;
 
-//Camera Imports
 
 //Source of reference for Camera API: https://www.youtube.com/watch?v=u5PDdg1G4Q4
 public class Peitho extends Fragment implements TextureView.SurfaceTextureListener, PeithoInterface {
-
     //Camera
     public TextureView mImageTextureView;
     public Camera mCamera;
