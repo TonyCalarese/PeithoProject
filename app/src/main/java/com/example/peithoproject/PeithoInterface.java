@@ -4,10 +4,10 @@ import android.os.Handler;
 
 import com.example.peithoproject.com.google.firebase.ml.EmoIdentifier;
 import com.example.peithoproject.com.google.firebase.ml.FacialDetector;
-import com.example.peithoproject.recyclerassets.UserEmotionData;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector;
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
+
 
 public interface PeithoInterface {
 
@@ -29,6 +29,9 @@ public interface PeithoInterface {
 
      int REQUEST_PHOTO = 101;
 
+     //Emotion Info & Key
+     String FACE_SUBSCRIPTION_KEY="d3fc622cd10f42e9a9576d37cbb9a4b0";
+     String FACE_ENDPOINT="https://pietho.cognitiveservices.azure.com/";
 
      //Handler Elements
      Handler mVideoHandler = new Handler();
