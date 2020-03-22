@@ -9,6 +9,8 @@ import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector;
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
 
 
+
+
 public interface PeithoInterface {
 
      //Google Form for Consent: https://forms.gle/LPSRbLoE81PV3akb8
@@ -20,11 +22,11 @@ public interface PeithoInterface {
 
      //Log Strings
      String NO_FACE_LOG = "NO FACES DETECTED",
-          ONE_FACE_LOG = "SINGLE FACE DETECTED",
-          MULTI_FACE_LOG = "MULTIPLE FACES DETECTED",
-          ACKNOWLEDGED_FACE_LOG = "FACE DETECTED AND REGISTERED, ATTMEPTING TO IDENTIFY",
-          NO_EMOTION_LOGGED = "NO EMOTION REGISTERED DEFAULTING TO HAPPINESS",
-             ATTEMPTING_EMOTION = "ATTEMPTING TO READ EMOTION";
+               ONE_FACE_LOG = "SINGLE FACE DETECTED",
+               MULTI_FACE_LOG = "MULTIPLE FACES DETECTED",
+               ACKNOWLEDGED_FACE_LOG = "FACE DETECTED AND REGISTERED, ATTMEPTING TO IDENTIFY",
+               NO_EMOTION_LOGGED = "NO EMOTION REGISTERED DEFAULTING TO HAPPINESS",
+               ATTEMPTING_EMOTION = "ATTEMPTING TO READ EMOTION";
 
 
      int REQUEST_PHOTO = 101;

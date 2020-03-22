@@ -8,29 +8,11 @@ package com.example.peithoproject.com.google.firebase.ml;
 // and https://firebase.google.com/docs/ml-kit/android/use-custom-models
 
 
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
 
 import com.example.peithoproject.Peitho;
 import com.example.peithoproject.recyclerassets.UserEmotionData;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.ml.common.FirebaseMLException;
 import com.google.firebase.ml.custom.FirebaseCustomLocalModel;
-import com.google.firebase.ml.custom.FirebaseModelDataType;
-import com.google.firebase.ml.custom.FirebaseModelInputOutputOptions;
-import com.google.firebase.ml.custom.FirebaseModelInputs;
-import com.google.firebase.ml.custom.FirebaseModelInterpreter;
-import com.google.firebase.ml.custom.FirebaseModelInterpreterOptions;
-import com.google.firebase.ml.custom.FirebaseModelOutputs;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.HashMap;
 
 public class EmoIdentifier extends Peitho {
     private Object mFaces;
@@ -47,6 +29,8 @@ public class EmoIdentifier extends Peitho {
     //Comment everything in great detail, IDC if it is a ton of lines
 
     public void processEmo(Bitmap bitmap, final UserEmotionData userEmo){
+
+        /*
         FirebaseModelInterpreter interpreter;
         final HashMap<String, Float> emotionMap = new HashMap<>();
 
@@ -147,6 +131,10 @@ public class EmoIdentifier extends Peitho {
             e.printStackTrace();
         }
         return null;
+
+         ***/
+
+
     }
 
 } //End of Class

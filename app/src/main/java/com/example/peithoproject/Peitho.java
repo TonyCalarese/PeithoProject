@@ -1,10 +1,15 @@
 package com.example.peithoproject;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,13 +27,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.peithoproject.recyclerassets.DataHolder;
 import com.example.peithoproject.recyclerassets.UserEmotionData;
+import com.microsoft.projectoxford.face.FaceServiceClient;
+import com.microsoft.projectoxford.face.FaceServiceRestClient;
+import com.microsoft.projectoxford.face.contract.Emotion;
+import com.microsoft.projectoxford.face.contract.Face;
+import com.microsoft.projectoxford.face.contract.FaceAttribute;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
+import java.io.InputStream;
 
 import static android.app.Activity.RESULT_OK;
-
-
 //Source of reference for Camera API: https://www.youtube.com/watch?v=u5PDdg1G4Q4
 public class Peitho extends Fragment implements TextureView.SurfaceTextureListener, PeithoInterface {
     //Camera
@@ -51,6 +61,13 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
     //Data Classes
     UserEmotionData UserEmoData = new UserEmotionData();
+
+    private final FaceServiceClient faceServiceClient =
+            new FaceServiceRestClient(FACE_ENDPOINT, FACE_SUBSCRIPTION_KEY);
+
+    private final int PICK_IMAGE = 1;
+    private ProgressDialog detectionProgressDialog;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -204,12 +221,12 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     //Finn Look Here: Added the error handler as requested by the compiler
     public void scanForFaces()  {
         try {
-            FD.scanFaces(mImageTextureView.getBitmap(), mUserEmoData);
-        } catch (ExecutionException e) {
+            detectFace(mImageTextureView.getBitmap());
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        } //catch (InterruptedException e) {
+            //e.printStackTrace();
+        //}
 
         mAdapter.notifyDataSetChanged();
     }
@@ -239,6 +256,100 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         public void appendEmotion(String emotion) {
             UserEmoData.add(emotion);
         }
+    }
+
+    // Detect faces by uploading a face image.
+// Frame faces after detection.
+    private void detectFace(final Bitmap imageBitmap) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        ByteArrayInputStream inputStream =
+                new ByteArrayInputStream(outputStream.toByteArray());
+
+        @SuppressLint("StaticFieldLeak") AsyncTask<InputStream, String, Face[]> detectTask =
+                new AsyncTask<InputStream, String, Face[]>() {
+                    String exceptionMessage = "";
+                    FaceServiceClient.FaceAttributeType[]  requiredAttributes = new FaceServiceClient.FaceAttributeType[] {
+                        FaceServiceClient.FaceAttributeType.Emotion
+                    };
+
+                    @Override
+                    protected Face[] doInBackground(InputStream... params) {
+                        try {
+                            publishProgress("Detecting...");
+                            Face[] result = faceServiceClient.detect(
+                                    params[0],
+                                    true,         // returnFaceId
+                                    false,        // returnFaceLandmarks
+                                    requiredAttributes          // returnFaceAttributes:
+                                /* new FaceServiceClient.FaceAttributeType[] {
+                                    FaceServiceClient.FaceAttributeType.Age,
+                                    FaceServiceClient.FaceAttributeType.Gender }
+                                */
+                            );
+                            if (result == null){
+                                publishProgress(
+                                        "Detection Finished. Nothing detected");
+                                return null;
+                            }
+                            publishProgress(String.format(
+                                    "Detection Finished. %d face(s) detected",
+                                    result.length));
+                            return result;
+                        } catch (Exception e) {
+                            exceptionMessage = String.format(
+                                    "Detection failed: %s", e.getMessage());
+                            return null;
+                        }
+                    }
+
+                    @Override
+                    protected void onPreExecute() {
+                        //TODO: show progress dialog
+                        detectionProgressDialog.show();
+                    }
+                    @Override
+                    protected void onProgressUpdate(String... progress) {
+                        //TODO: update progress
+                        detectionProgressDialog.setMessage(progress[0]);
+                    }
+                    @Override
+                    protected void onPostExecute(Face[] result) {
+                        //TODO: update face frames
+                        detectionProgressDialog.dismiss();
+
+                        if(!exceptionMessage.equals("")){
+                            showError(exceptionMessage);
+                        }
+                        if (result == null) return;
+
+                        //Add Info Update here (Look at old Flicker Project)
+                        parseFaces(result);
+                    }
+                };
+
+        detectTask.execute(inputStream);
+    }
+
+    private void parseFaces(Face[] faces) {
+        try {
+            for (Face face : faces) {
+                FaceAttribute attributes = face.faceAttributes;
+                Emotion emotions = attributes.emotion;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showError(String message) {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Error")
+                .setMessage(message)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }})
+                .create().show();
     }
 
 }// end of Fragment
