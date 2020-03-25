@@ -1,14 +1,16 @@
 package com.example.peithoproject;
 
+<<<<<<< HEAD
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+=======
+>>>>>>> parent of d63ccea... New Emo ID TESTING DONT USE
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.peithoproject.recyclerassets.DataHolder;
 import com.example.peithoproject.recyclerassets.UserEmotionData;
+<<<<<<< HEAD
 import com.microsoft.projectoxford.face.FaceServiceClient;
 import com.microsoft.projectoxford.face.FaceServiceRestClient;
 import com.microsoft.projectoxford.face.contract.Emotion;
@@ -40,6 +43,11 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
+=======
+
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+>>>>>>> parent of d63ccea... New Emo ID TESTING DONT USE
 
 import static android.app.Activity.RESULT_OK;
 
@@ -66,6 +74,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
     //Data Classes
     UserEmotionData UserEmoData = new UserEmotionData();
+<<<<<<< HEAD
 
     private HttpClient httpClient = HttpClientBuilder.create().build();
     private static final String uriBase = "https://"+FACE_ENDPOINT+"face/v1.0/detect";
@@ -79,6 +88,8 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     private final int PICK_IMAGE = 1;
     private ProgressDialog detectionProgressDialog;
 
+=======
+>>>>>>> parent of d63ccea... New Emo ID TESTING DONT USE
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -230,12 +241,12 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     //Finn Look Here: Added the error handler as requested by the compiler
     public void scanForFaces()  {
         try {
-            detectFace(mImageTextureView.getBitmap());
-        } catch (Exception e) {
+            FD.scanFaces(mImageTextureView.getBitmap(), mUserEmoData);
+        } catch (ExecutionException e) {
             e.printStackTrace();
-        } //catch (InterruptedException e) {
-            //e.printStackTrace();
-        //}
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         //mAdapter.notifyDataSetChanged();
     }
@@ -267,6 +278,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         }
     }
 
+<<<<<<< HEAD
     // Detect faces by uploading a face image.
 // Frame faces after detection.
     private void detectFace(final Bitmap imageBitmap) {
@@ -382,6 +394,8 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
                 .create().show();
     }
 
+=======
+>>>>>>> parent of d63ccea... New Emo ID TESTING DONT USE
 }// end of Fragment
 
 
