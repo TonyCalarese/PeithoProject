@@ -1,6 +1,5 @@
 package com.example.peithoproject;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -33,12 +32,18 @@ import com.microsoft.projectoxford.face.contract.Emotion;
 import com.microsoft.projectoxford.face.contract.Face;
 import com.microsoft.projectoxford.face.contract.FaceAttribute;
 
-import java.io.ByteArrayInputStream;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.impl.client.HttpClientBuilder;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.URI;
 
 import static android.app.Activity.RESULT_OK;
+
+
 //Source of reference for Camera API: https://www.youtube.com/watch?v=u5PDdg1G4Q4
 public class Peitho extends Fragment implements TextureView.SurfaceTextureListener, PeithoInterface {
     //Camera
@@ -61,6 +66,12 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
     //Data Classes
     UserEmotionData UserEmoData = new UserEmotionData();
+
+    private HttpClient httpClient = HttpClientBuilder.create().build();
+    private static final String uriBase = "https://"+FACE_ENDPOINT+"face/v1.0/detect";
+    private static final String faceAttributes = "emotion";
+
+    private byte[] byteArray;
 
     private final FaceServiceClient faceServiceClient =
             new FaceServiceRestClient(FACE_ENDPOINT, FACE_SUBSCRIPTION_KEY);
@@ -152,8 +163,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
             Bitmap image = (Bitmap) extras.get("data");
 
         }
-
-
     }
 
     @Override
@@ -228,7 +237,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
             //e.printStackTrace();
         //}
 
-        mAdapter.notifyDataSetChanged();
+        //mAdapter.notifyDataSetChanged();
     }
 
 
@@ -248,7 +257,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
             holder.bindPosition(mUserEmoData.getIndexEmotion(position), position);
         }
 
-        @Override
+         @Override
         public int getItemCount() {
             return UserEmoData.getEmotionDataSize();
         }
@@ -262,30 +271,27 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 // Frame faces after detection.
     private void detectFace(final Bitmap imageBitmap) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-        ByteArrayInputStream inputStream =
-                new ByteArrayInputStream(outputStream.toByteArray());
+        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+        byteArray = outputStream.toByteArray();
 
+        /*
         @SuppressLint("StaticFieldLeak") AsyncTask<InputStream, String, Face[]> detectTask =
                 new AsyncTask<InputStream, String, Face[]>() {
                     String exceptionMessage = "";
-                    FaceServiceClient.FaceAttributeType[]  requiredAttributes = new FaceServiceClient.FaceAttributeType[] {
-                        FaceServiceClient.FaceAttributeType.Emotion
-                    };
 
                     @Override
                     protected Face[] doInBackground(InputStream... params) {
                         try {
-                            publishProgress("Detecting...");
+                            Log.d("Progess Check", "Entered Do in Background");
                             Face[] result = faceServiceClient.detect(
                                     params[0],
                                     true,         // returnFaceId
                                     false,        // returnFaceLandmarks
-                                    requiredAttributes          // returnFaceAttributes:
-                                /* new FaceServiceClient.FaceAttributeType[] {
-                                    FaceServiceClient.FaceAttributeType.Age,
-                                    FaceServiceClient.FaceAttributeType.Gender }
-                                */
+                                    null
+                                    /*
+                                    new FaceServiceClient.FaceAttributeType[] {
+                                            FaceServiceClient.FaceAttributeType.Emotion}       // returnFaceAttributes:
+
                             );
                             if (result == null){
                                 publishProgress(
@@ -306,17 +312,17 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
                     @Override
                     protected void onPreExecute() {
                         //TODO: show progress dialog
-                        detectionProgressDialog.show();
+                        //detectionProgressDialog.show();
                     }
                     @Override
                     protected void onProgressUpdate(String... progress) {
                         //TODO: update progress
-                        detectionProgressDialog.setMessage(progress[0]);
+                        //detectionProgressDialog.setMessage(progress[0]);
                     }
                     @Override
                     protected void onPostExecute(Face[] result) {
                         //TODO: update face frames
-                        detectionProgressDialog.dismiss();
+                        //detectionProgressDialog.dismiss();
 
                         if(!exceptionMessage.equals("")){
                             showError(exceptionMessage);
@@ -327,8 +333,32 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
                         parseFaces(result);
                     }
                 };
-
         detectTask.execute(inputStream);
+
+         */
+    }
+
+    private class detectTask extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... voids) {
+           try {
+               URIBuilder builder = new URIBuilder(uriBase);
+               builder.setParameter("returnFaceId", "true");
+               builder.setParameter("returnFaceLandmarks", "false");
+               builder.setParameter("returnFaceAttributes", faceAttributes);
+
+               URI uri = builder.build();
+               HttpPost request = new HttpPost(uri);
+
+               request.setHeader("Content-Type", "application/octet-stream");
+               request.setHeader("Ocp-Apim-Subscription-Key",FACE_SUBSCRIPTION_KEY);
+
+
+           } catch (Exception e) {
+               e.printStackTrace();
+           }
+           return "";
+        }
     }
 
     private void parseFaces(Face[] faces) {
