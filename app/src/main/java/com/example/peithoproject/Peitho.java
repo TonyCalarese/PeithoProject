@@ -1,19 +1,14 @@
 package com.example.peithoproject;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-=======
->>>>>>> parent of d63ccea... New Emo ID TESTING DONT USE
-=======
->>>>>>> parent of d63ccea... New Emo ID TESTING DONT USE
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,32 +26,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.peithoproject.recyclerassets.DataHolder;
 import com.example.peithoproject.recyclerassets.UserEmotionData;
-<<<<<<< HEAD
-<<<<<<< HEAD
 import com.microsoft.projectoxford.face.FaceServiceClient;
 import com.microsoft.projectoxford.face.FaceServiceRestClient;
 import com.microsoft.projectoxford.face.contract.Emotion;
 import com.microsoft.projectoxford.face.contract.Face;
 import com.microsoft.projectoxford.face.contract.FaceAttribute;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
-=======
-
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
->>>>>>> parent of d63ccea... New Emo ID TESTING DONT USE
-=======
-
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
->>>>>>> parent of d63ccea... New Emo ID TESTING DONT USE
 
 import static android.app.Activity.RESULT_OK;
 
@@ -83,8 +70,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
     //Data Classes
     UserEmotionData UserEmoData = new UserEmotionData();
-<<<<<<< HEAD
-<<<<<<< HEAD
 
     private HttpClient httpClient = HttpClientBuilder.create().build();
     private static final String uriBase = "https://"+FACE_ENDPOINT+"face/v1.0/detect";
@@ -98,10 +83,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     private final int PICK_IMAGE = 1;
     private ProgressDialog detectionProgressDialog;
 
-=======
->>>>>>> parent of d63ccea... New Emo ID TESTING DONT USE
-=======
->>>>>>> parent of d63ccea... New Emo ID TESTING DONT USE
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -246,19 +227,19 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     private Runnable mRefreshImageTexture = new Runnable() {
         @Override
         public void run() {
-           scanForFaces();
-           mVideoHandler.postDelayed(mRefreshImageTexture, mStandardRefreshRate); }
+            scanForFaces();
+            mVideoHandler.postDelayed(mRefreshImageTexture, mStandardRefreshRate); }
     };
 
     //Finn Look Here: Added the error handler as requested by the compiler
     public void scanForFaces()  {
         try {
-            FD.scanFaces(mImageTextureView.getBitmap(), mUserEmoData);
-        } catch (ExecutionException e) {
+            detectFace(mImageTextureView.getBitmap());
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        } //catch (InterruptedException e) {
+        //e.printStackTrace();
+        //}
 
         //mAdapter.notifyDataSetChanged();
     }
@@ -280,7 +261,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
             holder.bindPosition(mUserEmoData.getIndexEmotion(position), position);
         }
 
-         @Override
+        @Override
         public int getItemCount() {
             return UserEmoData.getEmotionDataSize();
         }
@@ -290,8 +271,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         }
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     // Detect faces by uploading a face image.
 // Frame faces after detection.
     private void detectFace(final Bitmap imageBitmap) {
@@ -366,23 +345,32 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     private class detectTask extends AsyncTask<Void, Void, String> {
         @Override
         protected String doInBackground(Void... voids) {
-           try {
-               URIBuilder builder = new URIBuilder(uriBase);
-               builder.setParameter("returnFaceId", "true");
-               builder.setParameter("returnFaceLandmarks", "false");
-               builder.setParameter("returnFaceAttributes", faceAttributes);
+            try {
+                URIBuilder builder = new URIBuilder(uriBase);
+                builder.setParameter("returnFaceId", "true");
+                builder.setParameter("returnFaceLandmarks", "false");
+                builder.setParameter("returnFaceAttributes", faceAttributes);
 
-               URI uri = builder.build();
-               HttpPost request = new HttpPost(uri);
+                URI uri = builder.build();
+                HttpPost request = new HttpPost(uri);
 
-               request.setHeader("Content-Type", "application/octet-stream");
-               request.setHeader("Ocp-Apim-Subscription-Key",FACE_SUBSCRIPTION_KEY);
+                request.setHeader("Content-Type", "application/octet-stream");
+                request.setHeader("Ocp-Apim-Subscription-Key",FACE_SUBSCRIPTION_KEY);
 
+                ByteArrayEntity byteEntity = new ByteArrayEntity(byteArray);
+                request.setEntity(byteEntity);
 
-           } catch (Exception e) {
-               e.printStackTrace();
-           }
-           return "";
+                HttpResponse response = httpClient.execute(request);
+                HttpEntity entity = response.getEntity();
+
+                if (entity != null) {
+                    return EntityUtils.toString(entity).trim();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return "";
         }
     }
 
@@ -407,10 +395,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
                 .create().show();
     }
 
-=======
->>>>>>> parent of d63ccea... New Emo ID TESTING DONT USE
-=======
->>>>>>> parent of d63ccea... New Emo ID TESTING DONT USE
 }// end of Fragment
 
 
