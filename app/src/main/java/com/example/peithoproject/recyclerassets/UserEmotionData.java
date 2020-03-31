@@ -4,11 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserEmotionData {
-    private List<String> mEmotions;;
+
+    public List<String> mEmotions;;
 
     public UserEmotionData() {
-        mEmotions = new ArrayList<>();
+        mEmotions = new ArrayList<String>();
         mEmotions.add("Neutral");
+        mEmotions.add("Neutral");
+        mEmotions.add("Happiness");
+        mEmotions.add("Fear");
+        mEmotions.add("Fear");
+        mEmotions.add("Surprise");
+        mEmotions.add("Sadness");
+        mEmotions.add("Anger");
+        mEmotions.add("Disgust");
+
     }
 
     //Getters

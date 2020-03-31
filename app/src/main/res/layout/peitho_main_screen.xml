@@ -63,6 +63,13 @@
             </LinearLayout>
            <!-- source for barchart: https://javapapers.com/android/android-chart-example-app-using-mpandroidchart/ -->
             <!-- Add Charts here -->
+            <com.github.mikephil.charting.charts.BarChart
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/bargraph">
+
+
+            </com.github.mikephil.charting.charts.BarChart>
         </LinearLayout>
 
 

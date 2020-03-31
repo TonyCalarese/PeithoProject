@@ -1,14 +1,10 @@
 package com.example.peithoproject;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,24 +22,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.peithoproject.recyclerassets.DataHolder;
 import com.example.peithoproject.recyclerassets.UserEmotionData;
-import com.microsoft.projectoxford.face.FaceServiceClient;
-import com.microsoft.projectoxford.face.FaceServiceRestClient;
-import com.microsoft.projectoxford.face.contract.Emotion;
-import com.microsoft.projectoxford.face.contract.Face;
-import com.microsoft.projectoxford.face.contract.FaceAttribute;
+import com.github.mikephil.charting.charts.BarChart;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
-
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.URI;
+import java.util.concurrent.ExecutionException;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -71,17 +53,9 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     //Data Classes
     UserEmotionData UserEmoData = new UserEmotionData();
 
-    private HttpClient httpClient = HttpClientBuilder.create().build();
-    private static final String uriBase = "https://"+FACE_ENDPOINT+"face/v1.0/detect";
-    private static final String faceAttributes = "emotion";
+    //Charting
+    public BarChart mBarChart;
 
-    private byte[] byteArray;
-
-    private final FaceServiceClient faceServiceClient =
-            new FaceServiceRestClient(FACE_ENDPOINT, FACE_SUBSCRIPTION_KEY);
-
-    private final int PICK_IMAGE = 1;
-    private ProgressDialog detectionProgressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -115,8 +89,15 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         mLayoutManager = new LinearLayoutManager(getContext());
         mDataFrame.setLayoutManager(mLayoutManager);
 
+        //DataFrame
         mAdapter = new DataFrameAdapter();
         mDataFrame.setAdapter(mAdapter);
+
+        //Charting
+        mBarChart = (BarChart) v.findViewById(R.id.bargraph);
+        mBarChart.setData(ChartingFragment.refreshChart(UserEmoData.getAllEmotions()));
+        mBarChart.notifyDataSetChanged();
+        mBarChart.invalidate();
 
         return v;
     }
@@ -151,9 +132,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     }
 
     public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-        // Invoked every time there's a new Camera preview frame
-        //scanFace();
-
     }
     //End of Reference: https://developer.android.com/reference/android/view/TextureView
 
@@ -167,6 +145,8 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
             Bitmap image = (Bitmap) extras.get("data");
 
         }
+
+
     }
 
     @Override
@@ -190,11 +170,11 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
             case R.id.start_menu_icon:
                 if(mStarted == false){
                     mVideoHandler.post(mRefreshImageTexture);
-                    item.setIcon(R.drawable.stop_icon);
+                    item.setIcon(R.drawable.play_icon);
                 }
                 else{
                     mVideoHandler.removeCallbacks(mRefreshImageTexture);
-                    item.setIcon(R.drawable.play_icon);
+                    item.setIcon(R.drawable.stop_icon);
                 }
                 mStarted = !mStarted;
                 return true;
@@ -227,21 +207,24 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     private Runnable mRefreshImageTexture = new Runnable() {
         @Override
         public void run() {
-            scanForFaces();
-            mVideoHandler.postDelayed(mRefreshImageTexture, mStandardRefreshRate); }
+           scanForFaces();
+           mVideoHandler.postDelayed(mRefreshImageTexture, mStandardRefreshRate); }
     };
 
     //Finn Look Here: Added the error handler as requested by the compiler
     public void scanForFaces()  {
         try {
-            detectFace(mImageTextureView.getBitmap());
-        } catch (Exception e) {
+            FD.scanFaces(mImageTextureView.getBitmap(), mUserEmoData);
+        } catch (ExecutionException e) {
             e.printStackTrace();
-        } //catch (InterruptedException e) {
-        //e.printStackTrace();
-        //}
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        //mAdapter.notifyDataSetChanged();
+
+        mAdapter.notifyDataSetChanged();
+        mBarChart.notifyDataSetChanged();
+        mBarChart.invalidate();
     }
 
 
@@ -269,130 +252,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         public void appendEmotion(String emotion) {
             UserEmoData.add(emotion);
         }
-    }
-
-    // Detect faces by uploading a face image.
-// Frame faces after detection.
-    private void detectFace(final Bitmap imageBitmap) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-        byteArray = outputStream.toByteArray();
-
-        /*
-        @SuppressLint("StaticFieldLeak") AsyncTask<InputStream, String, Face[]> detectTask =
-                new AsyncTask<InputStream, String, Face[]>() {
-                    String exceptionMessage = "";
-
-                    @Override
-                    protected Face[] doInBackground(InputStream... params) {
-                        try {
-                            Log.d("Progess Check", "Entered Do in Background");
-                            Face[] result = faceServiceClient.detect(
-                                    params[0],
-                                    true,         // returnFaceId
-                                    false,        // returnFaceLandmarks
-                                    null
-                                    /*
-                                    new FaceServiceClient.FaceAttributeType[] {
-                                            FaceServiceClient.FaceAttributeType.Emotion}       // returnFaceAttributes:
-
-                            );
-                            if (result == null){
-                                publishProgress(
-                                        "Detection Finished. Nothing detected");
-                                return null;
-                            }
-                            publishProgress(String.format(
-                                    "Detection Finished. %d face(s) detected",
-                                    result.length));
-                            return result;
-                        } catch (Exception e) {
-                            exceptionMessage = String.format(
-                                    "Detection failed: %s", e.getMessage());
-                            return null;
-                        }
-                    }
-
-                    @Override
-                    protected void onPreExecute() {
-                        //TODO: show progress dialog
-                        //detectionProgressDialog.show();
-                    }
-                    @Override
-                    protected void onProgressUpdate(String... progress) {
-                        //TODO: update progress
-                        //detectionProgressDialog.setMessage(progress[0]);
-                    }
-                    @Override
-                    protected void onPostExecute(Face[] result) {
-                        //TODO: update face frames
-                        //detectionProgressDialog.dismiss();
-
-                        if(!exceptionMessage.equals("")){
-                            showError(exceptionMessage);
-                        }
-                        if (result == null) return;
-
-                        //Add Info Update here (Look at old Flicker Project)
-                        parseFaces(result);
-                    }
-                };
-        detectTask.execute(inputStream);
-
-         */
-    }
-
-    private class detectTask extends AsyncTask<Void, Void, String> {
-        @Override
-        protected String doInBackground(Void... voids) {
-            try {
-                URIBuilder builder = new URIBuilder(uriBase);
-                builder.setParameter("returnFaceId", "true");
-                builder.setParameter("returnFaceLandmarks", "false");
-                builder.setParameter("returnFaceAttributes", faceAttributes);
-
-                URI uri = builder.build();
-                HttpPost request = new HttpPost(uri);
-
-                request.setHeader("Content-Type", "application/octet-stream");
-                request.setHeader("Ocp-Apim-Subscription-Key",FACE_SUBSCRIPTION_KEY);
-
-                ByteArrayEntity byteEntity = new ByteArrayEntity(byteArray);
-                request.setEntity(byteEntity);
-
-                HttpResponse response = httpClient.execute(request);
-                HttpEntity entity = response.getEntity();
-
-                if (entity != null) {
-                    return EntityUtils.toString(entity).trim();
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return "";
-        }
-    }
-
-    private void parseFaces(Face[] faces) {
-        try {
-            for (Face face : faces) {
-                FaceAttribute attributes = face.faceAttributes;
-                Emotion emotions = attributes.emotion;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void showError(String message) {
-        new AlertDialog.Builder(getContext())
-                .setTitle("Error")
-                .setMessage(message)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }})
-                .create().show();
     }
 
 }// end of Fragment
