@@ -96,23 +96,7 @@ public class FacialDetector implements PeithoInterface {
                     float rotY = face.getHeadEulerAngleY();  // Head is rotated to the right rotY degrees
                     float rotZ = face.getHeadEulerAngleZ();  // Head is tilted sideways rotZ degrees
 
-                    try {
-                        mDetectedFace = getCutoutFace(getFireImage(), bounds.left, bounds.top, bounds.width(), bounds.height());
-                        //appendFacetoList(mDetectedFace);
-                    } catch (Exception e) {
-                        Log.d("CUT FACE ERROR", e.getMessage());
-                    }
-
-                    try{
-                        Log.d(SCANNER_LOG_TAG, ATTEMPTING_EMOTION);
-                        Emo.processEmo(mDetectedFace, userEmo);
-                        Log.d(SCANNER_LOG_TAG, ACKNOWLEDGED_FACE_LOG);
-                        Log.d("EMOTION: ", mEmotion);
-                    } catch (Exception e) {
-                        Log.d(SCANNER_LOG_TAG, NO_EMOTION_LOGGED);
-                        Log.d(SCANNER_LOG_TAG, e.getMessage());
-                        adjustHappinessProbability(face.getSmilingProbability());
-                    }
+                    userEmo.add(face.getSmilingProbability());
                 }
             }
 

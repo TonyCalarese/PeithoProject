@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -55,6 +57,10 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
     //Charting
     public BarChart mBarChart;
+
+    public static double findMinimum(String filename) {
+        return  0.0;
+    }
 
 
     @Override
@@ -212,6 +218,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     };
 
     //Finn Look Here: Added the error handler as requested by the compiler
+    @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public void scanForFaces()  {
         try {
             FD.scanFaces(mImageTextureView.getBitmap(), mUserEmoData);
@@ -249,9 +256,10 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
             return UserEmoData.getEmotionDataSize();
         }
 
-        public void appendEmotion(String emotion) {
+        public void appendEmotion(float emotion) {
             UserEmoData.add(emotion);
         }
+
     }
 
 }// end of Fragment

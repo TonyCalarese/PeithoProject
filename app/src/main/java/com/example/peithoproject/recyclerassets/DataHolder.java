@@ -19,9 +19,9 @@ public class DataHolder extends RecyclerView.ViewHolder{
         mEmoView = (TextView) itemView.findViewById(R.id.DataTile);
     }
 
-    public void bindPosition(String emo, int p) {
+    public void bindPosition(float emo, int p) {
         mPosition = p;
-        mEmoView.setText(emo);
+        mEmoView.setText(String.valueOf(emo));
     }
 
     public void appendData() {
