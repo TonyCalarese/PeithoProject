@@ -15,11 +15,12 @@ public class UserEmotionData {
     public synchronized List<Float> getAllEmotions() { return mEmotions; }
     public synchronized int getEmotionDataSize() { return mEmotions.size();}
     public synchronized float getIndexEmotion(int position) {return mEmotions.get(position);}
+    public synchronized float getEmo() {
+        return mEmotions.get(mEmotions.size());
+    }
 
     //setters
     public synchronized void add(float emotion){ mEmotions.add(emotion);}
-    public synchronized float getEmo() {
-        return mEmotions.get(mEmotions.size() - 1);
-    }
+
 
 }

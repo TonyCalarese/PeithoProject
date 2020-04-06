@@ -11,7 +11,6 @@ import com.example.peithoproject.R;
 //Recycler
 public class DataHolder extends RecyclerView.ViewHolder{
     private TextView mEmoView;
-
     private int mPosition;
 
     public DataHolder(LayoutInflater inflater, ViewGroup container) {
@@ -24,10 +23,6 @@ public class DataHolder extends RecyclerView.ViewHolder{
         mEmoView.setText(String.valueOf(emo));
     }
 
-    public void appendData() {
-        //Add Model Class Syncornous get function here
-        //
-    }
 }
 
 
