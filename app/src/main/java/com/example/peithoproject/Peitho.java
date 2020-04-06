@@ -24,7 +24,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.peithoproject.recyclerassets.DataHolder;
 import com.example.peithoproject.recyclerassets.UserEmotionData;
-import com.github.mikephil.charting.charts.BarChart;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -54,13 +53,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
     //Data Classes
     UserEmotionData UserEmoData = new UserEmotionData();
-
-    //Charting
-    public BarChart mBarChart;
-
-    public static double findMinimum(String filename) {
-        return  0.0;
-    }
 
 
     @Override
@@ -98,12 +90,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         //DataFrame
         mAdapter = new DataFrameAdapter();
         mDataFrame.setAdapter(mAdapter);
-
-        //Charting
-        mBarChart = (BarChart) v.findViewById(R.id.bargraph);
-        mBarChart.setData(ChartingFragment.refreshChart(UserEmoData.getAllEmotions()));
-        mBarChart.notifyDataSetChanged();
-        mBarChart.invalidate();
 
         return v;
     }
@@ -230,8 +216,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
 
         mAdapter.notifyDataSetChanged();
-        mBarChart.notifyDataSetChanged();
-        mBarChart.invalidate();
     }
 
 

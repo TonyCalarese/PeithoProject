@@ -1,5 +1,9 @@
 package com.example.peithoproject;
 
+import android.content.Context;
+
+import androidx.core.util.Pair;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -10,17 +14,46 @@ import static org.junit.Assert.assertEquals;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class ExampleUnitTest {
-    @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
-    }
 
     @Test
     public void testFindMinimum() {
-        double timestamp = Peitho.findMinimum("minimumTest");
+        Speech minSpeech = new Speech();
 
-        double expectedTime = 1;
+        minSpeech.addData(1.0f);
+        minSpeech.addData(0.1f);
 
-        assertEquals(expectedTime, timestamp);
+        float expected = 0.1F;
+
+        Pair<Long, Float> gottenMinimum = minSpeech.findMinimum();
+
+        assertEquals(expected, gottenMinimum.second, 0.002);
     }
+
+    @Test
+    public void testFindMaximum() {
+        Speech maxSpeech = new Speech();
+
+        maxSpeech.addData(0.1f);
+        maxSpeech.addData(1.0f);
+
+        float expected = 1.0f;
+
+        Pair<Long, Float> gottenMinimum = maxSpeech.findMaximum();
+
+        assertEquals(gottenMinimum.second, expected, 0.002);
+    }
+
+    @Test
+    public void testWrite() {
+        Speech speechSaveTest = new Speech();
+        Context context = null;
+
+        speechSaveTest.addData(0.1f);
+        speechSaveTest.addData(1.0f);
+
+        boolean output = speechSaveTest.saveSpeech(context, "Test-Saving");
+
+        assertEquals(output, true);
+    }
+
 }

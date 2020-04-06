@@ -23,6 +23,10 @@ android {
         noCompress "tflite"
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
 }
 
 // Added Tensorflow Lite Dependencies
