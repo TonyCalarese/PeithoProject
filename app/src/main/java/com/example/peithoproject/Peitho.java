@@ -78,16 +78,10 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         mImageTextureView = (TextureView) v.findViewById((R.id.imageSurfaceView));
         mImageTextureView.setSurfaceTextureListener(Peitho.this);
 
-
-        //mPhotoView = (ImageView) v.findViewById(R.id.imagePreview); //Photo View, will go away after some tesing is done
-        //mEmotionTextResults = (TextView) v.findViewById(R.id.analysisView); //TextView for Results
-
+        //DataFrame
         mDataFrame = (RecyclerView) v.findViewById(R.id.dataRecyclerView);
-
         mLayoutManager = new LinearLayoutManager(getContext());
         mDataFrame.setLayoutManager(mLayoutManager);
-
-        //DataFrame
         mAdapter = new DataFrameAdapter();
         mDataFrame.setAdapter(mAdapter);
 
@@ -203,7 +197,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
            mVideoHandler.postDelayed(mRefreshImageTexture, mStandardRefreshRate); }
     };
 
-    //Finn Look Here: Added the error handler as requested by the compiler
+   
     @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public void scanForFaces()  {
         try {
@@ -238,9 +232,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
             return UserEmoData.getEmotionDataSize();
         }
 
-        public void appendEmotion(float emotion) {
-            UserEmoData.add(emotion);
-        }
+        //public void appendEmotion(float emotion) { UserEmoData.add(emotion); }
 
     }
 
