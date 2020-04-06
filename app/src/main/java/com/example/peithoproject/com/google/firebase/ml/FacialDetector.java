@@ -68,7 +68,7 @@ public class FacialDetector implements PeithoInterface {
     }
 
 
-    public void scanFaces(Bitmap image, final UserEmotionData userEmo) throws ExecutionException, InterruptedException {
+    public UserEmotionData scanFaces(Bitmap image, final UserEmotionData userEmo) throws ExecutionException, InterruptedException {
        setFireImage(image);
        //Start of Async Task
         Task<List<FirebaseVisionFace>> result = mDetector.detectInImage(mFireImage).addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionFace>>() {
@@ -113,6 +113,8 @@ public class FacialDetector implements PeithoInterface {
         //Dont know where this is supposed to go but this waits
         //Tasks.await(result); //This will crash the app
        Log.d(FIREBASE_IMAGE_RESULT_LOG_TAG, result.toString());
+
+       return userEmo;
     } //end Scan Faces Function
 
 }
