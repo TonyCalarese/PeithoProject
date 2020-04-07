@@ -255,7 +255,10 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         ArrayList<Entry> values = new ArrayList<>();
         values.add(new Entry(1, 50));
         values.add(new Entry(2, 100));
-        values.add(new Entry(1, 50));
+        values.add(new Entry(3, 50));
+        values.add(new Entry(4, 50));
+        values.add(new Entry(5, 100));
+        values.add(new Entry(6, 50));
 
         LineDataSet HappinessDataSet = new LineDataSet(values, "Happiness");
 
