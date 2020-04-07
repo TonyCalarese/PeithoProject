@@ -5,8 +5,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-
-
 //Source of reference: https://www.youtube.com/watch?v=u5PDdg1G4Q4
 
 public class MainActivity extends AppCompatActivity {
