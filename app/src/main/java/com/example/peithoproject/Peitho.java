@@ -24,8 +24,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.peithoproject.recyclerassets.DataHolder;
 import com.example.peithoproject.recyclerassets.UserEmotionData;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import static android.app.Activity.RESULT_OK;
@@ -54,6 +60,8 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     //Data Classes
     UserEmotionData UserEmoData = new UserEmotionData();
 
+    //Charting
+    public LineChart mChart;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,6 +93,11 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         mAdapter = new DataFrameAdapter();
         mDataFrame.setAdapter(mAdapter);
 
+        //Charting
+        mChart = (LineChart) v.findViewById(R.id.LineChart);
+        mChart.setTouchEnabled(true);
+        mChart.setPinchZoom(true);
+        updateChart();
         return v;
     }
 
@@ -234,6 +247,24 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
         //public void appendEmotion(float emotion) { UserEmoData.add(emotion); }
 
+    }
+
+
+
+    public void updateChart() {
+        ArrayList<Entry> values = new ArrayList<>();
+        values.add(new Entry(1, 50));
+        values.add(new Entry(2, 100));
+        values.add(new Entry(1, 50));
+
+        LineDataSet HappinessDataSet = new LineDataSet(values, "Happiness");
+
+        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+        dataSets.add(HappinessDataSet);
+        LineData data = new LineData(dataSets);
+
+        mChart.setData(data);
+        mChart.invalidate();
     }
 
 }// end of Fragment
