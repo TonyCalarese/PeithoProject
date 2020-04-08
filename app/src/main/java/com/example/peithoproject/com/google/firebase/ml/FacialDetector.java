@@ -15,6 +15,7 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -23,6 +24,9 @@ import java.util.concurrent.ExecutionException;
 //https://www.upwork.com/hiring/mobile/why-you-should-use-asynctask-in-android-development/
 //Finn Look here: Whole class is restructured
 public class FacialDetector implements PeithoInterface {
+    public int[] happiness = new int[0]; // make a blank array
+
+
     public float mHappinessProbability = 0.0f;
     public String mEmotion = EMPTY_EMOPTION_STRING;
 
@@ -117,4 +121,46 @@ public class FacialDetector implements PeithoInterface {
        return userEmo;
     } //end Scan Faces Function
 
+    //Tony's version
+    public int[] scanHappiness(Bitmap image) {
+        //Start of Async Task
+        setFireImage(image);
+        //Start of Async Task
+        Task<List<FirebaseVisionFace>> result = mDetector.detectInImage(mFireImage).addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionFace>>() {
+            @Override
+            public void onSuccess(List<FirebaseVisionFace> faces) {
+                happiness = null; //empty the array
+                //source for landmarks: https://medium.com/androidiots/firebase-ml-kit-101-face-detection-5057190e58c0
+                //https://firebase.google.com/docs/ml-kit/detect-faces
+                //Starting here: These lines can be removed when fully functional, unless we want to log properly
+                switch(faces.size()){
+                    case 0:
+                        Log.d(SCANNER_LOG_TAG, NO_FACE_LOG);
+                        break;
+                    case 1:
+                        Log.d(SCANNER_LOG_TAG, ONE_FACE_LOG);
+                        break;
+                    default:
+                        Log.d(SCANNER_LOG_TAG, MULTI_FACE_LOG);
+                        break;
+
+                } //End of Auditable Code
+                for (FirebaseVisionFace face : faces) {
+                    happiness = Arrays.copyOf(happiness, happiness.length + 1);
+                    //Happiness is on scale of 0.0 to 1.0 --> Equivalent to a 0-100%
+                    double HScale = face.getSmilingProbability() * 100.0; //Convert to double to multiply by 100
+                    happiness[happiness.length - 1] = (int) HScale; //get all the happiness
+                }
+
+            }
+        })
+                .addOnFailureListener(
+                        new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d(SCANNER_LOG_TAG, "FUNCTION FAILURE");
+                            }
+                        });
+        return happiness;
+    } //end Scan Faces Function
 }

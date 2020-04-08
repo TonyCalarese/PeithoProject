@@ -32,7 +32,6 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -62,6 +61,8 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
     //Charting
     public LineChart mChart;
+    ArrayList<Entry> mHappinessData = new ArrayList<>(); //Charting data for Happiness
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,7 +98,10 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         mChart = (LineChart) v.findViewById(R.id.LineChart);
         mChart.setTouchEnabled(true);
         mChart.setPinchZoom(true);
-        updateChart();
+
+
+        //mHappinessData.add(new Entry(1, 0)); //Starting off with 0
+        updateChart(new int[]{0});
         return v;
     }
 
@@ -153,8 +157,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         super.onSaveInstanceState(outState);
     }
 
-    //Source for rotating with all the proper data https://medium.com/hootsuite-engineering/handling-orientation-changes-on-android-41a6b62cb43f
-
     //Menu Functions
     //Source on menus: https://developer.android.com/guide/topics/ui/menus#java
     @Override
@@ -206,13 +208,14 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     private Runnable mRefreshImageTexture = new Runnable() {
         @Override
         public void run() {
-           scanForFaces();
+           //scanForFaces();updateChart(new int[]{20});
            mVideoHandler.postDelayed(mRefreshImageTexture, mStandardRefreshRate); }
     };
 
    
     @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public void scanForFaces()  {
+        /*
         try {
             mUserEmoData = FD.scanFaces(mImageTextureView.getBitmap(), mUserEmoData);
         } catch (ExecutionException e) {
@@ -220,7 +223,9 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        mAdapter.notifyDataSetChanged();
+        */
+
+        updateChart(FD.scanHappiness(mImageTextureView.getBitmap()));
     }
 
 
@@ -251,17 +256,13 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
 
 
-    public void updateChart() {
-        ArrayList<Entry> values = new ArrayList<>();
-        values.add(new Entry(1, 50));
-        values.add(new Entry(2, 100));
-        values.add(new Entry(3, 50));
-        values.add(new Entry(4, 50));
-        values.add(new Entry(5, 100));
-        values.add(new Entry(6, 50));
-
-        LineDataSet HappinessDataSet = new LineDataSet(values, "Happiness");
-
+    public void updateChart(int[] happiness) {
+        //int size = mHappinessData.size();
+        for(int happyScale: happiness){
+            mHappinessData.add(new Entry(mHappinessData.size(), happyScale)); //Starting off with 0
+        }
+        LineDataSet HappinessDataSet = new LineDataSet(mHappinessData, "Happiness");
+        //Setting up the chart
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(HappinessDataSet);
         LineData data = new LineData(dataSets);
