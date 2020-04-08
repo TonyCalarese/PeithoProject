@@ -209,7 +209,8 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     private Runnable mRefreshImageTexture = new Runnable() {
         @Override
         public void run() {
-           //scanForFaces();updateChart(new int[]{20});
+           //scanForFaces();
+           updateChart(new int[]{20});
            mVideoHandler.postDelayed(mRefreshImageTexture, mStandardRefreshRate); }
     };
 
