@@ -122,7 +122,7 @@ public class FacialDetector implements PeithoInterface {
     } //end Scan Faces Function
 
     //Tony's version
-    public int[] scanHappiness(Bitmap image) {
+    public int[] scanHappiness(Bitmap image) throws ExecutionException, InterruptedException {
         //Start of Async Task
         setFireImage(image);
         //Start of Async Task
