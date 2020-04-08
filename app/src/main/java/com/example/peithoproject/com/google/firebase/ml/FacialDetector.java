@@ -11,8 +11,11 @@ import com.example.peithoproject.recyclerassets.UserEmotionData;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
+import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector;
+import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +27,13 @@ import java.util.concurrent.ExecutionException;
 //https://www.upwork.com/hiring/mobile/why-you-should-use-asynctask-in-android-development/
 //Finn Look here: Whole class is restructured
 public class FacialDetector implements PeithoInterface {
+    //FireBaseCode
+    FirebaseVisionFaceDetectorOptions mRealTimeOpts = new FirebaseVisionFaceDetectorOptions.Builder()
+            .setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
+            .build();
+    FirebaseVisionFaceDetector mDetector = FirebaseVision.getInstance()
+            .getVisionFaceDetector(mRealTimeOpts);
+
     public int[] happiness = new int[0]; // make a blank array
 
 
@@ -36,9 +46,6 @@ public class FacialDetector implements PeithoInterface {
     ArrayList<Bitmap> mDetectedFaces=new ArrayList<Bitmap>();
 
     //Setters and Functions
-    private void adjustHappinessProbability(float prob){
-        mHappinessProbability = prob;
-    }
     public void setFireImage(Bitmap image){
         mFireImage = FirebaseVisionImage.fromBitmap(image);
     }
@@ -62,9 +69,6 @@ public class FacialDetector implements PeithoInterface {
         return mDetectedFace;
     }
 
-    public String getEmotion() {
-        return mEmotion;
-    }
     //Source of reference: https://stackoverflow.com/questions/5432495/cut-the-portion-of-bitmap
     //https://stackoverflow.com/questions/10998843/create-a-cropped-bitmap-from-an-original-bitmap
     public Bitmap getCutoutFace(Bitmap image, int x, int y, int width, int height) {

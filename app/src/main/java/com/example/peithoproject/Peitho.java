@@ -32,6 +32,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -215,7 +216,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
    
     @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public void scanForFaces()  {
-        /*
         try {
             mUserEmoData = FD.scanFaces(mImageTextureView.getBitmap(), mUserEmoData);
         } catch (ExecutionException e) {
@@ -223,9 +223,17 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        */
 
-        updateChart(FD.scanHappiness(mImageTextureView.getBitmap()));
+
+        try {
+            updateChart(FD.scanHappiness(mImageTextureView.getBitmap()));
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 

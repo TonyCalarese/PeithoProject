@@ -49,9 +49,8 @@ dependencies {
     // https://firebase.google.com/docs/android/setup#available-libraries
 
     implementation 'com.google.firebase:firebase-ml-vision:24.0.1'
-    // If you want to detect face contours (landmark detection and classification
-    // don't require this additional model):
-    implementation 'com.google.firebase:firebase-ml-vision-face-model:19.0.0'
+
+    //implementation 'com.google.firebase:firebase-ml-vision-face-model:19.0.0'
 
     //Firebase Tensorflow lite Model interperter
     implementation 'com.google.firebase:firebase-ml-model-interpreter:22.0.1'
