@@ -162,6 +162,7 @@ public class FacialDetector implements PeithoInterface {
                         new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
+                                e.printStackTrace();
                                 Log.d(SCANNER_LOG_TAG, "FUNCTION FAILURE");
                             }
                         });
