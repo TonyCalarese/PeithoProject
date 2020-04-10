@@ -268,7 +268,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
 
 
-    public void updateChart(int[] happiness) {
+    public synchronized void updateChart(int[] happiness) {
         //int size = mHappinessData.size();
         if(happiness != null){
             for(int happyScale: happiness){
