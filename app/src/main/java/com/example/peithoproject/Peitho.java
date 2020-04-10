@@ -227,7 +227,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
 
         try {
-            updateChart(FD.scanHappiness(mImageTextureView.getBitmap()));
+            FD.scanHappiness(mImageTextureView.getBitmap());
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

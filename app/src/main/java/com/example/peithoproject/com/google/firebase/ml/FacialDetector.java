@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.peithoproject.Peitho;
 import com.example.peithoproject.PeithoInterface;
 import com.example.peithoproject.recyclerassets.UserEmotionData;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -26,7 +27,7 @@ import java.util.concurrent.ExecutionException;
 //Sources of Reference for Async tasks: https://stackoverflow.com/questions/51411110/are-the-firebase-ml-kit-functions-asynchronous-so-that-i-could-run-multiple-dete
 //https://www.upwork.com/hiring/mobile/why-you-should-use-asynctask-in-android-development/
 //Finn Look here: Whole class is restructured
-public class FacialDetector implements PeithoInterface {
+public class FacialDetector extends Peitho implements PeithoInterface {
     //FireBaseCode
     FirebaseVisionFaceDetectorOptions mRealTimeOpts = new FirebaseVisionFaceDetectorOptions.Builder()
             .setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
@@ -126,7 +127,7 @@ public class FacialDetector implements PeithoInterface {
     } //end Scan Faces Function
 
     //Tony's version
-    public int[] scanHappiness(Bitmap image) throws ExecutionException, InterruptedException {
+    public void scanHappiness(Bitmap image) throws ExecutionException, InterruptedException {
         //Start of Async Task
         setFireImage(image);
         //Start of Async Task
@@ -155,17 +156,16 @@ public class FacialDetector implements PeithoInterface {
                     double HScale = face.getSmilingProbability() * 100.0; //Convert to double to multiply by 100
                     happiness[happiness.length - 1] = (int) HScale; //get all the happiness
                 }
-
+                updateChart(happiness);
             }
-        })
-                .addOnFailureListener(
-                        new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                e.printStackTrace();
-                                Log.d(SCANNER_LOG_TAG, "FUNCTION FAILURE");
-                            }
-                        });
-        return happiness;
+        });
+
+        if (result.isSuccessful()) {
+            Log.d(SCANNER_LOG_TAG, "It passed");
+        } else {
+            Log.d(SCANNER_LOG_TAG, "It Failed");
+            Log.d(SCANNER_LOG_TAG, result.getResult().toString());
+        }
+
     } //end Scan Faces Function
 }
