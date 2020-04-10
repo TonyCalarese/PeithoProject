@@ -19,7 +19,6 @@ import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector;
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -135,7 +134,6 @@ public class FacialDetector extends Peitho implements PeithoInterface {
                 .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionFace>>() {
             @Override
             public void onSuccess(List<FirebaseVisionFace> faces) {
-                happiness = null; //empty the array
                 //source for landmarks: https://medium.com/androidiots/firebase-ml-kit-101-face-detection-5057190e58c0
                 //https://firebase.google.com/docs/ml-kit/detect-faces
                 //Starting here: These lines can be removed when fully functional, unless we want to log properly
@@ -152,12 +150,19 @@ public class FacialDetector extends Peitho implements PeithoInterface {
 
                 } //End of Auditable Code
                 for (FirebaseVisionFace face : faces) {
-                    happiness = Arrays.copyOf(happiness, happiness.length + 1);
+                    //happiness = Arrays.copyOf(happiness, happiness.length + 1);
                     //Happiness is on scale of 0.0 to 1.0 --> Equivalent to a 0-100%
-                    double HScale = face.getSmilingProbability() * 100.0; //Convert to double to multiply by 100
-                    happiness[happiness.length - 1] = (int) HScale; //get all the happiness
+                    Log.d("Happiness is: ", String.valueOf( Math.abs(face.getSmilingProbability())));
+                    double HScale = Math.abs(face.getSmilingProbability()); //Convert to double
+
+                    Log.d("Happiness is: ", String.valueOf(HScale));
+
+                    Log.d("Happiness is: ", String.valueOf((int) HScale));
+                    //happiness[happiness.length - 1] = (int) HScale; //get all the happiness
+
+                    updateChart(new int[]{25});
                 }
-                updateChart(happiness);
+                //updateChart(happiness);
             }
         })
                 .addOnFailureListener(
@@ -168,12 +173,6 @@ public class FacialDetector extends Peitho implements PeithoInterface {
                     }
                 });
 
-        if (result.isSuccessful()) {
-            Log.d(SCANNER_LOG_TAG, "It passed");
-        } else {
-            Log.d(SCANNER_LOG_TAG, "It Failed");
-           // Log.d(SCANNER_LOG_TAG, result.getResult().toString());
-        }
 
     } //end Scan Faces Function
 }
