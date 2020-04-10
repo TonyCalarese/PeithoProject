@@ -42,5 +42,5 @@ public interface PeithoInterface {
 
 
 
-     int mStandardRefreshRate = 10000; //in milliseconds, every 10 seconds
+     int mStandardRefreshRate = 1000; //in milliseconds, every 10 seconds
 }

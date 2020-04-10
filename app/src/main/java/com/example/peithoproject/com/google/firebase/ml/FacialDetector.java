@@ -131,7 +131,8 @@ public class FacialDetector extends Peitho implements PeithoInterface {
         //Start of Async Task
         setFireImage(image);
         //Start of Async Task
-        Task<List<FirebaseVisionFace>> result = mDetector.detectInImage(mFireImage).addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionFace>>() {
+        Task<List<FirebaseVisionFace>> result = mDetector.detectInImage(mFireImage)
+                .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionFace>>() {
             @Override
             public void onSuccess(List<FirebaseVisionFace> faces) {
                 happiness = null; //empty the array
@@ -158,13 +159,20 @@ public class FacialDetector extends Peitho implements PeithoInterface {
                 }
                 updateChart(happiness);
             }
-        });
+        })
+                .addOnFailureListener(
+                new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(SCANNER_LOG_TAG, "FUNCTION FAILURE");
+                    }
+                });
 
         if (result.isSuccessful()) {
             Log.d(SCANNER_LOG_TAG, "It passed");
         } else {
             Log.d(SCANNER_LOG_TAG, "It Failed");
-            Log.d(SCANNER_LOG_TAG, result.getResult().toString());
+           // Log.d(SCANNER_LOG_TAG, result.getResult().toString());
         }
 
     } //end Scan Faces Function

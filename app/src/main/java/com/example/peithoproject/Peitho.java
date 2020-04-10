@@ -209,14 +209,15 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     private Runnable mRefreshImageTexture = new Runnable() {
         @Override
         public void run() {
-           //scanForFaces();
-           updateChart(new int[]{20});
+           scanForFaces();
+           //updateChart(new int[]{20});
            mVideoHandler.postDelayed(mRefreshImageTexture, mStandardRefreshRate); }
     };
 
    
     @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public void scanForFaces()  {
+        /*
         try {
             mUserEmoData = FD.scanFaces(mImageTextureView.getBitmap(), mUserEmoData);
         } catch (ExecutionException e) {
@@ -224,6 +225,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+         */
 
 
         try {
@@ -233,7 +235,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
 
     }
 
@@ -267,17 +268,20 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
     public void updateChart(int[] happiness) {
         //int size = mHappinessData.size();
-        for(int happyScale: happiness){
-            mHappinessData.add(new Entry(mHappinessData.size(), happyScale)); //Starting off with 0
-        }
-        LineDataSet HappinessDataSet = new LineDataSet(mHappinessData, "Happiness");
-        //Setting up the chart
-        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
-        dataSets.add(HappinessDataSet);
-        LineData data = new LineData(dataSets);
+        if(happiness != null){
+            for(int happyScale: happiness){
+                mHappinessData.add(new Entry(mHappinessData.size(), happyScale)); //Starting off with 0
+            }
+            LineDataSet HappinessDataSet = new LineDataSet(mHappinessData, "Happiness");
+            //Setting up the chart
+            ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+            dataSets.add(HappinessDataSet);
+            LineData data = new LineData(dataSets);
 
-        mChart.setData(data);
-        mChart.invalidate();
+            mChart.setData(data);
+            mChart.invalidate();
+        }
+
     }
 
 }// end of Fragment
