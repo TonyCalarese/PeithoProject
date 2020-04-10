@@ -1,5 +1,7 @@
 package com.example.peithoproject.recyclerassets;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +23,8 @@ public class UserEmotionData {
 
     //setters
     public synchronized void add(double emotion){
-        int emo = (int) emotion * 100;
+        int emo = (int) (emotion * 100);
+        Log.d("Happiness from UEMO: ", String.valueOf(emo));
         mEmotions.add(emo);
     }
 }

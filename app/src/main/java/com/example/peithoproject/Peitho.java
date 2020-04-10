@@ -217,19 +217,8 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
    
     @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public void scanForFaces()  {
-        /*
         try {
-            mUserEmoData = FD.scanFaces(mImageTextureView.getBitmap(), mUserEmoData);
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-         */
-
-
-        try {
-            FD.scanHappiness(mImageTextureView.getBitmap(), mUserEmoData);
+            FD.scanHappiness(this, mImageTextureView.getBitmap(), mUserEmoData);
             updateChart();
         } catch (ExecutionException e) {
             e.printStackTrace();

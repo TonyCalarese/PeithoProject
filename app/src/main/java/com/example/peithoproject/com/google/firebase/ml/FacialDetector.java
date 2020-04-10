@@ -24,7 +24,7 @@ import java.util.concurrent.ExecutionException;
 //Sources of Reference for Async tasks: https://stackoverflow.com/questions/51411110/are-the-firebase-ml-kit-functions-asynchronous-so-that-i-could-run-multiple-dete
 //https://www.upwork.com/hiring/mobile/why-you-should-use-asynctask-in-android-development/
 //Finn Look here: Whole class is restructured
-public class FacialDetector extends Peitho implements PeithoInterface {
+public class FacialDetector implements PeithoInterface {
     //FireBaseCode
     FirebaseVisionFaceDetectorOptions mRealTimeOpts = new FirebaseVisionFaceDetectorOptions.Builder()
             .setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
@@ -46,7 +46,7 @@ public class FacialDetector extends Peitho implements PeithoInterface {
 
 
     //Tony's version
-    public void scanHappiness(Bitmap image, final UserEmotionData data) throws ExecutionException, InterruptedException {
+    public void scanHappiness(final Peitho peitho, Bitmap image, final UserEmotionData data) throws ExecutionException, InterruptedException {
         //Start of Async Task
         setFireImage(image);
         //Start of Async Task
@@ -60,6 +60,7 @@ public class FacialDetector extends Peitho implements PeithoInterface {
                 switch(faces.size()){
                     case 0:
                         Log.d(SCANNER_LOG_TAG, NO_FACE_LOG);
+                        data.add(0);
                         break;
                     case 1:
                         Log.d(SCANNER_LOG_TAG, ONE_FACE_LOG);
@@ -80,12 +81,12 @@ public class FacialDetector extends Peitho implements PeithoInterface {
                     Log.d("Happiness is: ", String.valueOf((int) HScale));
                     //happiness[happiness.length - 1] = (int) HScale; //get all the happiness
 
-                    data.add(0.78);
+                    data.add(HScale);
                 }
 
-                getActivity().runOnUiThread(new Runnable() {
+                peitho.getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        updateChart();
+                        peitho.updateChart();
                     }
                 });
             }
