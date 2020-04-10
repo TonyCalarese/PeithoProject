@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.example.peithoproject.Peitho;
 import com.example.peithoproject.PeithoInterface;
+import com.example.peithoproject.recyclerassets.UserEmotionData;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -45,7 +46,7 @@ public class FacialDetector extends Peitho implements PeithoInterface {
 
 
     //Tony's version
-    public void scanHappiness(Bitmap image) throws ExecutionException, InterruptedException {
+    public void scanHappiness(Bitmap image, final UserEmotionData data) throws ExecutionException, InterruptedException {
         //Start of Async Task
         setFireImage(image);
         //Start of Async Task
@@ -79,9 +80,14 @@ public class FacialDetector extends Peitho implements PeithoInterface {
                     Log.d("Happiness is: ", String.valueOf((int) HScale));
                     //happiness[happiness.length - 1] = (int) HScale; //get all the happiness
 
-                    updateChart(new int[]{25});
+                    data.add(0.78);
                 }
-                //updateChart(happiness);
+
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        updateChart();
+                    }
+                });
             }
         })
                 .addOnFailureListener(

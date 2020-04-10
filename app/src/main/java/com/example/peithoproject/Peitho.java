@@ -102,7 +102,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
 
         //mHappinessData.add(new Entry(1, 0)); //Starting off with 0
-        updateChart(new int[]{0});
+        updateChart();
         return v;
     }
 
@@ -229,9 +229,8 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
 
         try {
-            FD.scanHappiness(mImageTextureView.getBitmap());
-            updateChart(new int[]{100});
-            updateChart(new int[]{50});
+            FD.scanHappiness(mImageTextureView.getBitmap(), mUserEmoData);
+            updateChart();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -268,12 +267,11 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
 
 
-    public synchronized void updateChart(int[] happiness) {
+    public synchronized void updateChart() {
         //int size = mHappinessData.size();
-        if(happiness != null){
-            for(int happyScale: happiness){
-                mHappinessData.add(new Entry(mHappinessData.size(), happyScale)); //Starting off with 0
-            }
+        for(int happyScale: mUserEmoData.getAllEmotions()) {
+            mHappinessData.add(new Entry(mHappinessData.size(), happyScale));
+        }
             LineDataSet HappinessDataSet = new LineDataSet(mHappinessData, "Happiness");
             //Setting up the chart
             ArrayList<ILineDataSet> dataSets = new ArrayList<>();
@@ -283,8 +281,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
             mChart.setData(data);
             mChart.invalidate();
         }
-
-    }
 
 }// end of Fragment
 
