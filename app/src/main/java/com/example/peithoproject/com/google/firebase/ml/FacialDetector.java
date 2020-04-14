@@ -27,14 +27,10 @@ import java.util.concurrent.ExecutionException;
 public class FacialDetector implements PeithoInterface {
     //FireBaseCode
     FirebaseVisionFaceDetectorOptions mRealTimeOpts = new FirebaseVisionFaceDetectorOptions.Builder()
-            .setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
+            .setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CONTOURS)
             .build();
     FirebaseVisionFaceDetector mDetector = FirebaseVision.getInstance()
             .getVisionFaceDetector(mRealTimeOpts);
-
-    public int[] happiness = new int[0]; // make a blank array
-
-
 
     //FireBase Declareations //Check interface for the full settings
     FirebaseVisionImage mFireImage;
@@ -44,12 +40,11 @@ public class FacialDetector implements PeithoInterface {
         mFireImage = FirebaseVisionImage.fromBitmap(image);
     }
 
-
     //Tony's version
     public void scanHappiness(final Peitho peitho, Bitmap image, final UserEmotionData data) throws ExecutionException, InterruptedException {
         //Start of Async Task
-        setFireImage(image);
-        //Start of Async Task
+        setFireImage(image); //Set the image and create the task
+
         Task<List<FirebaseVisionFace>> result = mDetector.detectInImage(mFireImage)
                 .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionFace>>() {
             @Override

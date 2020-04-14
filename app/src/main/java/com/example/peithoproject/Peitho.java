@@ -184,19 +184,10 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
                 Toast.makeText(getActivity(), "DETECTING FACES", Toast.LENGTH_SHORT).show();
                 scanForFaces();
                 return true;
-            case R.id.download:
+            case R.id.save_menu_item:
                 //Need to work on saving
                 return true;
-            case R.id.camera_on_off_menu_icon:
-                if(mTextureViewVisible){
-                    //Need to turn textureview off
-                    item.setIcon(R.drawable.ic_camera);
-                }
-                else {
-                    item.setIcon(R.drawable.ic_camera_off);
-                }
 
-                mTextureViewVisible = !mTextureViewVisible;
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -3,9 +3,8 @@
     <string name="current_analysis">Current Analysis</string>
     <string name="start"> Start Camera</string>
     <string name="stop"> Stop Filming</string>
-    <string name ="save"> Save Current State</string>
+    <string name="save"> Save Current State</string>
     <string name="dummy_text">SOMETING</string>
-
 
 
     <!-- SubMenu Strings -->
@@ -16,5 +15,9 @@
 
     <string name="clear_data">Clear Data</string>
     <string name="change_refresh">Change RefreshRate</string>
+
+    <string name="title_activity_home_screen">HomeScreen</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 
 </resources>
