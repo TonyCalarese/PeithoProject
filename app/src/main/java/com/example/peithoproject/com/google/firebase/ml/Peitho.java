@@ -43,16 +43,12 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     public TextureView mImageTextureView;
     public Camera mCamera;
 
-
-
     //UserEmo Data
     private UserEmotionData mUserEmoData;
 
     //Handler Elements
     boolean mStarted = false;
 
-    //TextureView
-    boolean mTextureViewVisible = true;
 
     //Data Classes
     UserEmotionData UserEmoData = new UserEmotionData();
@@ -95,7 +91,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         mChart.setPinchZoom(true);
 
 
-        //mHappinessData.add(new Entry(1, 0)); //Starting off with 0
         updateChart();
         return v;
     }
