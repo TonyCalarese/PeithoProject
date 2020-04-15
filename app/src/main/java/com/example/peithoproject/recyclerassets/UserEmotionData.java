@@ -7,10 +7,11 @@ import java.util.List;
 
 public class UserEmotionData {
 
-    public List<Integer> mEmotions;;
+    public List<Integer> mEmotions;
 
     public UserEmotionData() {
         mEmotions = new ArrayList<Integer>();
+        mEmotions.add(0); //Initial Emotion set the 0
     }
 
     //Getters

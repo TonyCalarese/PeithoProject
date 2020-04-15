@@ -41,8 +41,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     public TextureView mImageTextureView;
     public Camera mCamera;
 
-
-
     //UserEmo Data
     private UserEmotionData mUserEmoData;
 
