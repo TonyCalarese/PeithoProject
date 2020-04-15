@@ -7,13 +7,9 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.peithoproject.recyclerassets.ChartsActivity;
-
-import java.util.ArrayList;
-import java.util.List;
 
 //Source of reference: https://www.youtube.com/watch?v=u5PDdg1G4Q4
 
@@ -48,18 +44,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.saved_speeches_recycler);
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        List<String> fakeData = new ArrayList<String>();
-        fakeData.add("Speech #1");
-        fakeData.add("Speech #2");
-        fakeData.add("Speech #3");
-        fakeData.add("Speech #4");
-        fakeData.add("Speech #5");
-
-        mAdapter = new Adapter(fakeData);
     }
 
     private void segueToPeitho() {
