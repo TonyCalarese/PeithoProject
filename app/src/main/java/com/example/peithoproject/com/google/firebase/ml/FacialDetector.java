@@ -75,7 +75,7 @@ public class FacialDetector implements PeithoInterface {
                     //Happiness is on scale of 0.0 to 1.0 --> Equivalent to a 0-100%
                     Log.d("Happiness is: ", String.valueOf( Math.abs(face.getSmilingProbability())));
                     double HScale = Math.abs(face.getSmilingProbability()); //Convert to double
-
+                    HScale = HScale * 100.0;
                     Log.d("Happiness is: ", String.valueOf(HScale));
 
                     Log.d("Happiness is: ", String.valueOf((int) HScale));

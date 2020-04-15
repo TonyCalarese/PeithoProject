@@ -167,7 +167,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
                 scanForFaces();
                 return true;
             case R.id.save_menu_item:
-                //Need to work on saving
+                saveChart();
                 return true;
 
             default:
@@ -215,7 +215,9 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
             mChart.setData(data);
             mChart.invalidate();
         }
-
+    public void saveChart(){
+        //Finn insert code here
+    }
 }// end of Fragment
 
 
