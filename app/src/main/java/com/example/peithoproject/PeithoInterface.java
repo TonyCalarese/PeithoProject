@@ -2,7 +2,6 @@ package com.example.peithoproject;
 
 import android.os.Handler;
 
-import com.example.peithoproject.com.google.firebase.ml.EmoIdentifier;
 import com.example.peithoproject.com.google.firebase.ml.FacialDetector;
 
 
@@ -35,11 +34,6 @@ public interface PeithoInterface {
 
      //Face Related Classes
      FacialDetector FD = new FacialDetector();
-     EmoIdentifier Emo = new EmoIdentifier();
-
-
-
-
 
 
      int mStandardRefreshRate = 1000; //in milliseconds, every 10 seconds

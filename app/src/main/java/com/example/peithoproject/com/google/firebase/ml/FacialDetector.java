@@ -5,7 +5,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.peithoproject.Peitho;
 import com.example.peithoproject.PeithoInterface;
 import com.example.peithoproject.recyclerassets.UserEmotionData;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -25,12 +24,22 @@ import java.util.concurrent.ExecutionException;
 //https://www.upwork.com/hiring/mobile/why-you-should-use-asynctask-in-android-development/
 //Finn Look here: Whole class is restructured
 public class FacialDetector implements PeithoInterface {
-    //FireBaseCode
+
+    //FireBaseCode for High speed
     FirebaseVisionFaceDetectorOptions mRealTimeOpts = new FirebaseVisionFaceDetectorOptions.Builder()
             .setContourMode(FirebaseVisionFaceDetectorOptions.ALL_CONTOURS)
             .build();
+
+    //Variant of the code for HighAccuracy
+    FirebaseVisionFaceDetectorOptions mHighAccuracyOpts =
+            new FirebaseVisionFaceDetectorOptions.Builder()
+                    .setPerformanceMode(FirebaseVisionFaceDetectorOptions.ACCURATE)
+                    .setLandmarkMode(FirebaseVisionFaceDetectorOptions.ALL_LANDMARKS)
+                    .setClassificationMode(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
+                    .build();
+
     FirebaseVisionFaceDetector mDetector = FirebaseVision.getInstance()
-            .getVisionFaceDetector(mRealTimeOpts);
+            .getVisionFaceDetector(mHighAccuracyOpts);
 
     //FireBase Declareations //Check interface for the full settings
     FirebaseVisionImage mFireImage;
@@ -55,10 +64,6 @@ public class FacialDetector implements PeithoInterface {
                 switch(faces.size()){
                     case 0:
                         Log.d(SCANNER_LOG_TAG, NO_FACE_LOG);
-                        data.add(0);
-                        break;
-                    case 1:
-                        Log.d(SCANNER_LOG_TAG, ONE_FACE_LOG);
                         break;
                     default:
                         Log.d(SCANNER_LOG_TAG, MULTI_FACE_LOG);

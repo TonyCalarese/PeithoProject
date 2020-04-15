@@ -20,14 +20,16 @@
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteY="0dp">
+
             <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_width="337dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
                 <TextureView
                     android:id="@+id/imageSurfaceView"
-                    android:layout_width="224dp"
-                    android:layout_height="224dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.006"
@@ -44,23 +46,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.994"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="4dp">
-
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="List of Emotions" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/dataRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scrollbars="vertical" />
-
-
-            </LinearLayout>
+                tools:layout_editor_absoluteY="4dp"/>
            <!-- source for barchart: https://javapapers.com/android/android-chart-example-app-using-mpandroidchart/ -->
             <!-- Source for LineCharting: https://medium.com/@leelaprasad4648/creating-linechart-using-mpandroidchart-33632324886d -->
             <!-- Add Charts here -->
@@ -69,9 +55,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

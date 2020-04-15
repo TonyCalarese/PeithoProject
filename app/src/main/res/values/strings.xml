@@ -1,17 +1,11 @@
 <resources>
     <string name="app_name">PeithoProject</string>
     <string name="current_analysis">Current Analysis</string>
-    <string name="start"> Start Camera</string>
-    <string name="stop"> Stop Filming</string>
-    <string name="save"> Save Current State</string>
-    <string name="dummy_text">SOMETING</string>
+    <string name="peitho_segue_button_string">Record New DataSet</string>
+    <string name="charting_segue_button_string">View Saved DataSets</string>
 
 
-    <!-- SubMenu Strings -->
-    <string name="options">Options</string>
-    <string name="share">Share</string>
-    <string name="download">Download</string>
-    <string name="open_chart">My Charts</string>
+
 
     <string name="clear_data">Clear Data</string>
     <string name="change_refresh">Change RefreshRate</string>
@@ -19,5 +13,7 @@
     <string name="title_activity_home_screen">HomeScreen</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_item_list">Items</string>
+    <string name="title_item_detail">Item Detail</string>
 
 </resources>

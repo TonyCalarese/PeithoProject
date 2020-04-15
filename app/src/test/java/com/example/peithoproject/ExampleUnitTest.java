@@ -4,6 +4,8 @@ import android.content.Context;
 
 import androidx.core.util.Pair;
 
+import com.example.peithoproject.recyclerassets.Speech;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

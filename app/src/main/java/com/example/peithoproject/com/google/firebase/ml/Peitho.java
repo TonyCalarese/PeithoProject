@@ -1,4 +1,4 @@
-package com.example.peithoproject;
+package com.example.peithoproject.com.google.firebase.ml;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,13 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.peithoproject.recyclerassets.DataHolder;
+import com.example.peithoproject.PeithoInterface;
+import com.example.peithoproject.R;
 import com.example.peithoproject.recyclerassets.UserEmotionData;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -43,10 +41,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     public TextureView mImageTextureView;
     public Camera mCamera;
 
-    //RecyclerView
-    private RecyclerView mDataFrame;
-    private DataFrameAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+
 
     //UserEmo Data
     private UserEmotionData mUserEmoData;
@@ -89,11 +84,8 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         mImageTextureView.setSurfaceTextureListener(Peitho.this);
 
         //DataFrame
-        mDataFrame = (RecyclerView) v.findViewById(R.id.dataRecyclerView);
-        mLayoutManager = new LinearLayoutManager(getContext());
-        mDataFrame.setLayoutManager(mLayoutManager);
-        mAdapter = new DataFrameAdapter();
-        mDataFrame.setAdapter(mAdapter);
+
+
 
         //Charting
         mChart = (LineChart) v.findViewById(R.id.LineChart);
@@ -106,15 +98,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         return v;
     }
 
-    private void UpdateUI() {
-        if (mAdapter == null) {
-            mAdapter = new DataFrameAdapter();
-            mDataFrame.setAdapter(mAdapter);
-        }
-        else {
-            mAdapter.notifyDataSetChanged();
-        }
-    }
+
     //Code For TextureView Reference: https://developer.android.com/reference/android/view/TextureView
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         mCamera = Camera.open();
@@ -171,12 +155,12 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         switch (item.getItemId()) {
             case R.id.start_menu_icon:
                 if(mStarted == false){
+                    item.setIcon(R.drawable.stop_icon);
                     mVideoHandler.post(mRefreshImageTexture);
-                    item.setIcon(R.drawable.play_icon);
                 }
                 else{
+                    item.setIcon(R.drawable.play_icon);
                     mVideoHandler.removeCallbacks(mRefreshImageTexture);
-                    item.setIcon(R.drawable.stop_icon);
                 }
                 mStarted = !mStarted;
                 return true;
@@ -218,34 +202,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         }
 
     }
-
-
-    //Adapter
-    public class DataFrameAdapter extends RecyclerView.Adapter<DataHolder> {
-        public DataFrameAdapter() {
-        }
-
-        @Override
-        public DataHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-            return new DataHolder(inflater, parent);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull DataHolder holder, int position) {
-            holder.bindPosition(mUserEmoData.getIndexEmotion(position), position);
-        }
-
-        @Override
-        public int getItemCount() {
-            return UserEmoData.getEmotionDataSize();
-        }
-
-        //public void appendEmotion(float emotion) { UserEmoData.add(emotion); }
-
-    }
-
-
 
     public synchronized void updateChart() {
         //int size = mHappinessData.size();
