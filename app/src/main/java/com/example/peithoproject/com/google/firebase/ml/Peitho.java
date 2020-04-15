@@ -28,7 +28,9 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -216,6 +218,13 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
             mChart.setData(data);
             mChart.invalidate();
+        }
+
+        public void saveSpeech(String name) throws IOException {
+            FileOutputStream fos = new FileOutputStream(name + ".txt");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(mUserEmoData);
+            oos.close();
         }
 
 }// end of Fragment

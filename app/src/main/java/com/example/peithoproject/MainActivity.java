@@ -4,10 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.peithoproject.recyclerassets.ChartsActivity;
 
@@ -16,10 +14,6 @@ import com.example.peithoproject.recyclerassets.ChartsActivity;
 public class MainActivity extends AppCompatActivity {
     private Button mPeithoButton;
     private Button mChartsButton;
-    private ImageButton mInformationButton;
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
