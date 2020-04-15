@@ -145,4 +145,6 @@
     <color name="black">#000000</color>
 
     <color name="black_overlay">#66000000</color>
+
+    <color name="prussian_blue">#003153</color>
 </resources>

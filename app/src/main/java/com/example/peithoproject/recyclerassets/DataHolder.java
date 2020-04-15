@@ -2,7 +2,7 @@ package com.example.peithoproject.recyclerassets;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,17 +10,17 @@ import com.example.peithoproject.R;
 
 //Recycler
 public class DataHolder extends RecyclerView.ViewHolder{
-    private TextView mEmoView;
+    private Button mSpeechButton;
     private int mPosition;
 
     public DataHolder(LayoutInflater inflater, ViewGroup container) {
-        super(inflater.inflate(R.layout.tile, container, false));
-        mEmoView = (TextView) itemView.findViewById(R.id.DataTile);
+        super(inflater.inflate(R.layout.saved_speech_item, container, false));
+        mSpeechButton = (Button) itemView.findViewById(R.id.speech_button);
     }
 
-    public void bindPosition(int emo, int p) {
+    public void bindPosition(String name, int p) {
         mPosition = p;
-        mEmoView.setText(String.valueOf(emo));
+        mSpeechButton.setText(name);
     }
 
 }

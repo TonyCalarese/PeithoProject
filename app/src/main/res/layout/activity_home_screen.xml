@@ -5,36 +5,43 @@
     android:id="@+id/main_menu"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center">
-
-    <Button
-        android:id="@+id/peitho_segue_button"
-        style="?metaButtonBarButtonStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="@string/peitho_segue_button_string" />
-    <Button
-        android:id="@+id/chart_segue_button"
-        style="?metaButtonBarButtonStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="@string/charting_segue_button_string" />
-    <ImageButton
-        android:id="@+id/info_button"
-        style="?metaButtonBarButtonStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="@string/dummy_button" />
+    android:layout_gravity="center"
+    android:background="@color/prussian_blue"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:id="@+id/main-button-bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
+        <Button
+            android:id="@+id/peitho_segue_button"
+            style="?metaButtonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/light_grey"
+            android:text="@string/peitho_segue_button_string" />
+
+        <Button
+            android:id="@+id/chart_segue_button"
+            style="?metaButtonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/light_grey"
+            android:text="@string/charting_segue_button_string" />
+
+        <ImageButton
+            android:id="@+id/info_button"
+            style="?metaButtonBarButtonStyle"
+            android:layout_width="78dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/light_grey"
+            android:text="@string/dummy_button" />
 
     </LinearLayout>
 

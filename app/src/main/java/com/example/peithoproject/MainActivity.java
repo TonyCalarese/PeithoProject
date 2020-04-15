@@ -7,15 +7,23 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.peithoproject.recyclerassets.ChartsActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 //Source of reference: https://www.youtube.com/watch?v=u5PDdg1G4Q4
 
 public class MainActivity extends AppCompatActivity {
-    public Button mPeithoButton;
-    public Button mChartsButton;
-    public ImageButton mInformationButton;
+    private Button mPeithoButton;
+    private Button mChartsButton;
+    private ImageButton mInformationButton;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +47,19 @@ public class MainActivity extends AppCompatActivity {
                 segueToCharts();
             }
         });
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.saved_speeches_recycler);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        List<String> fakeData = new ArrayList<String>();
+        fakeData.add("Speech #1");
+        fakeData.add("Speech #2");
+        fakeData.add("Speech #3");
+        fakeData.add("Speech #4");
+        fakeData.add("Speech #5");
+
+        mAdapter = new Adapter(fakeData);
     }
 
     private void segueToPeitho() {
@@ -53,3 +74,5 @@ public class MainActivity extends AppCompatActivity {
 
 
 }
+
+
