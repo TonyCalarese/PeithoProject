@@ -89,7 +89,8 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         mChart = (LineChart) v.findViewById(R.id.LineChart);
         mChart.setTouchEnabled(true);
         mChart.setPinchZoom(true);
-
+        mChart.setGridBackgroundColor(R.color.white);
+        mChart.setBackgroundColor(R.color.white);
 
         updateChart();
         return v;
