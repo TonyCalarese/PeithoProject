@@ -24,8 +24,12 @@
         android:roundIcon="@drawable/dove_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ViewSavedChart"></activity>
-        <activity android:name=".recyclerassets.ChartsActivity" />
+        <activity android:name=".ViewSavedChart"
+            />
+
+
+        <activity android:name=".recyclerassets.ChartsActivity"
+            android:label="@string/charting_title_screen"/>
         <activity
             android:name=".PeithoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -41,6 +45,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+
     </application>
 
 </manifest>

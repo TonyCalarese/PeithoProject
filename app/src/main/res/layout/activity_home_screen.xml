@@ -41,7 +41,7 @@
             android:layout_height="45dp"
             android:layout_weight="1"
             android:backgroundTint="@color/light_grey"
-            android:text="@string/dummy_button" />
+            android:background="@drawable/ic_info_vector_icon"/>
 
     </LinearLayout>
 

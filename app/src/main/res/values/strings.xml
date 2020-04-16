@@ -1,17 +1,10 @@
 <resources>
-    <string name="app_name">PeithoProject</string>
+    <string name="app_name">Peitho Project</string>
     <string name="current_analysis">Current Analysis</string>
-    <string name="peitho_segue_string">Record New DataSet</string>
-    <string name="charting_segue_string">View Saved DataSets</string>
-
-
-    <string name="clear_data">Clear Data</string>
-    <string name="change_refresh">Change RefreshRate</string>
-
+    <string name="peitho_segue_string">Record New Data Set</string>
+    <string name="charting_segue_string">View Saved Data Sets</string>
+    <string name="charting_title_screen">Saved Data Sets</string>
     <string name="title_activity_home_screen">HomeScreen</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="title_item_list">Items</string>
-    <string name="title_item_detail">Item Detail</string>
+    <string name="save_string">Save</string>
 
 </resources>

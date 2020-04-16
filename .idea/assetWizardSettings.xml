@@ -61,7 +61,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/Applications/Android%20Studio%203.6.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/content/ic_save_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/Applications/Android%20Studio%203.6.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_info_outline_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -84,7 +84,7 @@
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
                                       <entry key="foregroundAssetType" value="CLIP_ART" />
-                                      <entry key="outputName" value="ic_save_icon" />
+                                      <entry key="outputName" value="ic_info_icon" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -150,9 +150,24 @@
                   <entry key="vectorAssetStep">
                     <value>
                       <PersistentState>
+                        <option name="children">
+                          <map>
+                            <entry key="clipartAsset">
+                              <value>
+                                <PersistentState>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="url" value="jar:file:/Applications/Android%20Studio%203.6.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_info_outline_black_24dp.xml" />
+                                    </map>
+                                  </option>
+                                </PersistentState>
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_camera_off" />
+                            <entry key="outputName" value="ic_info_vector_icon" />
                             <entry key="sourceFile" value="$USER_HOME$" />
                           </map>
                         </option>
