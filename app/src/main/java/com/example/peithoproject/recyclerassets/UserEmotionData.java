@@ -7,7 +7,7 @@ import java.util.List;
 
 public class UserEmotionData {
 
-    public List<Integer> mEmotions;;
+    public List<Integer> mEmotions;
 
     public UserEmotionData() {
         mEmotions = new ArrayList<Integer>();
