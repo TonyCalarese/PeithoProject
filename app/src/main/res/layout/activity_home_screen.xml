@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@color/light_grey"
-            android:text="@string/peitho_segue_button_string" />
+            android:text="@string/peitho_segue_string" />
 
         <Button
             android:id="@+id/chart_segue_button"
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@color/light_grey"
-            android:text="@string/charting_segue_button_string" />
+            android:text="@string/charting_segue_string" />
 
         <ImageButton
             android:id="@+id/info_button"
