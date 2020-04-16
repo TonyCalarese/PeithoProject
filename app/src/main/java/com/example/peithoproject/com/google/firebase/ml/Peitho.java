@@ -1,5 +1,6 @@
 package com.example.peithoproject.com.google.firebase.ml;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -31,6 +32,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -225,6 +227,10 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(mUserEmoData);
             oos.close();
+
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getContext().openFileOutput("names.txt", Context.MODE_APPEND));
+            outputStreamWriter.write(name);
+            outputStreamWriter.close();
         }
 
 }// end of Fragment
