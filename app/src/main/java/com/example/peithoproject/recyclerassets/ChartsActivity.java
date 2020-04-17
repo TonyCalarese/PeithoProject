@@ -1,6 +1,7 @@
 package com.example.peithoproject.recyclerassets;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -33,6 +34,13 @@ public class ChartsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_charts);
+
+        try {
+            loadSavedSpeeches();
+            Log.d("Success on loading speeches", "SUCCESS TO LOAD");
+        }catch(Exception e) {
+            Log.d("FAILURE TO LOAD ", "FAILURE TO LOAD");
+        }
 
         mDataFrame = (RecyclerView) findViewById(R.id.saved_speeches_recycler);
         mLayoutManager = new LinearLayoutManager(this);

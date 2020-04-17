@@ -8,6 +8,7 @@ import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -91,8 +92,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         mChart = (LineChart) v.findViewById(R.id.LineChart);
         mChart.setTouchEnabled(true);
         mChart.setPinchZoom(true);
-        mChart.setGridBackgroundColor(R.color.white);
-        mChart.setBackgroundColor(R.color.white);
 
         updateChart();
         return v;
@@ -170,6 +169,12 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
                 return true;
             case R.id.save_menu_item:
                 //Need to work on saving
+                try {
+                    saveSpeech("Test Data");
+                    Log.d("SUCCESS TO SAVE", "SUCCESS TO SAVE");
+                }catch(Exception e) {
+                    Log.d("FAILURE TO SAVE", "FAILURE TO SAVE");
+                }
                 return true;
 
             default:
