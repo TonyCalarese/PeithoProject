@@ -170,7 +170,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
             case R.id.save_menu_item:
                 //Need to work on saving
                 try {
-                    saveSpeech("Test Data");
+                    saveSpeech("TestData");
                     Log.d("SUCCESS TO SAVE", "SUCCESS TO SAVE");
                 }catch(Exception e) {
                     Log.d("FAILURE TO SAVE", "FAILURE TO SAVE");

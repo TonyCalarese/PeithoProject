@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <uses-feature android:name="android.hardware.camera.autofocus" />
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <meta-data
@@ -34,7 +34,8 @@
             android:name=".PeithoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/peitho_segue_string"
-            android:theme="@style/FullscreenTheme" />
+            android:theme="@style/FullscreenTheme"
+            android:screenOrientation="landscape">
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize"
