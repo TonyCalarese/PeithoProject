@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mInfoImageButton = (ImageButton) findViewById(R.id.info_button);
-        mChartsButton.setOnClickListener(new View.OnClickListener() {
+        mInfoImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
