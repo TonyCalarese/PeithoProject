@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
@@ -52,10 +51,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     //Handler Elements
     boolean mStarted = false;
 
-
-    //Data Classes
-    UserEmotionData UserEmoData = new UserEmotionData();
-
     //Charting
     public LineChart mChart;
     ArrayList<Entry> mHappinessData = new ArrayList<>(); //Charting data for Happiness
@@ -71,9 +66,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.peitho_main_screen, container, false);
 
-        if (savedInstanceState != null) {
-
-        }
 
         PackageManager packageManager = getActivity().getPackageManager();
 
@@ -83,10 +75,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         //Texture View
         mImageTextureView = (TextureView) v.findViewById((R.id.imageSurfaceView));
         mImageTextureView.setSurfaceTextureListener(Peitho.this);
-
-        //DataFrame
-
-
 
         //Charting
         mChart = (LineChart) v.findViewById(R.id.LineChart);
@@ -105,7 +93,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
             mCamera.setPreviewTexture(surface);
             mCamera.startPreview();
         } catch (IOException ioe) {
-            // Something bad happened
+            //The camera does not exist or the permission is off
             System.out.println("ERROR ERRROR NO CAMERA OR PERMISSIONS ERROR");
         }
     }
@@ -163,9 +151,9 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
                 }
                 mStarted = !mStarted;
                 return true;
-            case R.id.single_shot_menu_icon:
-                Toast.makeText(getActivity(), "DETECTING FACES", Toast.LENGTH_SHORT).show();
-                scanForFaces();
+            case R.id.clear_screen:
+                //Clearing the current data in the screen
+                mHappinessData.clear(); //Clear the array List
                 return true;
             case R.id.save_menu_item:
                 //Need to work on saving

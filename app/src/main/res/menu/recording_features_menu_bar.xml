@@ -3,8 +3,8 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
         >
     <item
-        android:id="@+id/single_shot_menu_icon"
-        android:icon="@drawable/camera_img"
+        android:id="@+id/clear_screen"
+        android:icon="@drawable/ic_undo_black_24dp"
         android:iconTint="@color/white"
         app:showAsAction="always"/>
     <item

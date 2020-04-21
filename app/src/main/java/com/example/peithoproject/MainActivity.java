@@ -49,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ChartsActivity.class);
         startActivity(intent);
     }
+    private void segueToInfo() {
+        Intent intent = new Intent(this, InfoActivity.class);
+        startActivity(intent);
+    }
+
 
 
 }
