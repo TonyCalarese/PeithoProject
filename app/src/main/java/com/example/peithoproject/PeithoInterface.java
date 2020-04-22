@@ -22,5 +22,5 @@ public interface PeithoInterface {
      //Face Related Classes
      FacialDetector FD = new FacialDetector();
 
-     int mStandardRefreshRate = 10000; //in milliseconds
+     int mStandardRefreshRate = 7000; //in milliseconds
 }

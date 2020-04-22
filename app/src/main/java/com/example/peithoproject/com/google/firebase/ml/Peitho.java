@@ -61,7 +61,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.peitho_main_screen, container, false);
+        View v = inflater.inflate(R.layout.recording_screen, container, false);
 
         //PackageManager packageManager = getActivity().getPackageManager();
 

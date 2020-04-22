@@ -38,17 +38,16 @@
                 android:backgroundTint="@color/light_grey"
                 android:text="@string/peitho_segue_string" />
 
-        <Button
-            android:id="@+id/chart_segue_button"
-            style="?metaButtonBarButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:backgroundTint="@color/light_grey"
-            android:text="@string/charting_segue_string"
-            />
-
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/chart_segue_button"
+        style="?metaButtonBarButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:backgroundTint="@color/light_grey"
+        android:text="@string/charting_segue_string" />
 
 
 </LinearLayout>

@@ -70,22 +70,22 @@ public class FacialDetector implements PeithoInterface {
                         break;
 
                 } //End of Auditable Code
+                double HappinessScalePlaceHolder = 0.0; //Going to be the placeholder for the average
                 for (FirebaseVisionFace face : faces) {
-                    //happiness = Arrays.copyOf(happiness, happiness.length + 1);
                     //Happiness is on scale of 0.0 to 1.0 --> Equivalent to a 0-100%
-                    Log.d("Happiness is: ", String.valueOf( Math.abs(face.getSmilingProbability())));
-                    double HScale = Math.abs(face.getSmilingProbability()); //Convert to double
-                    Log.d("Happiness is: ", String.valueOf(HScale));
-                    Log.d("Happiness is: ", String.valueOf((int) HScale));
-                    //happiness[happiness.length - 1] = (int) HScale; //get all the happiness
 
-                    data.add(HScale);
+                    double HScale = Math.abs(face.getSmilingProbability()) * 100.0; //Convert to double
+                    Log.d("Happiness is: ", String.valueOf(HScale));
+                    Log.d("Total Faces ", String.valueOf(faces.size()));
+                    HappinessScalePlaceHolder += HScale;
                 }
+                HappinessScalePlaceHolder = HappinessScalePlaceHolder / faces.size(); //Average it out
+                data.add(HappinessScalePlaceHolder); //add it to the data
 
                 peitho.getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         peitho.updateChart();
-                    }
+                    } //Thread the data
                 });
             }
         })
