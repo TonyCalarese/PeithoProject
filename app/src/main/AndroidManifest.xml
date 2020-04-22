@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.peithoproject">
+    package="com.example.peithoproject"
+    >
 
     <uses-feature android:name="android.hardware.camera" />
 
@@ -11,7 +12,9 @@
 
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
 
     <meta-data
         android:name="com.google.firebase.ml.vision.DEPENDENCIES"

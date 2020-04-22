@@ -6,9 +6,7 @@ import com.example.peithoproject.com.google.firebase.ml.FacialDetector;
 
 
 public interface PeithoInterface {
-
      //Google Form for Consent: https://forms.gle/LPSRbLoE81PV3akb8
-
      //Scanner Strings
      String SCANNER_LOG_TAG = "SCANNING_FACES";
 
