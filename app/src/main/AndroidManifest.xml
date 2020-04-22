@@ -28,7 +28,10 @@
 
 
         <activity android:name=".recyclerassets.ChartsActivity"
-            android:label="@string/charting_title_screen"/>
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/charting_title_screen"
+            android:theme="@style/FullscreenTheme"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".PeithoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -38,12 +41,13 @@
         <activity
             android:name=".InfoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/info_segue_string" />
+            android:label="@string/info_segue_string"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize"
-            android:screenOrientation="fullSensor">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

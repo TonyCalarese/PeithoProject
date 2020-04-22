@@ -1,9 +1,6 @@
 package com.example.peithoproject.com.google.firebase.ml;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.os.Build;
@@ -36,38 +33,37 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-import static android.app.Activity.RESULT_OK;
 
 
-//Source of reference for Camera API: https://www.youtube.com/watch?v=u5PDdg1G4Q4
 public class Peitho extends Fragment implements TextureView.SurfaceTextureListener, PeithoInterface {
     //Camera
-    public TextureView mImageTextureView;
-    public Camera mCamera;
+    //Source of reference for Camera API: https://www.youtube.com/watch?v=u5PDdg1G4Q4
+    //Code For TextureView Reference: https://developer.android.com/reference/android/view/TextureView
+    public TextureView mImageTextureView; // declare the texture view for the camera
+    public Camera mCamera; //Declare the camera
 
     //UserEmo Data
-    private UserEmotionData mUserEmoData;
+    private UserEmotionData mUserEmoData; //Data representation
 
     //Handler Elements
-    boolean mStarted = false;
+    boolean mStarted = false; //Boolean if the loop/ play button was pressed
 
     //Charting
-    public LineChart mChart;
+    public LineChart mChart; //Declaring the line chart
     ArrayList<Entry> mHappinessData = new ArrayList<>(); //Charting data for Happiness
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(true); // Gets options menu
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.peitho_main_screen, container, false);
 
-
-        PackageManager packageManager = getActivity().getPackageManager();
+        //PackageManager packageManager = getActivity().getPackageManager();
 
         //User Emo Data
         mUserEmoData = new UserEmotionData();
@@ -110,19 +106,6 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     }
     //End of Reference: https://developer.android.com/reference/android/view/TextureView
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != RESULT_OK) {
-            return;
-        }
-        if (requestCode == REQUEST_PHOTO) {
-            Bundle extras = data.getExtras();
-            Bitmap image = (Bitmap) extras.get("data");
-
-        }
-
-
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -141,20 +124,25 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.start_menu_icon:
+                //Start the runner of getting the emotions
                 if(mStarted == false){
-                    item.setIcon(R.drawable.stop_icon);
-                    mVideoHandler.post(mRefreshImageTexture);
+                    item.setIcon(R.drawable.stop_icon); //Change the Handler
+                    mVideoHandler.post(mRefreshImageTexture); //Start the Hnadler
                 }
                 else{
-                    item.setIcon(R.drawable.play_icon);
-                    mVideoHandler.removeCallbacks(mRefreshImageTexture);
+                    item.setIcon(R.drawable.play_icon); //Change the Icon
+                    mVideoHandler.removeCallbacks(mRefreshImageTexture); //End the handler
                 }
-                mStarted = !mStarted;
+                mStarted = !mStarted; //Turn it on or off
                 return true;
+
             case R.id.clear_screen:
                 //Clearing the current data in the screen
                 mHappinessData.clear(); //Clear the array List
+                mUserEmoData = new UserEmotionData(); // Reset the User Emo Data
+                updateChart(); //Clear the chart
                 return true;
+
             case R.id.save_menu_item:
                 //Need to work on saving
                 try {
@@ -211,7 +199,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
             mChart.invalidate();
         }
 
-        public void saveSpeech(String name) throws IOException {
+    public void saveSpeech(String name) throws IOException {
             FileOutputStream fos = new FileOutputStream(name + ".txt");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(mUserEmoData);

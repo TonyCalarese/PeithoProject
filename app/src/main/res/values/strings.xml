@@ -8,4 +8,8 @@
     <string name="save_string">Save</string>
     <string name="info_segue_string"> About Peitho </string>
 
+
+    <!-- Strings for the Information -->
+
+    <string name="about_peitho">Peitho, the Goddess of Charming Speech was one of Aphrodite\'s handmaiden who was a master of emotional persuation in speech.</string>
 </resources>
