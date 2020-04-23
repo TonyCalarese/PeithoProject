@@ -186,6 +186,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
     public synchronized void updateChart() {
         //int size = mHappinessData.size();
+        mHappinessData.clear(); //Refresh as duplicate data will be entered if not
         for(int happyScale: mUserEmoData.getAllEmotions()) {
             mHappinessData.add(new Entry(mHappinessData.size(), happyScale));
         }
@@ -200,15 +201,16 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         }
 
     public void saveSpeech(String name) throws IOException {
-            FileOutputStream fos = new FileOutputStream(name + ".txt");
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(mUserEmoData);
-            oos.close();
 
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getContext().openFileOutput("names.txt", Context.MODE_APPEND));
-            outputStreamWriter.write(name);
-            outputStreamWriter.close();
-        }
+        FileOutputStream fos = new FileOutputStream(name + ".txt");
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(mUserEmoData);
+        oos.close();
+
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getContext().openFileOutput("names.txt", Context.MODE_PRIVATE));
+        outputStreamWriter.write(mUserEmoData.getFileData());
+        outputStreamWriter.close();
+}
 
 }// end of Fragment
 
