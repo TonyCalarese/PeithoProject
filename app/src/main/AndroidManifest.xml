@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.peithoproject"
-    >
+    package="com.example.peithoproject">
 
     <uses-feature android:name="android.hardware.camera" />
 
@@ -11,11 +10,11 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <uses-feature android:name="android.hardware.camera.autofocus" />
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
 
     <meta-data
         android:name="com.google.firebase.ml.vision.DEPENDENCIES"
@@ -28,25 +27,32 @@
         android:roundIcon="@drawable/dove_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ViewSavedChart" />
 
+        <activity android:name=".recyclerassets.ViewSavedChart"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/peitho_segue_string"
+            android:screenOrientation="landscape"
+            android:theme="@style/FullscreenTheme" />
 
-        <activity android:name=".recyclerassets.ChartsActivity"
+        <activity
+            android:name=".recyclerassets.ChartsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/charting_title_screen"
-            android:theme="@style/FullscreenTheme"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/FullscreenTheme" />
+
         <activity
             android:name=".PeithoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/peitho_segue_string"
-            android:theme="@style/FullscreenTheme"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape"
+            android:theme="@style/FullscreenTheme" />
+
         <activity
             android:name=".InfoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/info_segue_string"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".MainActivity"
@@ -58,9 +64,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-
     </application>
 
 </manifest>
