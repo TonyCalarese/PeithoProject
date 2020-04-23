@@ -92,14 +92,12 @@ public class ChartsActivity extends AppCompatActivity {
             }
 
         //Here is where it bugs
-        ObjectInputStream input = new ObjectInputStream(null);
         for(String name : mDataset){
-            input = new ObjectInputStream(new FileInputStream(name + ".txt"));
+            ObjectInputStream input = new ObjectInputStream(new FileInputStream(name + ".txt"));
             String data = (String) input.readObject();
-
             parseString(data);
+            input.close();
         }
-        input.close();
 
         return;
     }
