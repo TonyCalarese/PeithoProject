@@ -49,6 +49,7 @@ public class ViewSavedChart extends AppCompatActivity {
                 readEmotions();
             }catch (Exception e){
                 Log.d("FAILURE TO LOAD ", mFile + ".txt");
+                Log.d("FAILURE TO LOAD ", e.toString());
             }
 
         }
@@ -59,13 +60,7 @@ public class ViewSavedChart extends AppCompatActivity {
         mChart.setPinchZoom(true);
         
 
-        try {
-            readEmotions(); //Read the data
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+
         updateChart();  //Update the Chart
         
     }
