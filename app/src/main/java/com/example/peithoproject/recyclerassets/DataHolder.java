@@ -19,7 +19,6 @@ import static com.example.peithoproject.recyclerassets.ViewSavedChart.newIntent;
 public class DataHolder extends RecyclerView.ViewHolder{
     private Button mSpeechButton;
     private int mPosition;
-    private UserEmotionData mData;
 
     public DataHolder(LayoutInflater inflater, ViewGroup container) {
         super(inflater.inflate(R.layout.saved_speech_item, container, false));
@@ -36,10 +35,9 @@ public class DataHolder extends RecyclerView.ViewHolder{
 
     }
 
-    public void bindPosition(String name, int p, UserEmotionData data) {
+    public void bindPosition(String name, int p) {
         mPosition = p;
         mSpeechButton.setText(name);
-        mData = data;
     }
 }
 

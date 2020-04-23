@@ -13,7 +13,12 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ViewSavedChart extends AppCompatActivity {
     //FileName
@@ -48,7 +53,13 @@ public class ViewSavedChart extends AppCompatActivity {
 
         mGatheredEmotions.add(0); //Initial value for testing
 
-        readEmotions(); //Read the data
+        try {
+            readEmotions(); //Read the data
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         updateChart();  //Update the Chart
         
     }
@@ -69,8 +80,25 @@ public class ViewSavedChart extends AppCompatActivity {
     }
 
 
-    public void readEmotions() {
+    public void readEmotions() throws IOException, ClassNotFoundException {
         //Reading the charting data from the file
         //Need to
+
+        ObjectInputStream input = new ObjectInputStream(new FileInputStream(mFile));
+        String data = (String) input.readObject();
+        parseString(data);
+        input.close();
+    }
+
+    public void parseString(String data) {
+        data.replace("[", "");
+        data.replace("]","");
+        List<String> holder = new ArrayList<String>(Arrays.asList(data.split(",")));
+        UserEmotionData emoHolder = new UserEmotionData();
+
+        for (String str : holder){
+            emoHolder.add(Double.valueOf(str));
+        }
+
     }
 }

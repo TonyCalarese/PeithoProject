@@ -13,14 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.peithoproject.R;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class ChartsActivity extends AppCompatActivity {
 
@@ -30,7 +26,6 @@ public class ChartsActivity extends AppCompatActivity {
     private DataFrameAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<String> mDataset = new ArrayList<String>();
-    private ArrayList<UserEmotionData> mUserEmo = new ArrayList<UserEmotionData>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +63,7 @@ public class ChartsActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull DataHolder holder, int position) {
-            holder.bindPosition(mDataset.get(position), position, mUserEmo.get(position));
+            holder.bindPosition(mDataset.get(position), position);
         }
 
         @Override
@@ -91,27 +86,7 @@ public class ChartsActivity extends AppCompatActivity {
                 }
             }
 
-        //Here is where it bugs
-        for(String name : mDataset){
-            ObjectInputStream input = new ObjectInputStream(new FileInputStream(name + ".txt"));
-            String data = (String) input.readObject();
-            parseString(data);
-            input.close();
-        }
-
         return;
     }
 
-    public void parseString(String data) {
-        data.replace("[", "");
-        data.replace("]","");
-        List<String> holder = new ArrayList<String>(Arrays.asList(data.split(",")));
-        UserEmotionData emoHolder = new UserEmotionData();
-
-        for (String str : holder){
-            emoHolder.add(Double.valueOf(str));
-        }
-
-        mUserEmo.add(emoHolder);
-    }
 }
