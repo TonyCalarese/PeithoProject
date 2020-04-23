@@ -1,10 +1,13 @@
 package com.example.peithoproject.com.google.firebase.ml;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,6 +16,7 @@ import android.view.MenuItem;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
@@ -143,12 +147,35 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
             case R.id.save_menu_item:
                 //Need to work on saving
-                try {
-                    saveSpeech("TestData");
-                    Log.d("SUCCESS TO SAVE", "SUCCESS TO SAVE");
-                }catch(Exception e) {
-                    Log.d("FAILURE TO SAVE", "FAILURE TO SAVE");
-                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle(R.string.file_input_get);
+
+                final EditText input = new EditText(getContext());
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                builder.setView(input);
+
+                builder.setPositiveButton(R.string.positive_choice, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            saveSpeech(input.getText().toString());
+                            Log.d("SUCCESS TO SAVE", "SUCCESS TO SAVE");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Log.d("FAILURE TO SAVE", "FAILURE TO SAVE");
+                        }
+                    }
+                });
+
+                builder.setNegativeButton(R.string.negative_choice, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+
                 return true;
 
             default:

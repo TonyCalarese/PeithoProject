@@ -7,6 +7,9 @@
     <string name="title_activity_home_screen">HomeScreen</string>
     <string name="save_string">Save</string>
     <string name="info_segue_string"> About Peitho </string>
+    <string name="file_input_get">Name of Speech: </string>
+    <string name="positive_choice">OK</string>
+    <string name="negative_choice">Cancel</string>
 
 
     <!-- Strings for the Information -->
