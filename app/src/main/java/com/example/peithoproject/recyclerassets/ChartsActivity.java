@@ -19,6 +19,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ChartsActivity extends AppCompatActivity {
 
@@ -83,7 +85,6 @@ public class ChartsActivity extends AppCompatActivity {
                 InputStreamReader inStreamReader = new InputStreamReader(inStream);
                 BufferedReader bufferedReader = new BufferedReader(inStreamReader);
                 String receivedName = "";
-                StringBuilder stringBuilder = new StringBuilder();
 
                 while ( (receivedName = bufferedReader.readLine()) != null) {
                     mDataset.add(receivedName);
@@ -94,11 +95,25 @@ public class ChartsActivity extends AppCompatActivity {
         ObjectInputStream input = new ObjectInputStream(null);
         for(String name : mDataset){
             input = new ObjectInputStream(new FileInputStream(name + ".txt"));
-            UserEmotionData data = (UserEmotionData) input.readObject();
-            mUserEmo.add(data);
+            String data = (String) input.readObject();
+
+            parseString(data);
         }
         input.close();
 
         return;
+    }
+
+    public void parseString(String data) {
+        data.replace("[", "");
+        data.replace("]","");
+        List<String> holder = new ArrayList<String>(Arrays.asList(data.split(",")));
+        UserEmotionData emoHolder = new UserEmotionData();
+
+        for (String str : holder){
+            emoHolder.add(Double.valueOf(str));
+        }
+
+        mUserEmo.add(emoHolder);
     }
 }
