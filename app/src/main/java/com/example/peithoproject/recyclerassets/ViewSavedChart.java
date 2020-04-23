@@ -57,8 +57,7 @@ public class ViewSavedChart extends AppCompatActivity {
         mChart = (LineChart) findViewById(R.id.LineChart);
         mChart.setTouchEnabled(true);
         mChart.setPinchZoom(true);
-
-        mGatheredEmotions.add(0); //Initial value for testing
+        
 
         try {
             readEmotions(); //Read the data
