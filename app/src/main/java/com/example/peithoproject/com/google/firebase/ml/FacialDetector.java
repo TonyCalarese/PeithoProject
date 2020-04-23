@@ -70,7 +70,9 @@ public class FacialDetector implements PeithoInterface {
                         break;
 
                 } //End of Auditable Code
+
                 double HappinessScalePlaceHolder = 0.0; //Going to be the placeholder for the average
+
                 for (FirebaseVisionFace face : faces) {
                     //Happiness is on scale of 0.0 to 1.0 --> Equivalent to a 0-100%
 
