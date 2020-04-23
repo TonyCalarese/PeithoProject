@@ -3,6 +3,7 @@ package com.example.peithoproject.recyclerassets;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -44,6 +45,12 @@ public class ViewSavedChart extends AppCompatActivity {
         if(getFileName != null)
         {
             mFile = getFileName.getStringExtra(FILE); // Get the File Name from the Intent
+            try {
+                readEmotions();
+            }catch (Exception e){
+                Log.d("FAILURE TO LOAD ", mFile + ".txt");
+            }
+
         }
 
         //Charting
@@ -81,9 +88,7 @@ public class ViewSavedChart extends AppCompatActivity {
 
 
     public void readEmotions() throws IOException, ClassNotFoundException {
-        //Reading the charting data from the file
-        //Need to
-
+        //Read the Contents of the File
         ObjectInputStream input = new ObjectInputStream(new FileInputStream(mFile));
         String data = (String) input.readObject();
         parseString(data);
@@ -94,11 +99,9 @@ public class ViewSavedChart extends AppCompatActivity {
         data.replace("[", "");
         data.replace("]","");
         List<String> holder = new ArrayList<String>(Arrays.asList(data.split(",")));
-        UserEmotionData emoHolder = new UserEmotionData();
 
         for (String str : holder){
-            emoHolder.add(Double.valueOf(str));
+            mGatheredEmotions.add(Integer.valueOf(str));
         }
-
     }
 }
