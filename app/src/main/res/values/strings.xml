@@ -11,15 +11,15 @@
 
     <!-- Strings for the Information -->
 
-    <string name="about_peitho">\tPeitho, the Goddess of Charming Speech was one of Aphrodite\'s handmaiden who was a master of emotional persuation in speech.</string>
+    <string name="about_peitho">\tPeitho, the Goddess of Charming Speech was one of Aphrodite\'s handmaiden who was a master of emotional persuasion in speech.</string>
     <string name="before_getting_started">\tBefore Getting Started, Please go to the App Info and make sure that the permissions for both Camera and Storage are switched to true.
     Without doing so the application will not work.</string>
-    <string name="body1_info">\tThe Peitho Project was designed by  <b>Tony Calarese </b> and <b>Finn Jensen</b>
-    To fufill the purpose getting geting crowd happiness during Presentations. These Presentations may be speechs\, Confrences, or even in the class room when the teacher is presenting to students.
+    <string name="body1_info">\tThe Peitho Project was designed by  <b>Finn Jensen </b> and <b>Tony Calarese</b>
+    To fulfill the purpose getting getting crowd happiness during Presentations. These Presentations may be speeches\, Conferences, or even in the class room when the teacher is presenting to students.
     We aimed to tackle to issue of getting the crowd\'s overall emotion of a presentation during certain points in the presentation.</string>
     <string name="body2_info">\tWith that said, The Peitho project application is able to record the crowd with your camera and get the average happiness of the faces that is detected.
-    Noted that no identifying factors of the individuals are being saved, we ask the users of this application to oblige by the proper filming or Vouyerism laws of their respected areas
-    and do not film people without consent. Please use safely and we hope you enjoy the applcation.</string>
+    Noted that no identifying factors of the individuals are being saved, we ask the users of this application to oblige by the proper filming or Voyeurism laws of their respected areas
+    and do not film people without consent. Please use safely and we hope you enjoy the application.</string>
 
     <string name="consent_form_link"><a href="https://forms.gle/LPSRbLoE81PV3akb8">\t\t\t Utilize this consent form during testing with users.</a></string>
 </resources>
