@@ -30,9 +30,6 @@ public class DataHolder extends RecyclerView.ViewHolder{
                 startActivity(v.getContext(), intent, Bundle.EMPTY);
             }
         });
-
-
-
     }
 
     public void bindPosition(String name, int p) {

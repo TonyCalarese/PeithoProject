@@ -32,13 +32,6 @@ public class ChartsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_charts);
 
-        try {
-            loadSavedSpeeches();
-            Log.d("Success on loading speeches", "SUCCESS TO LOAD");
-        }catch(Exception e) {
-            Log.d("FAILURE TO LOAD ", "FAILURE TO LOAD");
-        }
-
         mDataFrame = (RecyclerView) findViewById(R.id.saved_speeches_recycler);
         mLayoutManager = new LinearLayoutManager(this);
         mDataFrame.setLayoutManager(mLayoutManager);
@@ -46,6 +39,12 @@ public class ChartsActivity extends AppCompatActivity {
         mDataFrame.setAdapter(mAdapter);
 
 
+        try {
+            loadSavedSpeeches();
+            Log.d("Success on loading speeches", "SUCCESS TO LOAD");
+        }catch(Exception e) {
+            Log.d("FAILURE TO LOAD ", "FAILURE TO LOAD");
+        }
     }
 
 
@@ -86,6 +85,7 @@ public class ChartsActivity extends AppCompatActivity {
                 }
             }
 
+            mAdapter.notifyDataSetChanged();
         return;
     }
 
