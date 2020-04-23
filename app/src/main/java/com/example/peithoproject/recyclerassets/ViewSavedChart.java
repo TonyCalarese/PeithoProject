@@ -24,7 +24,7 @@ public class ViewSavedChart extends AppCompatActivity {
     ArrayList<Entry> mHappinessData = new ArrayList<>(); //Charting data for Happiness
     ArrayList<Integer> mGatheredEmotions = new ArrayList<>();
 
-    public static Intent newIntent(Context packageContext, String file) {
+    public static Intent newIntent(DataHolder packageContext, String file) {
         Intent intent = new Intent(packageContext, ViewSavedChart.class);
         intent.putExtra(FILE, file);
         return intent;

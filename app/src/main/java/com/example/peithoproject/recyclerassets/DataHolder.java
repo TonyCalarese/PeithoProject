@@ -23,7 +23,7 @@ public class DataHolder extends RecyclerView.ViewHolder{
         mSpeechButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = ViewSavedChart.newIntent(this, mSpeechButton.getText().toString());
+                Intent intent = ViewSavedChart.newIntent(DataHolder.this, mSpeechButton.getText().toString());
                 startActivity(intent);
             }
         });
