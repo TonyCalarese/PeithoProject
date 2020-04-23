@@ -1,6 +1,7 @@
 package com.example.peithoproject.recyclerassets;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.peithoproject.R;
 
 import static androidx.core.content.ContextCompat.startActivity;
+import static com.example.peithoproject.recyclerassets.ViewSavedChart.newIntent;
+
 
 //Recycler
 public class DataHolder extends RecyclerView.ViewHolder{
     private Button mSpeechButton;
     private int mPosition;
+    private UserEmotionData mData;
 
     public DataHolder(LayoutInflater inflater, ViewGroup container) {
         super(inflater.inflate(R.layout.saved_speech_item, container, false));
@@ -23,8 +27,8 @@ public class DataHolder extends RecyclerView.ViewHolder{
         mSpeechButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = ViewSavedChart.newIntent(DataHolder.this, mSpeechButton.getText().toString());
-                startActivity(intent);
+                Intent intent = newIntent(v.getContext(), mSpeechButton.getText().toString());
+                startActivity(v.getContext(), intent, Bundle.EMPTY);
             }
         });
 
@@ -32,9 +36,10 @@ public class DataHolder extends RecyclerView.ViewHolder{
 
     }
 
-    public void bindPosition(String name, int p) {
+    public void bindPosition(String name, int p, UserEmotionData data) {
         mPosition = p;
         mSpeechButton.setText(name);
+        mData = data;
     }
 }
 

@@ -68,7 +68,7 @@ public class ChartsActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull DataHolder holder, int position) {
-            holder.bindPosition(mDataset.get(position), position);
+            holder.bindPosition(mDataset.get(position), position, mUserEmo.get(position));
         }
 
         @Override
