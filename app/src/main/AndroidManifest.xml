@@ -27,7 +27,7 @@
         android:roundIcon="@drawable/dove_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <!-- Image source for Dove: https://www.hiclipart.com/free-transparent-background-png-clipart-iiswm -->
         <activity android:name=".recyclerassets.ViewSavedChart"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
