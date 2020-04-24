@@ -14,8 +14,10 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -83,6 +85,10 @@ public class ViewSavedChart extends AppCompatActivity {
 
     public void readEmotions() throws IOException, ClassNotFoundException {
         //Read the Contents of the File
+        //Source of Reference for code to read from file: https://stackoverflow.com/questions/23675204/how-to-read-write-from-txt-file-in-android
+        File fileDir = getApplicationContext().getFileStreamPath(mFile + ".txt");
+        InputStream inStream = new FileInputStream(fileDir);
+        //End of refernce
         ObjectInputStream input = new ObjectInputStream(new FileInputStream(mFile));
         String data = (String) input.readObject();
         parseString(data);
