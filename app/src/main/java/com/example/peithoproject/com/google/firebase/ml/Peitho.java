@@ -232,13 +232,13 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
         outputStreamWriter.write(mUserEmoData.getFileData());
         outputStreamWriter.close();
 
-        //Writing to the names file to name
-        OutputStreamWriter out = new OutputStreamWriter(getContext().openFileOutput("names.txt", Context.MODE_PRIVATE));
+    //Writing to the names file to name
+    OutputStreamWriter out = new OutputStreamWriter(getContext().openFileOutput("names.txt", Context.MODE_PRIVATE));
         out.write(name);
-        out.close();
-}
+                out.close();
+                }
 
-}// end of Fragment
+                }// end of Fragment
 
 
 

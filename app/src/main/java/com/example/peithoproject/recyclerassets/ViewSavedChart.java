@@ -14,10 +14,10 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -59,9 +59,6 @@ public class ViewSavedChart extends AppCompatActivity {
         mChart = (LineChart) findViewById(R.id.LineChart);
         mChart.setTouchEnabled(true);
         mChart.setPinchZoom(true);
-        
-
-
         updateChart();  //Update the Chart
         
     }
@@ -85,26 +82,41 @@ public class ViewSavedChart extends AppCompatActivity {
     public void readEmotions() throws IOException, ClassNotFoundException {
         //Read the Contents of the File
         //Source of Reference for code to read from file: https://stackoverflow.com/questions/23675204/how-to-read-write-from-txt-file-in-android
+        //More code Reference: http://zetcode.com/java/fileinputstream/
+        //Source of Reference: https://stackoverflow.com/questions/4716503/reading-a-plain-text-file-in-java/4716623#4716623
         Log.d("File Name: ", mFile + ".txt");
-        File fileDir = getApplicationContext().getFileStreamPath(mFile + ".txt");
-        InputStream inStream = new FileInputStream(fileDir);
 
-       // ObjectInputStream input = new ObjectInputStream(new FileInputStream(mFile));
-        String data = Integer.toString(inStream.read());
-        Log.d("Read Data: ", data);
-        parseString(data);
-        inStream.close();
+        File fileDir = getApplicationContext().getFileStreamPath(mFile + ".txt");
+        FileReader fisr = new FileReader(fileDir);
+        BufferedReader br = new BufferedReader((fisr));
+
+        //code here is verbatim reference: //Source of Reference: https://stackoverflow.com/questions/4716503/reading-a-plain-text-file-in-java/4716623#4716623
+        try {
+            StringBuilder sb = new StringBuilder();
+            String line = br.readLine();
+
+            while (line != null) {
+                sb.append(line);
+                sb.append(System.lineSeparator());
+                line = br.readLine();
+            }
+            String everything = sb.toString();
+            Log.d("Text of File: ", everything);
+            parseString(everything); //Push everything in the file through
+        } finally {
+            br.close();
+        }
         //End of refernce
     }
-//63, 45 -> 91?
-    //[52, 47] --> 91?
-    //[46,47] --> 91?
-    public void parseString(String data) {
-        data.replace("[", "");
-        data.replace("]","");
-        List<String> holder = new ArrayList<String>(Arrays.asList(data.split(",")));
 
-        for (String str : holder){
+
+    public void parseString(String data) {
+        data = data.replace("[", "");
+        data = data.replace("]","");
+        data = data.replace("\n", "");
+        List<String> holder = new ArrayList<String>(Arrays.asList(data.split(",")));
+        String[] rawData = data.split(",");
+        for (String str : rawData){
             mGatheredEmotions.add(Integer.valueOf(str));
         }
     }
