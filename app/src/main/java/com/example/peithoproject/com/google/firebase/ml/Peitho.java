@@ -227,6 +227,7 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
     public void saveSpeech(String name) throws IOException {
         //Writing to the newly created file
+        Log.d("File Name: ", name + ".txt");
         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getContext().openFileOutput(name + ".txt", Context.MODE_PRIVATE));
         outputStreamWriter.write(mUserEmoData.getFileData());
         outputStreamWriter.close();
