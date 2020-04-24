@@ -111,12 +111,15 @@ public class ViewSavedChart extends AppCompatActivity {
 
 
     public void parseString(String data) {
+        //Getting Rid of [, ], and \n
         data = data.replace("[", "");
         data = data.replace("]","");
         data = data.replace("\n", "");
         List<String> holder = new ArrayList<String>(Arrays.asList(data.split(",")));
         String[] rawData = data.split(",");
+        Log.d("Loading Value: ", String.valueOf(rawData));
         for (String str : rawData){
+            Log.d("Loading Value: ", str);
             mGatheredEmotions.add(Integer.valueOf(str));
         }
     }
