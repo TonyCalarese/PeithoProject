@@ -81,7 +81,12 @@ public class ChartsActivity extends AppCompatActivity {
                 String receivedName = "";
 
                 while ( (receivedName = bufferedReader.readLine()) != null) {
-                    mDataset.add(receivedName);
+                    Log.d("Group of Files ", String.valueOf(receivedName));
+                    String[] receivedNameArray = receivedName.split(" ");
+                    for(String nameOfFile: receivedNameArray){
+                        mDataset.add(nameOfFile);
+                    }
+
                 }
             }
 

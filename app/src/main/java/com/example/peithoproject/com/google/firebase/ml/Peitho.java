@@ -227,18 +227,18 @@ public class Peitho extends Fragment implements TextureView.SurfaceTextureListen
 
     public void saveSpeech(String name) throws IOException {
         //Writing to the newly created file
+        name.replace(" ", "_"); //No spaces in the save files
         Log.d("File Name: ", name + ".txt");
         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getContext().openFileOutput(name + ".txt", Context.MODE_PRIVATE));
         outputStreamWriter.write(mUserEmoData.getFileData());
         outputStreamWriter.close();
 
     //Writing to the names file to name
-    OutputStreamWriter out = new OutputStreamWriter(getContext().openFileOutput("names.txt", Context.MODE_PRIVATE));
-        out.write(name);
-                out.close();
-                }
-
-                }// end of Fragment
+        OutputStreamWriter out = new OutputStreamWriter(getContext().openFileOutput("names.txt", Context.MODE_APPEND));
+        out.write(name + " ");
+        out.close();
+    }
+}// end of Fragment
 
 
 

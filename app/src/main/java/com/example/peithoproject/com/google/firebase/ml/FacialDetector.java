@@ -60,16 +60,6 @@ public class FacialDetector implements PeithoInterface {
             public void onSuccess(List<FirebaseVisionFace> faces) {
                 //source for landmarks: https://medium.com/androidiots/firebase-ml-kit-101-face-detection-5057190e58c0
                 //https://firebase.google.com/docs/ml-kit/detect-faces
-                //Starting here: These lines can be removed when fully functional, unless we want to log properly
-                switch(faces.size()){
-                    case 0:
-                        Log.d(SCANNER_LOG_TAG, NO_FACE_LOG);
-                        break;
-                    default:
-                        Log.d(SCANNER_LOG_TAG, MULTI_FACE_LOG);
-                        break;
-
-                } //End of Auditable Code
 
                 double HappinessScalePlaceHolder = 0.0; //Going to be the placeholder for the average
 
@@ -84,6 +74,7 @@ public class FacialDetector implements PeithoInterface {
                 HappinessScalePlaceHolder = HappinessScalePlaceHolder / faces.size(); //Average it out
                 data.add(HappinessScalePlaceHolder); //add it to the data
 
+                //feed the UI Thread the data
                 peitho.getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         peitho.updateChart();

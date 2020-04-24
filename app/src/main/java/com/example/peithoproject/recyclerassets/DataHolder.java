@@ -22,10 +22,11 @@ public class DataHolder extends RecyclerView.ViewHolder{
 
     public DataHolder(LayoutInflater inflater, ViewGroup container) {
         super(inflater.inflate(R.layout.saved_speech_item, container, false));
-        mSpeechButton = (Button) itemView.findViewById(R.id.speech_button);
+        mSpeechButton = (Button) itemView.findViewById(R.id.speech_button); //Get the button for the speech data
         mSpeechButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Get the intent for the Opening File
                 Intent intent = newIntent(v.getContext(), mSpeechButton.getText().toString());
                 startActivity(v.getContext(), intent, Bundle.EMPTY);
             }
@@ -34,7 +35,7 @@ public class DataHolder extends RecyclerView.ViewHolder{
 
     public void bindPosition(String name, int p) {
         mPosition = p;
-        mSpeechButton.setText(name);
+        mSpeechButton.setText(name); //Set the name of the button
     }
 }
 

@@ -25,15 +25,14 @@ public class UserEmotionData implements Serializable {
     public synchronized String getFileData(){
         //Source of refernce: https://devqa.io/java/convert-list-to-array-in-java/
         Integer[] emotions = new Integer[mEmotions.size()];
-        emotions = mEmotions.toArray(emotions);
+        emotions = mEmotions.toArray(emotions); //Put all the emotions into a string array
         //end of refernce
-        Log.d("Emotion values", Arrays.toString(emotions));
         return Arrays.toString(emotions);
     }
 
     //setters
     public synchronized void add(double emotion){
-        int emo = (int) (emotion);
+        int emo = (int) (emotion); //Convert to int and append
         Log.d("Happiness from UEMO: ", String.valueOf(emo));
         mEmotions.add(emo);
     }
