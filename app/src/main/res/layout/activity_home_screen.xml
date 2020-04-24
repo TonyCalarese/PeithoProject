@@ -7,19 +7,17 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:background="@color/prussian_blue"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center_vertical">
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="223dp"
-        android:orientation="vertical"></LinearLayout>
 
     <LinearLayout
         android:id="@+id/main-button-bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center">
 
         <ImageButton
             android:id="@+id/info_button"
@@ -37,17 +35,17 @@
                 android:layout_height="100dp"
                 android:backgroundTint="@color/light_grey"
                 android:text="@string/peitho_segue_string" />
-
+        <Button
+            android:id="@+id/chart_segue_button"
+            style="?metaButtonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:backgroundTint="@color/light_grey"
+            android:text="@string/charting_segue_string" />
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/chart_segue_button"
-        style="?metaButtonBarButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:backgroundTint="@color/light_grey"
-        android:text="@string/charting_segue_string" />
+
 
 
 </LinearLayout>
