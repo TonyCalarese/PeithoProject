@@ -19,8 +19,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class ViewSavedChart extends AppCompatActivity {
     //FileName
@@ -111,11 +109,12 @@ public class ViewSavedChart extends AppCompatActivity {
 
 
     public void parseString(String data) {
-        //Getting Rid of [, ], and \n
+        //Getting Rid of [, ], spaces and \n
         data = data.replace("[", "");
         data = data.replace("]","");
         data = data.replace("\n", "");
-        List<String> holder = new ArrayList<String>(Arrays.asList(data.split(",")));
+        data = data.replace(" ", "");
+
         String[] rawData = data.split(",");
         Log.d("Loading Value: ", String.valueOf(rawData));
         for (String str : rawData){
